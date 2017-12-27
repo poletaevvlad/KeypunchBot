@@ -1,20 +1,17 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Handler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
+from yaml import load
+import io
 
 from encoding import Encoder
 from formatting import ImageFormatter
-import io
-from pprint import pprint
-from yaml import load
-
-
-encoder = Encoder("codes")
-formatter = ImageFormatter()
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
-
 logger = logging.getLogger(__name__)
+
+encoder = Encoder("codes")
+formatter = ImageFormatter()
 
 
 def start(bot, update):

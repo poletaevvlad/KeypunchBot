@@ -48,16 +48,19 @@ class ImageFormatter(Formatter):
         ctx.line_to(self.width, self.corner_radius)
         ctx.arc_negative(self.width - self.corner_radius, self.corner_radius, self.corner_radius, 0, -math.pi / 2)
         ctx.close_path()
-        ctx.stroke()
+        
+        ctx.stroke_preserve()
+        ctx.set_source_rgb (0.9, 0.9, 0.9)
+        ctx.fill()
     
     def format(self, codes):
         surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, int(self.width * self.dpi + 2 * self.padding), 
                                       int(self.height * self.dpi + 2 * self.padding))
         ctx = cairo.Context (surface)
 
-        ctx.set_source_rgb (1, 1, 1)
-        ctx.rectangle (0, 0, self.width * self.dpi + 2 * self.padding, self.height * self.dpi + 2 * self.padding)
-        ctx.fill ()
+       ctx.set_source_rgb (1, 1, 1)
+       ctx.rectangle (0, 0, self.width * self.dpi + 2 * self.padding, self.height * self.dpi + 2 * self.padding)
+       ctx.fill ()
 
         ctx.scale(self.dpi, self.dpi)
         ctx.translate((self.padding + 0.5) / self.dpi, (self.padding + 0.5) / self.dpi)
