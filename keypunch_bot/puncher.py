@@ -10,8 +10,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-encoder = Encoder("codes")
-formatter = ImageFormatter()
+encoder = None
+formatter = None 
 
 
 def start(bot, update):
@@ -31,6 +31,7 @@ def generate(bot, update):
     surface.write_to_png(writer)
     writer.seek(0)
     bot.send_photo(message.chat_id, photo=writer)
+    writer.close()
 
 
 def error(bot, update, error):
@@ -38,8 +39,13 @@ def error(bot, update, error):
 
 
 def main():
+    global encoder, formatter
     with open("config.yaml") as file:
         config = load(file)
+
+    with open("keycodes.yaml") as file:
+        encoder = Encoder(load(file))
+    formatter = ImageFormatter()
 
     updater = Updater(config["api_key"])
 
