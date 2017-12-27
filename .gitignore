@@ -1,0 +1,6 @@
+ipython_cairo.py
+*.ipynb
+.ipynb_checkpoints
+__pycache__
+ipython_cairo_
+keypunch_bot/config.yaml
