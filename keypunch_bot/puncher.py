@@ -24,14 +24,13 @@ def generate(bot, update):
     else:
         message = update.edited_message
     
-    text = message.text
-    codes = encoder.encode(text)
-    surface = formatter.format(codes)
-    writer = io.BytesIO()
-    surface.write_to_png(writer)
-    writer.seek(0)
-    bot.send_photo(message.chat_id, photo=writer)
-    writer.close()
+    for card in encoder.encode(message.text):
+        surface = formatter.format(card)
+        stream = io.BytesIO()
+        surface.write_to_png(stream)
+        stream.seek(0)
+        bot.send_photo(message.chat_id, photo=stream)
+        stream.close()
 
 
 def error(bot, update, error):

@@ -1,3 +1,4 @@
+from yaml import load
 class Encoder:
     __slots__ = ["codes"]
     
@@ -7,8 +8,8 @@ class Encoder:
         for symbols in codes:
             code = codes[symbols]
             for char in symbols:
-                self.codes[char] = code
+                self.codes[char] = set(code)
     
-    def encode(self, text: str) -> iter:
-        for char in text:
-            yield self.codes[char] if char in self.codes else {}
+    def encode(self, text: str):
+        for i in range(0, len(text), 80):
+            yield (self.codes[c] if c in self.codes else {} for c in text[i: i + 80])
