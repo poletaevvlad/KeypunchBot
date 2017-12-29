@@ -1,0 +1,16 @@
+supported_chars: "Not all characters can be encoded. Only the following characters are supported: \n
+  * Uppercase and lowercase latin letters (<code>a</code>-<code>z</code>, <code>A</code>-<code>Z</code>)\n
+  * Digits (<code>0</code>-<code>9</code>)\n
+  * Space\n
+  * Some punctuation marks (<code>&</code>, <code>-</code>, <code>:</code>,
+  <code>#</code>, <code>'</code>, <code>=</code>, <code>\\</code>, <code>.</code>,
+  <code>&lt;</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>,
+  <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>%</code>,
+  <code>_</code>, <code>&gt;</code>, <code>?</code>)"
+too_many_cards: "Your message will require {} punched cards to encoded. You cannot encode more then 10 cards 
+  per at the time using KeypunchBot."
+mostly_unsupported: "Your message mostly consists of unsupported characters. To see, what characters are
+  supported, use /characters command."
+partially_unsupported: "Your message contains some unsupported characters. Sequences of these characters will 
+  be replaced with a single space. To see, what characters are supported, use /characters command.\n\nYour 
+  text will be changed to \"<code>{}</code>\""

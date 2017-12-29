@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 encoder = None
 formatter = None 
+messages = None
 
 
 def start(bot, update):
@@ -34,21 +35,14 @@ def generate(bot, update):
     filtered, valid_chars = encoder.filter_string(message.text)
     cards_num = encoder.num_cards(filtered)
     if cards_num > 10:
-         bot.sendMessage(message.chat_id, "Your message will require {} "
-            "punched cards to encoded. You cannot encode more then 10 cards "
-            "per at the time using KeypunchBot.".format(cards_num))
+         bot.sendMessage(message.chat_id, messages["too_many_cards"]
+            .format(cards_num))
     elif valid_chars < len(message.text) / 2:
-        bot.sendMessage(message.chat_id, "Your message mostly consists of "
-            "unsupported characrers. To see, what characrers are "
-            "supported, use /characrers command.")
+        bot.sendMessage(message.chat_id, messages["mostly_unsupported"])
     else:
         if valid_chars < len(message.text):
-            bot.sendMessage(message.chat_id, "Your message contains some "
-                "unsupported characrers. Sequences of these characrers will be "
-                "replaced with a single space. To see, what characrers are "
-                "supported, use /characrers command.\n\nYour text will be "
-                "changed to \"<code>{}</code>\"".format(filtered), 
-                parse_mode="HTML")
+            bot.sendMessage(message.chat_id, messages["partially_unsupported"]
+                .format(filtered), parse_mode="HTML")
         for card_text in encoder.split_by_card(filtered):
             char_codes = encoder.encode(card_text)
 
@@ -59,17 +53,25 @@ def generate(bot, update):
             stream.close()
 
 
+def characters_command(bot, update):
+    bot.sendMessage(update.message.chat_id, messages["supported_chars"], 
+                    parse_mode="HTML")
+
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
 
 def main():
-    global encoder, formatter
+    global encoder, formatter, messages
     with open("config.yaml") as file:
         config = yaml.load(file)
 
     with open("keycodes.yaml") as file:
         encoder = Encoder(yaml.load(file))
+
+    with open("messages.yaml") as file:
+        messages = yaml.load(file)
+
     formatter = PILFormatter()
 
     updater = Updater(config["api_key"])
@@ -78,6 +80,7 @@ def main():
 
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("text", text_command, pass_args=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("characters", characters_command))
     dp.add_handler(MessageHandler(Filters.text, generate, edited_updates=True))
 
     dp.add_error_handler(error)
