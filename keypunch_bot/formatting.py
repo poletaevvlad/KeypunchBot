@@ -67,9 +67,11 @@ class PILFormatter(GraphicsFormatter):
         self.row_number_font = aggdraw.Font("black", "./fonts/Oswald-Regular.ttf", 10)
         self.col_number_font = aggdraw.Font("black", "./fonts/Oswald-Light.ttf", 7)
     
-    def create(self):
-        im = Image.new("RGBA", (int(self.width + 2 * self.padding), 
-                                int(self.height + 2 * self.padding)))
+    def create(self, image_format):
+        mode = "RGBA" if image_format == "png" else "RGB"
+        color = None if image_format == "png" else (255, 255, 255)
+        im = Image.new(mode, (int(self.width + 2 * self.padding), int(self.height + 2 * self.padding)),
+            color)
         draw = aggdraw.Draw(im)
         return im, draw
     
@@ -149,7 +151,7 @@ class PILFormatter(GraphicsFormatter):
             draw.text(self.to_px(x + (self.hole_width - width) / 2, self.text_y), c, self.text_font)
     
     def format(self, codes, text, fobj, image_format="png"):
-        image, draw = self.create()
+        image, draw = self.create(image_format)
         self.draw_background(draw)
         self.draw_outline(draw)
         self.draw_numbers(draw, codes)

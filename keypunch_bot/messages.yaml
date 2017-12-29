@@ -14,3 +14,15 @@ mostly_unsupported: "Your message mostly consists of unsupported characters. To 
 partially_unsupported: "Your message contains some unsupported characters. Sequences of these characters will 
   be replaced with a single space. To see, what characters are supported, use /characters command.\n\nYour 
   text will be changed to \"<code>{}</code>\""
+too_many_arguments: "Too many arguments for the /{} command."
+
+showtext_currently_off: "KeypunchBot does not currently prints your text on the punched cards. You can enable
+  this using \"/showtext on\" command."
+showtext_currently_on: "KeypunchBot currently prints your text on the punched cards. You can disable this using 
+  \"/showtext off\" command"
+showtext_invalid: "Invalid argument: You can either use \"+\", \"y\", \"yes\", \"t\", \"true\" or \"on\" to 
+  enable the printing of text or \"-\", \"n\", \"no\", \"f\", \"false\", \"off\" to disable it."
+showtext_already_on: "KeypunchBot already prints your text on punched cards."
+showtext_already_off: "KeypunchBot already does not print your text on punched cards."
+showtext_set_on: "KeypunchBot will now print print your text on punched cards."
+showtext_set_off: "KeypunchBot will stop print print your text on punched cards."
