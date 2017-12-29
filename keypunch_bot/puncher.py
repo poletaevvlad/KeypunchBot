@@ -31,12 +31,32 @@ def generate(bot, update):
     else:
         message = update.edited_message
     
-    for card in encoder.encode(message.text):
-        stream = io.BytesIO()
-        formatter.format(card, None, stream)
-        stream.seek(0)
-        bot.send_photo(message.chat_id, photo=stream)
-        stream.close()
+    filtered, valid_chars = encoder.filter_string(message.text)
+    cards_num = encoder.num_cards(filtered)
+    if cards_num > 10:
+         bot.sendMessage(message.chat_id, "Your message will require {} "
+            "punched cards to encoded. You cannot encode more then 10 cards "
+            "per at the time using KeypunchBot.".format(cards_num))
+    elif valid_chars < len(message.text) / 2:
+        bot.sendMessage(message.chat_id, "Your message mostly consists of "
+            "unsupported characrers. To see, what characrers are "
+            "supported, use /characrers command.")
+    else:
+        if valid_chars < len(message.text):
+            bot.sendMessage(message.chat_id, "Your message contains some "
+                "unsupported characrers. Sequences of these characrers will be "
+                "replaced with a single space. To see, what characrers are "
+                "supported, use /characrers command.\n\nYour text will be "
+                "changed to \"<code>{}</code>\"".format(filtered), 
+                parse_mode="HTML")
+        for card_text in encoder.split_by_card(filtered):
+            char_codes = encoder.encode(card_text)
+
+            stream = io.BytesIO()
+            formatter.format(char_codes, card_text, stream)
+            stream.seek(0)
+            bot.send_photo(message.chat_id, photo=stream)
+            stream.close()
 
 
 def error(bot, update, error):
