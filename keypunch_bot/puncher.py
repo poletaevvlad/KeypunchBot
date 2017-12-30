@@ -5,7 +5,7 @@ from telegram.ext import Filters, CallbackQueryHandler
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 import logging
 import yaml
-import io
+from io import BytesIO
 from pprint import pprint
 
 from encoding import Encoder
@@ -41,7 +41,12 @@ def send_result(bot, chat_id, message_format, stream, index):
     if message_format.send_image:
         bot.send_photo(chat_id, photo=stream)
     else:
-        filename = message_format.make_filename("punchcard" + str(index))
+        if index == -1:
+            filename = message_format.make_filename("punchcards")
+        elif index == -2:
+            filename = message_format.make_filename("punchcard")
+        else:
+            filename = message_format.make_filename("punchcard" + str(index + 1))
         bot.send_document(chat_id, document=stream, filename=filename)
 
 
@@ -61,11 +66,14 @@ def handle_format_request(bot, chat_data, text, message_format):
         for i, card_text in enumerate(encoder.split_by_card(filtered)):
             char_codes = encoder.encode(card_text)
 
-            stream = io.BytesIO()
-            message_format.renderer.format(char_codes, text, stream, message_format)
-            stream.seek(0)
-            send_result(bot, chat_data.id, message_format, stream, i)
-            stream.close()
+            if i == 0 or not message_format.join_cards:
+                stream = BytesIO()
+            message_format.renderer.format(char_codes, stream, message_format)
+            if i == cards_num - 1 or not message_format.join_cards:
+                stream.seek(0)
+                send_result(bot, chat_data.id, message_format, stream, 
+                    (-2 if i == 0 else -1) if message_format.join_cards else i)
+                stream.close()
 
 
 @requires_chat_data

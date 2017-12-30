@@ -21,18 +21,26 @@ class Renderer:
 
 
 class TextRenderer(Renderer):
+    def format_line(self, fob, codes_list: list, num: int) -> str:
+        self.write(fob, "| ")
+        for i in range(80):
+            self.write(fob, "x" if i < len(codes_list) and num in codes_list[i].rows else " ")
+        self.write(fob, "|\r\n")
     
-    def format_line(self, codes_list: list, num: int) -> str:
-        return "| " + "".join("x" if i < len(codes_list) and num in codes_list[i] else " " for i in range(80))
-    
-    def format(self, codes):
-        all_codes = list(codes)
-        result = ["  " + "_" * 80]
-        result += [" /"]
-        for line in self.rows_numbers():
-            result += [self.format_line(all_codes, line)]
-        result += ["|" + "_" * 81]
-        return result
+    def write(self, fob, *args):
+        for string in args:
+            fob.write(bytes(string, "utf-8"))
+
+    def format(self, encoded, fob, message_format):
+        all_codes = list(encoded)
+        self.write(fob, "  ", "_" * 81, "\r\n")
+        self.write(fob, " /")
+        for i in range(80):
+            self.write(fob, all_codes[i].char if i < len(all_codes) else " ")
+        self.write(fob, "|\r\n")
+        for line in self.row_numbers():
+            self.format_line(fob, all_codes, line)
+        self.write(fob, "|", "_" * 81, "|\r\n")
 
 
 class ImageRenderer (Renderer):
@@ -60,24 +68,24 @@ class ImageRenderer (Renderer):
         numbers_layer = Image.new(self.base.mode, self.base.size)
         
         row_numbers = list(self.row_numbers())
-        encoded = set()
+        encoded_char = 1
         i = 0
         for column in range(self.columns_count):
-            if encoded is not None:
+            if encoded_char is not None:
                 try:
-                    encoded = next(encoded)
+                    encoded_char = next(encoded)
                 except StopIteration:
-                    encoded = None
+                    encoded_char = None
             x = int(column * 8.5) + 35
             for row in range(12):
                 coord = x, row * 24 + 30
-                if encoded is not None and row_numbers[row] in encoded.rows:
+                if encoded_char is not None and row_numbers[row] in encoded_char.rows:
                     paper_layer.paste(self.hole, coord)
                 elif row > 1:
                     numbers_layer.paste(self.numbers[row - 2], coord)
-            if encoded is not None:
-                char = encoded.char.upper()
-                if encoded.char in self.symbols:
+            if encoded_char is not None:
+                char = encoded_char.char.upper()
+                if char in self.symbols:
                     numbers_layer.paste(self.symbols[char], (x, 12))
             i += 1
         numbers_layer.paste(self.column_numbers, (35, 93))
@@ -100,12 +108,13 @@ class ImageRenderer (Renderer):
 class Format:
     formats = dict()
 
-    def __init__(self, name, extension, renderer, renderer_attr, send_image=False):
+    def __init__(self, name, extension, renderer, renderer_attr, send_image=False, join_cards=False):
         self.name = name
         self.extension = extension
         self.renderer = renderer
         self.renderer_attr = renderer_attr
         self.send_image = send_image
+        self.join_cards = join_cards
         if name is not None:
             self.formats[name] = self
 
@@ -125,7 +134,9 @@ class Format:
 
 image_renderer = ImageRenderer()
 ImageRendererArguments = namedtuple("ImageRendererArguments", ["format", "allow_alpha"])
+text_renderer = TextRenderer()
 
 Format.png = Format("png", ".png", image_renderer, ImageRendererArguments("PNG", True))
 Format.jpeg = Format("jpg", ".jpg", image_renderer, ImageRendererArguments("JPEG", False))
+Format.jpeg = Format("text", ".txt", text_renderer, None, join_cards=True)
 Format.default = Format(None, None, image_renderer, ImageRendererArguments("PNG", True), True)
