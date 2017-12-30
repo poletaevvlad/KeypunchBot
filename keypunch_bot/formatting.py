@@ -31,12 +31,13 @@ class TextRenderer(Renderer):
         for string in args:
             fob.write(bytes(string, "utf-8"))
 
-    def format(self, encoded, fob, message_format):
+    def format(self, encoded, fob, message_format, show_text):
         all_codes = list(encoded)
         self.write(fob, "  ", "_" * 81, "\r\n")
         self.write(fob, " /")
         for i in range(80):
-            self.write(fob, all_codes[i].char if i < len(all_codes) else " ")
+            self.write(fob, all_codes[i].char if show_text and i < len(all_codes) else " ")
+
         self.write(fob, "|\r\n")
         for line in self.row_numbers():
             self.format_line(fob, all_codes, line)
@@ -63,7 +64,7 @@ class ImageRenderer (Renderer):
 
         symbols_sheet.close()
         
-    def format(self, encoded, fob, message_format):
+    def format(self, encoded, fob, message_format, show_text):
         paper_layer = self.base.copy()
         numbers_layer = Image.new(self.base.mode, self.base.size)
         
@@ -83,7 +84,7 @@ class ImageRenderer (Renderer):
                     paper_layer.paste(self.hole, coord)
                 elif row > 1:
                     numbers_layer.paste(self.numbers[row - 2], coord)
-            if encoded_char is not None:
+            if show_text and encoded_char is not None:
                 char = encoded_char.char.upper()
                 if char in self.symbols:
                     numbers_layer.paste(self.symbols[char], (x, 12))

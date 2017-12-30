@@ -68,7 +68,8 @@ def handle_format_request(bot, chat_data, text, message_format):
 
             if i == 0 or not message_format.join_cards:
                 stream = BytesIO()
-            message_format.renderer.format(char_codes, stream, message_format)
+            message_format.renderer.format(char_codes, stream, message_format,
+                chat_data.show_text)
             if i == cards_num - 1 or not message_format.join_cards:
                 stream.seek(0)
                 send_result(bot, chat_data.id, message_format, stream, 
