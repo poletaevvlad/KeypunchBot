@@ -31,9 +31,13 @@ def get_text_format(text):
         format_end = text.find(" ")
         if format_end >= 0:
             format_name = text[1: format_end]
-            text_format = Format.get_by_name(format_name)
-            if text_format != None:
-                return text_format, text[format_end + 1:]
+            text = text[format_end + 1:]
+        else:
+            format_name = text[1:]
+            text = ""
+        text_format = Format.get_by_name(format_name)
+        if text_format != None:
+            return text_format, text
     return Format.default, text
 
 
@@ -85,8 +89,25 @@ def generate(bot, update, chat_data):
         message = update.edited_message
 
     text_format, text = get_text_format(message.text)
-    handle_format_request(bot, chat_data, text, text_format)
+    if chat_data.format is not None and text_format.is_default():
+        text_format = Format.get_by_name(chat_data.format)
+    if len(text) > 0:
+        handle_format_request(bot, chat_data, text, text_format)
+        chat_data.format = None
+    else:
+        chat_data.format = text_format.name
+        bot.sendMessage(chat_data.id, messages["empty_format_request"]
+            .format(text_format.name_readable))
     
+
+@requires_chat_data
+def cancel_command(bot, update, chat_data):
+    if chat_data.format is None:
+        bot.sendMessage(chat_data.id, messages["no_cancel"])
+    else:
+        bot.sendMessage(chat_data.id, messages["cancel_confirm"])
+        chat_data.format = None;
+
 
 def showtext_respond(new_val, chat_data):
     if new_val is None:
@@ -151,6 +172,11 @@ def stasik(bot, update):
     bot.sendMessage(update.effective_chat.id, "❤")
 
 
+def help_command(bot, update):
+    bot.sendMessage(update.effective_chat.id, messages["help"], 
+        parse_mode="HTML")
+
+
 def main():
     global encoder, formatter, messages
     with open("config.yaml") as file:
@@ -173,6 +199,8 @@ def main():
     for format_name in Format.formats:
         dp.add_handler(CommandHandler(format_name, generate, allow_edited=True))
     dp.add_handler(MessageHandler(Filters.text, generate, edited_updates=True))
+    dp.add_handler(CommandHandler("cancel", cancel_command))
+    dp.add_handler(CommandHandler("help", help_command))
     dp.add_handler(CallbackQueryHandler(inlinequery))
 
     dp.add_error_handler(error)

@@ -6,6 +6,7 @@ class ChatData:
     def __init__(self, id):
         self.id = id
         self.show_text = True
+        self.format = None
 
 
 def get_chat_data(chat_id):

@@ -109,13 +109,14 @@ class ImageRenderer (Renderer):
 class Format:
     formats = dict()
 
-    def __init__(self, name, extension, renderer, renderer_attr, send_image=False, join_cards=False):
+    def __init__(self, name, name_readable, extension, renderer, renderer_attr, send_image=False, join_cards=False):
         self.name = name
         self.extension = extension
         self.renderer = renderer
         self.renderer_attr = renderer_attr
         self.send_image = send_image
         self.join_cards = join_cards
+        self.name_readable = name_readable
         if name is not None:
             self.formats[name] = self
 
@@ -128,6 +129,9 @@ class Format:
             return cls.formats[name]
         return None
 
+    def is_default(self):
+        return self.name is None
+
     def __str__(self):
         return "Format({}, {}, {}, {}, {})".format(self.name, self.extension, self.renderer, 
             self.renderer_attr, self.send_image)
@@ -137,7 +141,7 @@ image_renderer = ImageRenderer()
 ImageRendererArguments = namedtuple("ImageRendererArguments", ["format", "allow_alpha"])
 text_renderer = TextRenderer()
 
-Format.png = Format("png", ".png", image_renderer, ImageRendererArguments("PNG", True))
-Format.jpeg = Format("jpg", ".jpg", image_renderer, ImageRendererArguments("JPEG", False))
-Format.jpeg = Format("text", ".txt", text_renderer, None, join_cards=True)
-Format.default = Format(None, None, image_renderer, ImageRendererArguments("PNG", True), True)
+Format.png = Format("png", "PNG", ".png", image_renderer, ImageRendererArguments("PNG", True))
+Format.jpeg = Format("jpg", "JPEG", ".jpg", image_renderer, ImageRendererArguments("JPEG", False))
+Format.jpeg = Format("text", "text", ".txt", text_renderer, None, join_cards=True)
+Format.default = Format(None, None, None, image_renderer, ImageRendererArguments("PNG", True), True)

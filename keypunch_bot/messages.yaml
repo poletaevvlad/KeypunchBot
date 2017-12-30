@@ -26,3 +26,12 @@ showtext_already_on: "KeypunchBot already prints your text on punched cards."
 showtext_already_off: "KeypunchBot already does not print your text on punched cards."
 showtext_set_on: "KeypunchBot will now print print your text on punched cards."
 showtext_set_off: "KeypunchBot will stop print print your text on punched cards."
+empty_format_request: "What text would you like to be encoded as a {} file?"
+no_cancel: "There is nothing to cancel."
+cancel_confirm: "Ok."
+help: "KeypunchBot is a bot that can make 80-column-wide punched cards with your text. The following commands are supported:\n
+  /png [<code>text</code>]- Render punched card as a PNG file\n
+  /text [<code>text</code>] - Render punched card as a text file\n
+  /jpeg [<code>text</code>] - Render punched card as a JPEG file\n
+  /cancel - Cancel current operation\n
+  /help - Shows this message"
