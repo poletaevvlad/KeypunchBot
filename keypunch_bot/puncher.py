@@ -54,13 +54,13 @@ def handle_format_request(bot, chat_data, text, message_format):
     filtered, valid_chars = encoder.filter_string(text)
     cards_num = encoder.num_cards(filtered)
     if cards_num > 10:
-         bot.sendMessage(message.chat_id, messages["too_many_cards"]
+         bot.sendMessage(chat_data.id, messages["too_many_cards"]
             .format(cards_num))
     elif valid_chars < len(text) / 2:
-        bot.sendMessage(message.chat_id, messages["mostly_unsupported"])
+        bot.sendMessage(chat_data.id, messages["mostly_unsupported"])
     else:
         if valid_chars < len(text):
-            bot.sendMessage(message.chat_id, messages["partially_unsupported"]
+            bot.sendMessage(chat_data.id, messages["partially_unsupported"]
                 .format(filtered), parse_mode="HTML")
         
         for i, card_text in enumerate(encoder.split_by_card(filtered)):

@@ -54,10 +54,29 @@ class Encoder:
                 if len(string) > 0:
                     yield string
                     string = ""
-            string += char
-            if len(string) >= self.columns_count:
-                yield string
-                string = ""
+            else:
+                string += char
+                if len(string) >= self.columns_count:
+                    yield string
+                    string = ""
+        if len(string) > 0:
+            yield string
 
     def num_cards(self, text):
-        return ceil(len(text) / self.columns_count)
+        count = 0
+        in_card = 0
+        for c in text:
+            if c == "\n":
+                if in_card > 0:
+                    count += 1
+                in_card = 0
+            else:
+                in_card += 1
+                if in_card >= self.columns_count:
+                    count += 1
+                    in_card = 0
+        if in_card > 0:
+            count += 1
+        return count
+
+
