@@ -177,6 +177,11 @@ def help_command(bot, update):
         parse_mode="HTML")
 
 
+def about_command(bot, update):
+    bot.sendMessage(update.effective_chat.id, messages["about"], 
+        parse_mode="Markdown", disable_web_page_preview=True)
+
+
 def main():
     global encoder, formatter, messages
     with open("config.yaml") as file:
@@ -201,6 +206,7 @@ def main():
     dp.add_handler(MessageHandler(Filters.text, generate, edited_updates=True))
     dp.add_handler(CommandHandler("cancel", cancel_command))
     dp.add_handler(CommandHandler("help", help_command))
+    dp.add_handler(CommandHandler("about", about_command))
     dp.add_handler(CallbackQueryHandler(inlinequery))
 
     dp.add_error_handler(error)
