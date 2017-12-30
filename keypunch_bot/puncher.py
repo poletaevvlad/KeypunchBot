@@ -1,4 +1,7 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+# -*- coding: utf-8 -*-
+
+from telegram.ext import Updater, CommandHandler, MessageHandler
+from telegram.ext import Filters, CallbackQueryHandler
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 import logging
 import yaml
@@ -6,10 +9,9 @@ import io
 from pprint import pprint
 
 from encoding import Encoder
-from formatting import PILFormatter
+from formatting import Format
 from chatdata import requires_chat_data
 from parsers import parse_boolean
-
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -17,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 
 encoder = None
-formatter = None 
 messages = None
 
 
@@ -25,30 +26,26 @@ def start(bot, update):
     update.message.reply_text('Welcome!')
 
 
-@requires_chat_data
-def generate(bot, update, chat_data):
-    if update.edited_message is None:
-        message = update.message
-    else:
-        message = update.edited_message
+def get_text_format(text):
+    if text.startswith("/"):
+        format_end = text.find(" ")
+        if format_end >= 0:
+            format_name = text[1: format_end]
+            text_format = Format.get_by_name(format_name)
+            if text_format != None:
+                return text_format, text[format_end + 1:]
+    return Format.default, text
 
-    image_format = None
-    file_ext = None
-    if message.text.startswith("/png "):
-        text = message.text[5:]
-        image_format = "png"
-        file_ext = "png"
-    elif message.text.startswith("/bmp "):
-        text = message.text[5:]
-        image_format = "bmp"
-        file_ext = "bmp"
-    elif message.text.startswith("/jpg "):
-        text = message.text[5:]
-        image_format = "jpeg"
-        file_ext = "jpg"
+
+def send_result(bot, chat_id, message_format, stream, index):
+    if message_format.send_image:
+        bot.send_photo(chat_id, photo=stream)
     else:
-        text = message.text
-    
+        filename = message_format.make_filename("punchcard" + str(index))
+        bot.send_document(chat_id, document=stream, filename=filename)
+
+
+def handle_format_request(bot, chat_data, text, message_format):
     filtered, valid_chars = encoder.filter_string(text)
     cards_num = encoder.num_cards(filtered)
     if cards_num > 10:
@@ -60,23 +57,27 @@ def generate(bot, update, chat_data):
         if valid_chars < len(text):
             bot.sendMessage(message.chat_id, messages["partially_unsupported"]
                 .format(filtered), parse_mode="HTML")
+        
         for i, card_text in enumerate(encoder.split_by_card(filtered)):
             char_codes = encoder.encode(card_text)
 
             stream = io.BytesIO()
-            text = card_text if chat_data.show_text else None
-            if image_format is not None:
-                formatter.format(char_codes, text, stream, image_format=image_format)
-                stream.seek(0)
-                filename = "punchcard{}.{}".format(i + 1, image_format)
-                bot.send_document(message.chat_id, document=stream, 
-                    filename=filename)
-            else:
-                formatter.format(char_codes, text, stream)
-                stream.seek(0)
-                bot.send_photo(message.chat_id, photo=stream)
+            message_format.renderer.format(char_codes, text, stream, message_format)
+            stream.seek(0)
+            send_result(bot, chat_data.id, message_format, stream, i)
             stream.close()
 
+
+@requires_chat_data
+def generate(bot, update, chat_data):
+    if update.edited_message is None:
+        message = update.message
+    else:
+        message = update.edited_message
+
+    text_format, text = get_text_format(message.text)
+    handle_format_request(bot, chat_data, text, text_format)
+    
 
 def showtext_respond(new_val, chat_data):
     if new_val is None:
@@ -119,8 +120,10 @@ def characters_command(bot, update):
     bot.sendMessage(update.message.chat_id, messages["supported_chars"], 
                     parse_mode="HTML")
 
+
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
+
 
 @requires_chat_data
 def inlinequery(bot, update, chat_data):
@@ -134,8 +137,10 @@ def inlinequery(bot, update, chat_data):
             if reply is not None:
                 bot.sendMessage(chat_data.id, reply)
 
+
 def stasik(bot, update):
     bot.sendMessage(update.effective_chat.id, "❤")
+
 
 def main():
     global encoder, formatter, messages
@@ -148,8 +153,6 @@ def main():
     with open("messages.yaml") as file:
         messages = yaml.load(file)
 
-    formatter = PILFormatter()
-
     updater = Updater(config["api_key"])
 
     dp = updater.dispatcher
@@ -158,9 +161,8 @@ def main():
     dp.add_handler(CommandHandler("characters", characters_command))
     dp.add_handler(CommandHandler("стасик", stasik))
     dp.add_handler(CommandHandler("showtext", showtext_command, pass_args=True))
-    dp.add_handler(CommandHandler("png", generate, allow_edited=True))
-    dp.add_handler(CommandHandler("jpg", generate, allow_edited=True))
-    dp.add_handler(CommandHandler("bmp", generate, allow_edited=True))
+    for format_name in Format.formats:
+        dp.add_handler(CommandHandler(format_name, generate, allow_edited=True))
     dp.add_handler(MessageHandler(Filters.text, generate, edited_updates=True))
     dp.add_handler(CallbackQueryHandler(inlinequery))
 
