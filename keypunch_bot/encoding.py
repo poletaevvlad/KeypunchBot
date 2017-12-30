@@ -48,8 +48,16 @@ class Encoder:
         return filtered.strip(), counter.value
 
     def split_by_card(self, text):
-        for i in range(0, len(text), self.columns_count):
-            yield text[i: i + self.columns_count]
+        string = ""
+        for char in text:
+            if char == "\n":
+                if len(string) > 0:
+                    yield string
+                    string = ""
+            string += char
+            if len(string) >= self.columns_count:
+                yield string
+                string = ""
 
     def num_cards(self, text):
         return ceil(len(text) / self.columns_count)
