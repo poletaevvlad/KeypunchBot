@@ -1,4 +1,8 @@
 from math import ceil
+from collections import namedtuple
+
+
+EncodedCharacter = namedtuple("EncodedCharacter", ["char", "rows"])
 
 
 class Encoder:
@@ -15,7 +19,7 @@ class Encoder:
                 self.codes[char] = set(code)
     
     def encode(self, text: str):
-        return (self.codes[c] if c in self.codes else {} for c in text)
+        return (EncodedCharacter(c, self.codes[c]) if c in self.codes else {} for c in text)
             
     def char_supported(self, char):
         return char in self.codes

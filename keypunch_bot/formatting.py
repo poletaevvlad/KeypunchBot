@@ -55,29 +55,29 @@ class ImageRenderer (Renderer):
 
         symbols_sheet.close()
         
-    def format(self, encoded, text, fob, message_format):
+    def format(self, encoded, fob, message_format):
         paper_layer = self.base.copy()
         numbers_layer = Image.new(self.base.mode, self.base.size)
         
         row_numbers = list(self.row_numbers())
-        holes_rows = set()
+        encoded = set()
         i = 0
         for column in range(self.columns_count):
-            if holes_rows is not None:
+            if encoded is not None:
                 try:
-                    holes_rows = next(encoded)
+                    encoded = next(encoded)
                 except StopIteration:
-                    holes_rows = None
+                    encoded = None
             x = int(column * 8.5) + 35
             for row in range(12):
                 coord = x, row * 24 + 30
-                if holes_rows is not None and row_numbers[row] in holes_rows:
+                if encoded is not None and row_numbers[row] in encoded.rows:
                     paper_layer.paste(self.hole, coord)
                 elif row > 1:
                     numbers_layer.paste(self.numbers[row - 2], coord)
-            if i < len(text):
-                char = text[i].upper()
-                if char in self.symbols:
+            if encoded is not None:
+                char = encoded.char.upper()
+                if encoded.char in self.symbols:
                     numbers_layer.paste(self.symbols[char], (x, 12))
             i += 1
         numbers_layer.paste(self.column_numbers, (35, 93))
