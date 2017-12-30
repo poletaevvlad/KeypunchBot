@@ -59,7 +59,7 @@ class ImageRenderer (Renderer):
         number_sheet.close()
         
         symbols_sheet = Image.open(self.get_image_url("encoded_symbols.png"))
-        symbols_chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&-:#@'=\".<(+|~$*);,%_>/"
+        symbols_chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&-:#@'=\".<(+|!$*);,%_>/"
         self.symbols = {c: symbols_sheet.crop((8 * i, 0, 8 * i + 8, 14)) for i, c in enumerate(symbols_chars)}
 
         symbols_sheet.close()
