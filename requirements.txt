@@ -2,3 +2,4 @@ PyYAML==3.12
 python-telegram-bot==9.0.0
 Pillow==4.3.0
 gunicorn==19.7.1
+pymongo==3.6.0

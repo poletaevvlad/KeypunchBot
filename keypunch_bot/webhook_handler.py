@@ -8,16 +8,20 @@ import signal
 
 from .keypunchbot import KeypunchBot
 from .encoding import Encoder
-
+from .chatdata import MongoDataManager
 
 token = os.environ["WEBHOOK_TOKEN"]
-api_key = os.environ["API_KEY"]
 
 with open("keypunch_bot/keycodes.yaml") as keycodes:
     encoder = Encoder(yaml.load(keycodes))
 with open("keypunch_bot/messages.yaml") as messages_strings:
     messages = yaml.load(messages_strings)
-bot = KeypunchBot(api_key, encoder, messages)
+
+data_manager = MongoDataManager(server=os.environ["MONGO_SERVER"],
+                                database=os.environ["MONGO_DATABASE"],
+                                user=os.environ["MONGO_USER"],
+                                password=os.environ["MONGO_PASSWORD"])
+bot = KeypunchBot(os.environ["API_KEY"], encoder, messages, data_manager)
 try:
     bot.start_webhook("https://keypunch-bot.herokuapp.com/" + token)
 except:
@@ -55,7 +59,7 @@ def application(environ, start_response):
             except ValueError:
                 content_length = 0
             post_input = environ["wsgi.input"].read(content_length)
-            update = Update.de_json(json.loads(post_input), bot)
+            update = Update.de_json(json.loads(post_input), bot.bot)
             bot.handle_update(update)
             return send_responce(start_response, "200 OK", "")
     else:
