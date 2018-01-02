@@ -4,6 +4,7 @@ import os
 import yaml
 import json
 from telegram import Update
+import signal
 
 from .keypunchbot import KeypunchBot
 from .encoding import Encoder
@@ -17,7 +18,7 @@ with open("keypunch_bot/keycodes.yaml") as keycodes:
 with open("keypunch_bot/messages.yaml") as messages_strings:
     messages = yaml.load(messages_strings)
 bot = KeypunchBot(api_key, encoder, messages)
-# bot.start_webhook("https://keypunch-bot.herokuapp.com/" + token)
+bot.start_webhook("https://keypunch-bot.herokuapp.com/" + token)
 bot.start_dispatch_thread()
 
 
@@ -56,3 +57,9 @@ def application(environ, start_response):
             return send_responce(start_response, "200 OK", "")
     else:
         return send_responce(start_response, "404 Not Found")
+
+
+def before_terminate(signum, frame):
+    bot.remove_webhook()
+
+signal.signal(signal.SIGINT, before_terminate)

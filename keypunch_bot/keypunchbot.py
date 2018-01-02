@@ -232,7 +232,10 @@ class KeypunchBot:
         updater.idle()
 
     def start_webhook(self, url):
-        self.bot.set_webhook(webhook_url=url)
+        self.bot.set_webhook(url=url)
+
+    def remove_webhook(self, url):
+        self.bot.delete_webhook()
 
     def start_dispatch_thread(self):
         thread = Thread(target=self.dispatcher.start, name='dispatcher')
