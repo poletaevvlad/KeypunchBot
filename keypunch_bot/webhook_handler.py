@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from random import random
+
 
 def application(environ, start_response):
-    data = 'Hello, World!\n'
+    data = 'Hello, World! {}\n'.format(random())
     status = '200 OK'
     response_headers = [
         ('Content-type', 'text/plain'),
