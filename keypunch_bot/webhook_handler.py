@@ -59,7 +59,7 @@ def application(environ, start_response):
             except ValueError:
                 content_length = 0
             post_input = environ["wsgi.input"].read(content_length)
-            update = Update.de_json(json.loads(post_input), bot)
+            update = Update.de_json(json.loads(post_input), bot.bot)
             bot.handle_update(update)
             return send_responce(start_response, "200 OK", "")
     else:
