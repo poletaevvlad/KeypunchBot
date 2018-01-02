@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 from functools import wraps
 
 data = dict()
+
 
 class ChatData:
     def __init__(self, id):
@@ -21,6 +24,6 @@ def get_chat_data(chat_id):
 def requires_chat_data(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        chat_id = args[1].effective_chat.id
+        chat_id = args[2].effective_chat.id
         func(*args, **kwargs, chat_data=get_chat_data(chat_id))
     return wrapper

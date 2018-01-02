@@ -5,3 +5,4 @@ __pycache__
 ipython_cairo_
 keypunch_bot/config.yaml
 commands.txtx
+*.pyc

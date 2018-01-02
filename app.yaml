@@ -1,0 +1,7 @@
+application: keypunchbot
+runtime: python
+api_version: 1
+
+handlers:
+- url: /.*
+  script: keypunch_bot.webhook_handler.app

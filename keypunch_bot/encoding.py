@@ -1,15 +1,15 @@
-from math import ceil
-from collections import namedtuple
+# -*- coding: utf-8 -*-
 
+from collections import namedtuple
 
 EncodedCharacter = namedtuple("EncodedCharacter", ["char", "rows"])
 
 
 class Encoder:
     __slots__ = ["codes"]
-    
+
     columns_count = 80
-    
+
     def __init__(self, codes):
         self.codes = dict()
 
@@ -17,22 +17,27 @@ class Encoder:
             code = codes[symbols]
             for char in symbols:
                 self.codes[char] = set(code)
-    
-    def encode(self, text: str):
-        return (EncodedCharacter(c, self.codes[c]) if c in self.codes else {} for c in text)
-            
+
+    def encode(self, text):
+        for c in text:
+            if c in self.codes:
+                yield EncodedCharacter(c, self.codes[c])
+            else:
+                yield set()
+
     def char_supported(self, char):
         return char in self.codes
-    
+
     def filter_string(self, string):
         class Counter:
             def __init__(self):
                 self.value = 0
 
             def inc(self):
-                self.value +=1 
+                self.value += 1
 
         counter = Counter()
+
         def filter_characters(counter):
             previous_supported = False
             for char in string:
@@ -43,7 +48,7 @@ class Encoder:
                 elif previous_supported:
                     yield " "
                     previous_supported = False
-            
+
         filtered = "".join(filter_characters(counter))
         return filtered.strip(), counter.value
 
@@ -78,5 +83,3 @@ class Encoder:
         if in_card > 0:
             count += 1
         return count
-
-

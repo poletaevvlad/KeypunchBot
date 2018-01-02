@@ -1,6 +1,0 @@
-png - Render punched card as a PNG file
-text - Render punched card as a text file
-jpeg - Render punched card as a JPEG file
-cancel - Cancel current operation
-help - Shows a list of commands and their descriptions
-about - Shows information about the bot

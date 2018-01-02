@@ -34,6 +34,8 @@ help: "KeypunchBot is a bot that can make 80-column-wide punched cards with your
   /text [<code>text</code>] - Render punched card as a text file\n
   /jpeg [<code>text</code>] - Render punched card as a JPEG file\n
   /cancel - Cancel current operation\n
+  /showtext [<code>on</code>|<code>off</code>] - Choose if you want your text to be printed on a punched card\n
+  /characters - Shows the list of supported characters\n
   /help - Shows this message\n
   /about - Shows information about this bot"
 about: "**KeypunchBot**\nv. 0.1 beta\n\n Written by [Vlad Poletaev](https://github.com/poletaevvlad).\n\n
