@@ -17,7 +17,7 @@ with open("keypunch_bot/keycodes.yaml") as keycodes:
 with open("keypunch_bot/messages.yaml") as messages_strings:
     messages = yaml.load(messages_strings)
 bot = KeypunchBot(api_key, encoder, messages)
-bot.start_webhook("https://keypunch-bot.herokuapp.com/" + token)
+# bot.start_webhook("https://keypunch-bot.herokuapp.com/" + token)
 bot.start_dispatch_thread()
 
 
