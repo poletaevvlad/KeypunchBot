@@ -41,5 +41,5 @@ help: "KeypunchBot is a bot that can make 80-column-wide punched cards with your
 about: "**KeypunchBot**\nv. 0.1 beta\n\n Written by [Vlad Poletaev](https://github.com/poletaevvlad).\n\n
 Fonts used: [Oswald](https://fonts.google.com/specimen/Oswald) by Vernon Adams ([OFL](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web)),
 [Share Tech Mono](https://fonts.google.com/specimen/Share+Tech+Mono) by Carrois Apostrophe ([OFL](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web))"
-unknown_command: "Your command is not recognized. Use /help to view the list of supported command"
+unknown_command: "Your command is not recognized. Use /help to view the list of supported commands."
 welcome: "Send a text message in this chat and a punched card with your text will be sent you back.\n\nCheck /help for list of supported commands."
