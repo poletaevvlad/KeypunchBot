@@ -73,7 +73,7 @@ class KeypunchBot:
         self.dispatcher.add_handler(CommandHandler(name, callback, **kwargs))
 
     def start_command(self, bot, update):
-        update.message.reply_text('Welcome!')
+        update.message.reply_text(self.messages["welcome"])
 
     def get_text_format(self, text):
         if text.startswith("/"):
