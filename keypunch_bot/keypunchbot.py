@@ -16,10 +16,10 @@ import yaml
 from io import BytesIO
 from threading import Thread
 from queue import Queue
+from functools import wraps
 
 from .encoding import Encoder
 from .formatting import Format
-from .chatdata import requires_chat_data
 from .parsers import parse_boolean
 
 
@@ -27,11 +27,22 @@ logging.basicConfig(format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
                     level=logging.INFO)
 
 
+def requires_chat_data(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        chat_id = args[2].effective_chat.id
+        chat_data = args[0].data_manager.get(chat_id)
+        func(*args, **kwargs, chat_data=chat_data)
+    return wrapper
+
+
 class KeypunchBot:
     html_escape_chars = [("&", "&amp;"), (">", "&gt;"), ("<", "&lt;")]
-    __slots__ = ["bot", "dispatcher", "encoder", "messages", "logger"]
+    __slots__ = ["bot", "dispatcher", "encoder", "messages", "logger",
+                 "data_manager"]
 
-    def __init__(self, token, encoder, messages, workers=4, logger=None):
+    def __init__(self, token, encoder, messages, data_manager, workers=4,
+                 logger=None):
         self.bot = Bot(token, request=Request(con_pool_size=workers + 4))
 
         self.dispatcher = Dispatcher(self.bot, Queue(), workers=workers)
@@ -53,6 +64,7 @@ class KeypunchBot:
         self.encoder = encoder
         self.messages = messages
         self.logger = logger
+        self.data_manager = data_manager
 
     def add_command_handler(self, name, callback, **kwargs):
         self.dispatcher.add_handler(CommandHandler(name, callback, **kwargs))
@@ -138,9 +150,13 @@ class KeypunchBot:
             text_format = Format.get_by_name(chat_data.format)
         if len(text) > 0:
             self.handle_format_request(bot, chat_data, text, text_format)
-            chat_data.format = None
+            if chat_data.format is not None:
+                chat_data.format = None
+                self.data_manager.put(chat_data)
         else:
-            chat_data.format = text_format.name
+            if chat_data.format != text_format.name:
+                chat_data.format = text_format.name
+                self.data_manager.put(chat_data)
             message = (self.messages["empty_format_request"]
                            .format(text_format.name_readable))
             bot.sendMessage(chat_data.id, message)
@@ -152,6 +168,7 @@ class KeypunchBot:
         else:
             bot.sendMessage(chat_data.id, self.messages["cancel_confirm"])
             chat_data.format = None
+            self.data_manager.put(chat_data)
 
     def showtext_respond(self, new_val, chat_data):
         if new_val is None:
@@ -162,13 +179,15 @@ class KeypunchBot:
             return self.messages["showtext_already_off"]
         elif new_val:
             chat_data.show_text = True
+            self.data_manager.put(chat_data)
             return self.messages["showtext_set_on"]
         else:
             chat_data.show_text = False
+            self.data_manager.put(chat_data)
             return self.messages["showtext_set_off"]
 
     @requires_chat_data
-    def showtext_command(self, bot, update, args, chat_data=None):
+    def showtext_command(self, bot, update, args, chat_data):
         reply = None
         reply_markup = None
         if len(args) > 1:
@@ -234,7 +253,7 @@ class KeypunchBot:
     def start_webhook(self, url):
         self.bot.set_webhook(url=url)
 
-    def remove_webhook(self, url):
+    def remove_webhook(self):
         self.bot.delete_webhook()
 
     def start_dispatch_thread(self):
