@@ -32,9 +32,11 @@ class MongoDataManager:
 
 
 class ChatData:
-    def __init__(self, id):
+    __slots__ = ["in_database", "id", "show_text", "format"]
+
+    def __init__(self, chat_id):
         self.in_database = False
-        self.id = id
+        self.id = chat_id
         self.show_text = True
         self.format = None
 
