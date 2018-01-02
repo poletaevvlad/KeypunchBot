@@ -14,19 +14,20 @@ from telegram.utils.request import Request
 import logging
 import yaml
 from io import BytesIO
-
-from encoding import Encoder
-from formatting import Format
-from chatdata import requires_chat_data
-from parsers import parse_boolean
+from threading import Thread
 from queue import Queue
+
+from .encoding import Encoder
+from .formatting import Format
+from .chatdata import requires_chat_data
+from .parsers import parse_boolean
 
 
 logging.basicConfig(format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
                     level=logging.INFO)
 
 
-class KeyPunchBot:
+class KeypunchBot:
     html_escape_chars = [("&", "&amp;"), (">", "&gt;"), ("<", "&lt;")]
     __slots__ = ["bot", "dispatcher", "encoder", "messages", "logger"]
 
@@ -88,7 +89,7 @@ class KeyPunchBot:
             bot.send_document(chat_id, document=stream, filename=filename)
 
     def escape_chars(self, text):
-        for original, replacement in KeyPunchBot.html_escape_chars:
+        for original, replacement in KeypunchBot.html_escape_chars:
             text = text.replace(original, replacement)
         return text
 
@@ -230,6 +231,16 @@ class KeyPunchBot:
         updater.start_polling()
         updater.idle()
 
+    def start_webhook(self, url):
+        self.bot.set_webhook(webhook_url=url)
+
+    def start_dispatch_thread(self):
+        thread = Thread(target=self.dispatcher.start, name='dispatcher')
+        thread.start()
+
+    def handle_update(self, update):
+        self.dispatcher.update_queue.put(update)
+
 
 def main():
     with open("config.yaml") as file:
@@ -241,7 +252,7 @@ def main():
     with open("messages.yaml") as file:
         messages = yaml.load(file)
 
-    keypunch = KeyPunchBot(config["api_key"], encoder, messages)
+    keypunch = KeypunchBot(config["api_key"], encoder, messages)
     keypunch.run_polling()
 
     # token = config["token"]
