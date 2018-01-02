@@ -1,18 +1,12 @@
-import webapp2
-import yaml
-from keypunch_bot import KeyPunchBot
-from telegram import Update
-import json
+# -*- coding: utf-8 -*-
 
 
-class MainPage(webapp2.RequestHandler):
-
-    def get(self):
-        config = yaml.load("config.yaml")
-        bot = KeyPunchBot(config["api_key"])
-
-        update = Update.de_json(json.loads(self.request.body), bot)
-        bot.dispatcher.process_update(update)
-
-
-app = webapp2.WSGIApplication([('/', MainPage), ], debug=True)
+def application(environ, start_response):
+    data = 'Hello, World!\n'
+    status = '200 OK'
+    response_headers = [
+        ('Content-type', 'text/plain'),
+        ('Content-Length', str(len(data)))
+    ]
+    start_response(status, response_headers)
+    return iter([bytes(data, "utf-8")])
