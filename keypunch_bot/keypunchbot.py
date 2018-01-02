@@ -59,6 +59,9 @@ class KeypunchBot:
         self.add_command_handler("cancel", self.cancel_command)
         self.add_command_handler("help", self.help_command)
         self.add_command_handler("about", self.about_command)
+        self.add_command_handler("about", self.about_command)
+        self.dispatcher.add_handler(MessageHandler([Filters.command],
+                                                   self.unknown_command))
         self.dispatcher.add_handler(CallbackQueryHandler(self.inlinequery))
         self.dispatcher.add_error_handler(self.error)
         self.encoder = encoder
@@ -70,7 +73,7 @@ class KeypunchBot:
         self.dispatcher.add_handler(CommandHandler(name, callback, **kwargs))
 
     def start_command(self, bot, update):
-        update.message.reply_text('Welcome!')
+        update.message.reply_text(self.messages["welcome"])
 
     def get_text_format(self, text):
         if text.startswith("/"):
@@ -242,6 +245,10 @@ class KeypunchBot:
     def about_command(self, bot, update):
         bot.sendMessage(update.effective_chat.id, self.messages["about"],
                         parse_mode="Markdown", disable_web_page_preview=True)
+
+    def unknown_command(self, bot, update):
+        bot.sendMessage(update.effective_chat.id,
+                        self.messages["unknown_command"])
 
     def run_polling(self):
         updater = Updater(bot=self.bot)
