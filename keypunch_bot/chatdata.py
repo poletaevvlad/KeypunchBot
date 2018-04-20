@@ -1,7 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from pymongo import MongoClient
 from urllib.parse import quote_plus
+
+from pymongo import MongoClient
+
+
+class InMemoryDataManager:
+    def __init__(self):
+        self.data = dict()
+
+    def get(self, chat_id):
+        if chat_id in self.data:
+            return self.data.get(chat_id)
+        else:
+            return ChatData(chat_id)
+
+    def put(self, chat_data):
+        self.data[chat_data.id] = chat_data
 
 
 class MongoDataManager:
@@ -22,28 +37,30 @@ class MongoDataManager:
         return chat_data
 
     def put(self, chat_data):
+        doc = dict(show_text=chat_data.show_text, format=chat_data.format,
+                   char_table=chat_data.chat_table)
         if chat_data.in_database:
-            doc = dict(show_text=chat_data.show_text, format=chat_data.format)
             self.collection.update_one({"_id": chat_data.id}, {"$set": doc})
         else:
-            doc = {"_id": chat_data.id, "show_text": chat_data.show_text,
-                   "format": chat_data.format}
+            doc["_id"] = chat_data.id
             self.collection.insert_one(doc)
 
 
 class ChatData:
-    __slots__ = ["in_database", "id", "show_text", "format"]
+    __slots__ = ["in_database", "id", "show_text", "format", "char_table"]
 
     def __init__(self, chat_id):
         self.in_database = False
         self.id = chat_id
         self.show_text = True
         self.format = None
+        self.char_table = None
 
     @classmethod
     def from_database(cls, data):
         chat_data = ChatData(data["_id"])
         chat_data.show_text = data["show_text"]
         chat_data.format = data["format"]
+        chat_data.chat_table = data["char_table"]
         chat_data.in_database = True
         return chat_data
