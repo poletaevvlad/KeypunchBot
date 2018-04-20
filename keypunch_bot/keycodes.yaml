@@ -1,5 +1,12 @@
 punchcard:
   type: punchcard
+  name: PK
+  supported:
+    - Capital latin letters (<code>A</code>-<code>Z</code>)
+    - Arabic numbers (<code>0</code>-<code>9</code>)
+    - Space character
+    - Line break
+    - Punctuation and some other symbols (<code>&amp;</code>, <code>-</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>.</code>, <code>&lt;</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>&gt;</code>, <code>?</code>)
   common:
     codes:
       A:  [11, 1]
@@ -66,6 +73,14 @@ punchcard:
 
 mtk2:
   type: tape
+  name: MTK-2
+  supported:
+    - Latin letters (<code>A</code>-<code>Z</code>)
+    - Cyrillic letters (<code>А</code>-<code>Я</code>)
+    - Arabic numbers (<code>0</code>-<code>9</code>)
+    - Space character
+    - Line break
+    - Punctuation and some other symbols (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>=</code>, <code>/</code>, <code>+</code>)
   common:
     codes:
       "\r": 2

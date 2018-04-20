@@ -34,10 +34,6 @@ def requires_chat_data(func):
 
 
 class KeypunchBot:
-    # html_escape_chars = [("&", "&amp;"), (">", "&gt;"), ("<", "&lt;")]
-    # __slots__ = ["bot", "dispatcher", "encoder", "messages", "logger",
-    #              "data_manager"]
-
     def __init__(self, token, formats_manager, messages, data_manager,
                  workers=4, logger=None):
         self.bot = Bot(token, request=Request(con_pool_size=workers + 4))
@@ -97,17 +93,30 @@ class KeypunchBot:
                                   filename=filename)
         else:
             bot.sendMessage(update.message.chat_id, message,
-                            disable_web_page_preview=True)
+                            disable_web_page_preview=True, parse_mode="html")
 
     def start_command(self, bot, update):
         self.reply(bot, update, self.messages["welcome"])
+
+    def _get_type_repr(self, type):
+        if type == "punchcard":
+            return self.messages["punched_cards"]
+        else:
+            return self.messages["punched_tape"]
 
     def generate(self, bot, update, text, format="png", chartable="punchcard",
                  show_text=True, as_file=False):
         formatter = self.formats_manager.get(chartable, format)
         count = formatter.chartable.count_chars(text, formatter.per_image)
         if count.images > formatter.max_images:
-            self.reply(bot, update, self.messages["too_many_cards"])
+            name, t = self.formats_manager.get_info(chartable)
+            if format != "text":
+                self.reply(bot, update, self.messages["too_many_images"].
+                           format(count.images, formatter.max_images))
+            else:
+                self.reply(bot, update, self.messages["too_many_text"].
+                           format(self._get_type_repr(t),
+                                  formatter.max_images * formatter.per_image))
             return
         if count.supported < len(text) / 2:
             self.reply(bot, update, self.messages["mostly_unsupported"])
@@ -149,28 +158,40 @@ class KeypunchBot:
             chat_data.format = None
             self.data_manager.put(chat_data)
 
-    def get_command(self, text):
+    def _get_command(self, text):
         command_end = text.find(" ")
         if command_end < 0:
-            command_end = len(text)
+            command_end = len(text) + 1
         return text[1: command_end]
 
     @requires_chat_data
     def handle_format(self, bot, update, chat_data):
-        format_name = self.get_command(update.message.text)
-        text = update.message.text[len(format_name):].strip()
+        format_name = self._get_command(update.message.text)
+        text = update.message.text[len(format_name) + 1:].strip()
         if len(text) > 0:
             self.generate(bot, update, text, format=format_name, as_file=True,
                           show_text=chat_data.show_text)
         else:
             chat_data.format = format_name
             self.data_manager.put(chat_data)
+            self.reply(bot, update, self.messages["empty_format_request"].
+                       format(format_name))
 
     @requires_chat_data
     def handle_chartable(self, bot, update, chat_data):
-        chartable_name = self.get_command(update.message.text)
-        chat_data.char_table = chartable_name
-        self.data_manager.put(chat_data)
+        chartable = self._get_command(update.message.text)
+        name, t = self.formats_manager.get_info(chartable)
+        unchanged = chat_data.char_table is None and chartable == "punchcard"
+        unchanged |= chat_data.char_table == chartable
+        if unchanged:
+            self.reply(bot, update, self.messages["unchanged_char_table"].
+                       format(name))
+        else:
+            chat_data.char_table = chartable
+            self.data_manager.put(chat_data)
+            type_repr = self._get_type_repr(t)
+            reply = self.messages["changed_char_table"].format(type_repr, name)
+            self.reply(bot, update, reply)
 
     @requires_chat_data
     def cancel_command(self, bot, update, chat_data):
@@ -199,13 +220,20 @@ class KeypunchBot:
             chat_data.show_text = False
             self.data_manager.put(chat_data)
 
-    # def escape_chars(self, text):
-#         for original, replacement in KeypunchBot.html_escape_chars:
-#             text = text.replace(original, replacement)
-#         return text
-
-    def characters_command(self, bot, update):
-        self.reply(bot, update, self.messages["supported_chars"])
+    @requires_chat_data
+    def characters_command(self, bot, update, chat_data):
+        char_table = chat_data.char_table
+        if char_table is None:
+            char_table = "punchcard"
+        name, t = self.formats_manager.get_info(char_table)
+        message = self.messages["supported_chars_prefix"].format(name)
+        for line in self.formats_manager.get_supported_characters(char_table):
+            message += self.messages["characters_line"].format(line)
+        message += self.messages["supported_chars_postfix"]
+        for name, table, type in self.formats_manager.get_all():
+            message += (self.messages["encoding_line"].
+                        format(name, self._get_type_repr(type), table))
+        self.reply(bot, update, message)
 
     def error(self, bot, update, error):
         if self.logger is None:
@@ -213,7 +241,10 @@ class KeypunchBot:
         self.logger.warning('Update "%s" caused error "%s"', update, error)
 
     def help_command(self, bot, update):
-        self.reply(bot, update, self.messages["help"])
+        encodings = ""
+        for name, table, type in self.formats_manager.get_all():
+            encodings += (self.messages["help_encoding"].format(table, name))
+        self.reply(bot, update, self.messages["help"].format(encodings))
 
     def about_command(self, bot, update):
         self.reply(bot, update, self.messages["about"])

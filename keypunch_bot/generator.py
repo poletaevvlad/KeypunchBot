@@ -104,3 +104,16 @@ class FormatsManager:
             return TapeFormat(ct, format)
         else:
             return PunchcardFormat(ct, format)
+
+    def get_info(self, code_table):
+        if code_table not in self.char_tables:
+            raise ValueError("unknown code table: " + code_table)
+        ct = self.char_tables[code_table]
+        return ct.name, ct.type
+
+    def get_all(self):
+        for key in sorted(self.char_tables.keys()):
+            yield self.char_tables[key].name, key, self.char_tables[key].type
+
+    def get_supported_characters(self, char_table):
+        return self.char_tables[char_table].supported

@@ -20,12 +20,18 @@ class CharTable:
         self.codes = dict()
         self.substitution = dict()
         self.type = "tape"
+        self.name = ""
+        self.supported = []
         for section in codes:
             entry = codes[section]
             if section == "substitution":
                 self.substitution = dict(entry)
             elif section == "type":
                 self.type = entry
+            elif section == "name":
+                self.name = entry
+            elif section == "supported":
+                self.supported = entry
             else:
                 self._add_group(entry)
 
