@@ -34,6 +34,8 @@ def requires_chat_data(func):
 
 
 class KeypunchBot:
+    default_char_table = "mtk2"
+
     def __init__(self, token, formats_manager, messages, data_manager,
                  workers=4, logger=None):
         self.bot = Bot(token, request=Request(con_pool_size=workers + 4))
@@ -104,8 +106,8 @@ class KeypunchBot:
         else:
             return self.messages["punched_tape"]
 
-    def generate(self, bot, update, text, format="png", chartable="punchcard",
-                 show_text=True, as_file=False):
+    def generate(self, bot, update, text, format="png",
+                 chartable=default_char_table, show_text=True, as_file=False):
         formatter = self.formats_manager.get(chartable, format)
         count = formatter.chartable.count_chars(text, formatter.per_image)
         if count.images > formatter.max_images:
@@ -150,7 +152,7 @@ class KeypunchBot:
         if chat_data.char_table is not None:
             char_table = chat_data.char_table
         else:
-            char_table = "punchcard"
+            char_table = self.default_char_table
         self.generate(bot, update, update.message.text, format=image_format,
                       as_file=chat_data.format is not None,
                       show_text=chat_data.show_text, chartable=char_table)
@@ -181,7 +183,8 @@ class KeypunchBot:
     def handle_chartable(self, bot, update, chat_data):
         chartable = self._get_command(update.message.text)
         name, t = self.formats_manager.get_info(chartable)
-        unchanged = chat_data.char_table is None and chartable == "punchcard"
+        unchanged = chat_data.char_table is None and \
+            chartable == self.default_char_table
         unchanged |= chat_data.char_table == chartable
         if unchanged:
             self.reply(bot, update, self.messages["unchanged_char_table"].
@@ -224,7 +227,7 @@ class KeypunchBot:
     def characters_command(self, bot, update, chat_data):
         char_table = chat_data.char_table
         if char_table is None:
-            char_table = "punchcard"
+            char_table = self.default_char_table
         name, t = self.formats_manager.get_info(char_table)
         message = self.messages["supported_chars_prefix"].format(name)
         for line in self.formats_manager.get_supported_characters(char_table):

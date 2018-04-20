@@ -1,12 +1,13 @@
-punchcard:
+ebcdic:
   type: punchcard
-  name: PK
+  name: EBCDIC
   supported:
-    - Capital latin letters (<code>A</code>-<code>Z</code>)
+    - Upper-case and lower-case latin letters (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
     - Arabic numbers (<code>0</code>-<code>9</code>)
-    - Space character
-    - Line break
-    - Punctuation and some other symbols (<code>&amp;</code>, <code>-</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>.</code>, <code>&lt;</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>&gt;</code>, <code>?</code>)
+    - Superscript arabic numbers (<code>⁰</code>-<code>⁹</code>)
+    - Space character and line break
+    - Punctuation and some other symbols (<code>¢</code>, <code>.</code>, <code>&lt;</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>¬</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>&gt;</code>, <code>?</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>{</code>, <code>}</code>, <code>≤</code>, <code>¤</code>, <code>≥</code>, <code>±</code>)
+    - Other characters not supported by this bot
   common:
     codes:
       A:  [11, 1]
@@ -48,27 +49,79 @@ punchcard:
       "7": [7]
       "8": [8]
       "9": [9]
-      ":": [2, 8]
-      "#": [3, 8]
-      "@": [4, 8]
-      "'": [5, 8]
-      "=": [6, 8]
-      "\"": [7, 8]
+      a: [11, 0, 1]
+      b: [11, 0, 2]
+      c: [11, 0, 3]
+      d: [11, 0, 4]
+      e: [11, 0, 5]
+      f: [11, 0, 6]
+      g: [11, 0, 7]
+      h: [11, 0, 8]
+      i: [11, 0, 9]
+      j: [11, 10, 1]
+      k: [11, 10, 2]
+      l: [11, 10, 3]
+      m: [11, 10, 4]
+      n: [11, 10, 5]
+      o: [11, 10, 6]
+      p: [11, 10, 7]
+      q: [11, 10, 8]
+      r: [11, 10, 9]
+      °: [10, 0, 1]
+      s: [10, 0, 2]
+      t: [10, 0, 3]
+      u: [10, 0, 4]
+      v: [10, 0, 5]
+      w: [10, 0, 6]
+      x: [10, 0, 7]
+      y: [10, 0, 8]
+      z: [10, 0, 9]
+
+      ⁰: [10, 11, 0, 1, 8]
+      ¹: [10, 11, 0, 1]
+      ²: [10, 11, 0, 2]
+      ³: [10, 11, 0, 3]
+      ⁴: [10, 11, 0, 4]
+      ⁵: [10, 11, 0, 5]
+      ⁶: [10, 11, 0, 6]
+      ⁷: [10, 11, 0, 7]
+      ⁸: [10, 11, 0, 8]
+      ⁹: [10, 11, 0, 9]
+
+      "¢": [11, 2, 8] 
       ".": [11, 3, 8]
       "<": [11, 4, 8]
       "(": [11, 5, 8]
       "+": [11, 6, 8]
       "|": [11, 7, 8]
-      "!": [10, 2, 8]
-      "$" : [10, 3, 8]
+      
+      "!": [10, 2, 8] 
+      "$": [10, 3, 8]
       "*": [10, 4, 8]
       ")": [10, 5, 8]
       ";": [10, 6, 8]
+      "¬": [10, 7, 8]
+
       ",": [0, 3, 8]
       "%": [0, 4, 8]
       "_": [0, 5, 8]
       ">": [0, 6, 8]
       "?": [0, 7, 8]
+
+      ":": [2, 8] 
+      "#": [3, 8]
+      "@": [4, 8]
+      "'": [5, 8]
+      "=": [6, 8]
+      "\"": [7, 8]
+
+      "{": [11, 0, 3, 8]
+      "}": [11, 10, 3, 8]
+      "≤": [11, 0, 3, 8]
+      "¤": [11, 10, 3, 8]
+      "≥": [10, 0, 6, 8]
+      "±": [11, 10, 6, 8]
+
       " \n\t": []
 
 mtk2:
@@ -93,61 +146,61 @@ mtk2:
   latin:
     activation: 31
     codes:
-      A: 3
-      B: 25
-      C: 14
-      D: 9
-      E: 1
-      F: 13
-      G: 26
-      H: 20
-      I: 6
-      J: 11
-      K: 15
-      L: 18
-      M: 28
-      N: 12
-      O: 24
-      P: 22
-      Q: 23
-      R: 10
-      S: 5
-      T: 16
-      U: 7
-      V: 30
-      W: 19
-      X: 29
-      Y: 21
-      Z: 17
+      aA: 3
+      bB: 25
+      cC: 14
+      dD: 9
+      eE: 1
+      fF: 13
+      gG: 26
+      hH: 20
+      iI: 6
+      jJ: 11
+      kK: 15
+      lL: 18
+      mM: 28
+      nN: 12
+      oO: 24
+      pP: 22
+      qQ: 23
+      rR: 10
+      sS: 5
+      yT: 16
+      uU: 7
+      vV: 30
+      wW: 19
+      xX: 29
+      yY: 21
+      zZ: 17
   russian:
     activation: 0
     codes:
-      А: 3
-      Б: 25
-      Ц: 14
-      Д: 9
-      Е: 1
-      Ф: 13
-      Г: 26
-      Х: 20
-      И: 6
-      Й: 11
-      К: 15
-      Л: 18
-      М: 28
-      Н: 12
-      О: 24
-      П: 22
-      Я: 23
-      Р: 10
-      С: 5
-      Т: 16
-      У: 7
-      Ж: 30
-      В: 19
-      Ь: 29
-      Ы: 21
-      З: 17
+      аА: 3
+      бБ: 25
+      цЦ: 14
+      дД: 9
+      еЕ: 1
+      фФ: 13
+      гГ: 26
+      хХ: 20
+      иИ: 6
+      йЙ: 11
+      кК: 15
+      лЛ: 18
+      мМ: 28
+      нН: 12
+      оО: 24
+      пП: 22
+      яЯ: 23
+      рР: 10
+      сС: 5
+      тТ: 16
+      уУ: 7
+      жЖ: 30
+      вВ: 19
+      ьЬ: 29
+      ыЫ: 21
+      зЗ: 17
   numbers:
     activation: 27
     codes:
@@ -156,10 +209,10 @@ mtk2:
       ":": 14
       "3": 1
       "Э": 13
-      "Ш": 26
-      "Щ": 20
+      "шШ": 26
+      "щЩ": 20
       "8": 6
-      "Ю": 11
+      "юЮ": 11
       "(": 15
       ")": 18
       ".": 28
@@ -176,3 +229,76 @@ mtk2:
       "/": 29
       "6": 21
       "+": 17
+
+ita2:
+  type: tape
+  name: ITA-2 (CCITT-2)
+  supported:
+    - Latin letters (<code>A</code>-<code>Z</code>)
+    - Arabic numbers (<code>0</code>-<code>9</code>)
+    - Space character
+    - Line break
+    - Pound symbol (<code>£</code>)
+    - Punctuation and some other symbols (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>;</code>, <code>/</code>, <code>+</code>, <code>!</code>, <code>&amp;</code>)
+  common:
+    codes:
+      "\r": 2
+      "\n": 8
+      " \t": 4
+  latin:
+    activation: 31
+    codes:
+      aA: 3
+      bB: 25
+      cC: 14
+      dD: 9
+      eE: 1
+      fF: 13
+      gG: 26
+      hH: 20
+      iI: 6
+      jJ: 11
+      kK: 15
+      lL: 18
+      mM: 28
+      nN: 12
+      oO: 24
+      pP: 22
+      qQ: 23
+      rR: 10
+      sS: 5
+      tT: 16
+      uU: 7
+      vV: 30
+      wW: 19
+      xX: 29
+      yY: 21
+      zZ: 17
+  numbers:
+    activation: 27
+    codes:
+      "-": 3
+      "?": 25
+      ":": 14
+      "3": 1
+      "!": 13
+      "&": 26
+      "£": 20
+      "8": 6
+      "(": 15
+      ")": 18
+      ".": 28
+      ",": 12
+      "9": 24
+      "0": 22
+      "1": 23
+      "4": 10
+      "'": 5
+      "5": 16
+      "7": 7
+      ";": 30
+      "2": 19
+      "/": 29
+      "6": 21
+      "+": 17
+

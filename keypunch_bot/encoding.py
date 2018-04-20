@@ -54,7 +54,6 @@ class CharTable:
                 self.codes[char] = entry
 
     def _get_code(self, char):
-        char = char.upper()
         while char in self.substitution:
             char = self.substitution[char]
         return char, self.codes.get(char)
