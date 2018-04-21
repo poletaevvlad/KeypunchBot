@@ -46,7 +46,6 @@ class KeypunchBot:
             self.dispatcher.add_handler(CommandHandler(name, cb, **kwargs))
 
         command("start", self.start_command)
-        command("info", self.info_command)
         command("cancel", self.cancel_command)
         command("showtext", self.showtext_command)
         command("hidetext", self.hidetext_command)
@@ -75,12 +74,6 @@ class KeypunchBot:
 
     def add_command_handler(self, name, callback, **kwargs):
         self.dispatcher.add_handler(CommandHandler(name, callback, **kwargs))
-
-    @requires_chat_data
-    def info_command(self, bot, update, chat_data):
-        self.reply(bot, update, "id = {}, show_text = {}, format={}".
-                   format(chat_data.id, chat_data.show_text,
-                          chat_data.format))
 
     def reply(self, bot, update, message, filename=None):
         if isinstance(message, BytesIO):
