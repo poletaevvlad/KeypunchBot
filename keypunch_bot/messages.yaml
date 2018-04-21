@@ -31,7 +31,12 @@ encoding_line: " • <b>{}</b> ({}, /{})\n"
 
 # misc. messages
 unknown_command: Your command is not recognized. Use /help to see the list of all supported commands.
-welcome: Send a text message in this chat and an image with a punched card or pucnhed tape with your text will be sent you back.\n\nCheck /help to see a list of all supported commands.
+
+welcome: |
+    Send a text message in this chat and an image with a punched card or pucnhed tape with your text will be sent you back.
+    
+    Check /help to see a list of all supported commands.
+
 heart: ❤
 
 # information about this software
