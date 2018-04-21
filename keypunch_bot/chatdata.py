@@ -38,7 +38,7 @@ class MongoDataManager:
 
     def put(self, chat_data):
         doc = dict(show_text=chat_data.show_text, format=chat_data.format,
-                   char_table=chat_data.chat_table)
+                   char_table=chat_data.char_table)
         if chat_data.in_database:
             self.collection.update_one({"_id": chat_data.id}, {"$set": doc})
         else:
@@ -61,7 +61,7 @@ class ChatData:
         chat_data = ChatData(data["_id"])
         chat_data.show_text = data["show_text"]
         chat_data.format = data["format"]
-        chat_data.chat_table = data["char_table"] if "char_table" in data \
+        chat_data.char_table = data["char_table"] if "char_table" in data \
             else None
         chat_data.in_database = True
         return chat_data
