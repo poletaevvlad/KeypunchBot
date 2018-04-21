@@ -7,21 +7,21 @@ from telegram import Update
 import signal
 
 from .keypunchbot import KeypunchBot
-from .encoding import Encoder
+from .generator import FormatsManager
 from .chatdata import MongoDataManager
 
 token = os.environ["WEBHOOK_TOKEN"]
 
-with open("keypunch_bot/keycodes.yaml") as keycodes:
-    encoder = Encoder(yaml.load(keycodes))
 with open("keypunch_bot/messages.yaml") as messages_strings:
     messages = yaml.load(messages_strings)
-
 data_manager = MongoDataManager(server=os.environ["MONGO_SERVER"],
                                 database=os.environ["MONGO_DATABASE"],
                                 user=os.environ["MONGO_USER"],
                                 password=os.environ["MONGO_PASSWORD"])
-bot = KeypunchBot(os.environ["API_KEY"], encoder, messages, data_manager)
+
+formats_manager = FormatsManager("keypunch_bot/keycodes.yaml")
+bot = KeypunchBot(os.environ["API_KEY"], formats_manager, messages,
+                  data_manager)
 try:
     bot.start_webhook("https://keypunch-bot.herokuapp.com/" + token)
 except:
