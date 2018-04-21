@@ -5,6 +5,7 @@ from functools import wraps
 from io import BytesIO, StringIO
 from queue import Queue
 from threading import Thread
+import os
 
 from telegram import Bot
 from telegram.ext import CommandHandler
@@ -34,7 +35,7 @@ def requires_chat_data(func):
 
 
 class KeypunchBot:
-    default_char_table = "mtk2"
+    default_char_table = "ebcdic880"
 
     def __init__(self, token, formats_manager, messages, data_manager,
                  workers=4, logger=None):
@@ -58,6 +59,10 @@ class KeypunchBot:
 
         for chartable_name in formats_manager.char_tables:
             command(chartable_name, self.handle_chartable)
+
+        if "HEART_COMMAND" in os.environ:
+            for cmd in os.environ["HEART_COMMAND"].split(";"):
+                command(cmd.strip(), self.heart_command)
 
         self.dispatcher.add_handler(MessageHandler(Filters.text, self.run))
         self.dispatcher.add_handler(MessageHandler(Filters.command,
@@ -237,6 +242,9 @@ class KeypunchBot:
             message += (self.messages["encoding_line"].
                         format(name, self._get_type_repr(type), table))
         self.reply(bot, update, message)
+
+    def heart_command(self, bot, update):
+        self.reply(bot, update, self.messages["heart"])
 
     def error(self, bot, update, error):
         if self.logger is None:
