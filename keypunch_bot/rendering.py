@@ -12,14 +12,17 @@ from .encoding import digits
 
 
 class ImageRenderer:
-    symbols_chars = ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&-:#@'=\".<(+|!$*);,"
-                     "%_>?/")
+    symbols = None
 
     def open_image(self, filename):
         dirpath = "./keypunch_bot"
         return Image.open(path.join(dirpath, "images", filename))
 
-    def split_map(self, image, width, height, rows, columns):
+    def split_map(self, image, width, height, rows=None, columns=None):
+        if rows is None:
+            rows = image.size[1] // height
+        if columns is None:
+            columns = image.size[0] // width
         for i in range(rows):
             for j in range(columns):
                 yield image.crop((width * j, height * i, width * (j + 1),
@@ -27,10 +30,13 @@ class ImageRenderer:
 
     def __init__(self, base):
         self.base = self.open_image(base)
-        symbols_sheet = self.open_image("encoded_symbols.png")
-        self.symbols = dict(zip(self.symbols_chars,
-                                self.split_map(symbols_sheet, 8, 14, 1,
-                                               len(self.symbols_chars))))
+        if self.symbols is None:
+            with open("./keypunch_bot/images/encoded_symbols.txt", "r",
+                      encoding="utf-8") as f:
+                chars = [c for c in f.read() if c != "\n" and c != "\r"]
+            symbols_sheet = self.open_image("encoded_symbols.png")
+            images = self.split_map(symbols_sheet, 8, 14)
+            self.symbols = dict(zip(chars, images))
         symbols_sheet.close()
 
     def render(self, encoded_message, output_format, show_text, fob):
