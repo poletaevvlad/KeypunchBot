@@ -61,6 +61,7 @@ class ChatData:
         chat_data = ChatData(data["_id"])
         chat_data.show_text = data["show_text"]
         chat_data.format = data["format"]
-        chat_data.chat_table = data["char_table"]
+        chat_data.chat_table = data["char_table"] if "char_table" in data \
+            else None
         chat_data.in_database = True
         return chat_data
