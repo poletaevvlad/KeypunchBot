@@ -27,3 +27,16 @@ supported commands send `\help` command.
 ### Punched tape (ITA-2 encoding)
 ![Pucnged tape](sample_punched_tape.png)
 
+## Dependencies
+
+The KeypunchBot uses the following open-source libraries:
+
+* [PyYAML](https://github.com/yaml)
+* [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)
+* [Pillow](http://python-pillow.org/)
+* [gunicorn](https://http://gunicorn.org/)
+* [pymongo](https://api.mongodb.com/python/current/)
+
+File `keypunch_bot/images/encoded_symbols.png` is generated using by 
+[png-font-generator](https://github.com/poletaevvlad/png-font-generator), 
+which was written for the development of KeypunchBot.
