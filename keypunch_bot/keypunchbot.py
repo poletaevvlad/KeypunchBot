@@ -186,8 +186,12 @@ class KeypunchBot:
         format_name = self._get_command(update.message.text)
         text = update.message.text[len(format_name) + 1:].strip()
         if len(text) > 0:
+            if chat_data.char_table is not None:
+                char_table = chat_data.char_table
+            else:
+                char_table = self.default_char_table
             self.generate(bot, update, text, format=format_name, as_file=True,
-                          show_text=chat_data.show_text)
+                          show_text=chat_data.show_text, chartable=char_table)
         else:
             chat_data.format = format_name
             self.data_manager.put(chat_data)
