@@ -37,6 +37,6 @@ The KeypunchBot uses the following open-source libraries:
 * [gunicorn](https://http://gunicorn.org/)
 * [pymongo](https://api.mongodb.com/python/current/)
 
-File `keypunch_bot/images/encoded_symbols.png` is generated using by 
+File `keypunch_bot/images/encoded_symbols.png` is generated using 
 [png-font-generator](https://github.com/poletaevvlad/png-font-generator), 
-which was written for the development of KeypunchBot.
+which was written for the development of KeypunchBot.   
