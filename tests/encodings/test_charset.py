@@ -40,6 +40,8 @@ def test_encoding_simple():
     charset = CharacterSet("Charset", EncodingType.PUNCHCARD)
     charset.add_characters(dict(a=[1, 2], b=[3]))
 
-    result = charset.encode("aab", 3)
+    result = charset.encode("acacb", 3)
     assert result.result == [[("a", 1), ("", 2), ("a", 1)],
                              [("", 2), ("b", 3)]]
+    assert result.unknown == {"c"}
+    assert result.unknown_count == 2
