@@ -17,10 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from .bot import ChatBot
+import click
+from keypunch_bot.keypunchbot import KeyPunchBot
 
 
-class KeyPunchBot(ChatBot):
+@click.command()
+@click.option("--api-key", required=True, envvar="API_KEY")
+def main(api_key):
+    keypunch = KeyPunchBot(api_key)
+    keypunch.start_polling()
 
-    def initialize(self):
-        pass
+
+if __name__ == "__main__":
+    main()  # pylint: disable=no-value-for-parameter

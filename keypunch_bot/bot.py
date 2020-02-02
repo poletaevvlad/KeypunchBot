@@ -17,10 +17,30 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from .bot import ChatBot
+from logging import Logger
+from abc import ABC, abstractmethod
+from telegram import Update
+from telegram.ext import Updater
+
+LOGGER = Logger(__name__)
 
 
-class KeyPunchBot(ChatBot):
+def on_error(update: Update, context):
+    LOGGER.warning('Update "%s" caused error "%s"', update, context.error)
 
+
+class ChatBot(ABC):
+    def __init__(self, api_key: str):
+        self.updater = Updater(api_key, use_context=True)
+        dispatcher = self.updater.dispatcher
+        dispatcher.add_error_handler(on_error)
+
+        self.initialize()
+
+    @abstractmethod
     def initialize(self):
         pass
+
+    def start_polling(self):
+        self.updater.start_polling()
+        self.updater.idle()
