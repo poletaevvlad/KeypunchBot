@@ -84,3 +84,17 @@ def test_too_many_pages():
     charset.add_characters(dict(a=[1]))
     with pytest.raises(TooManyPagesError):
         charset.encode("aaaaaaaaaaaaaaaaaa", 5, max_pages=3)
+
+
+def test_breaks_with_newline():
+    charset = CharacterSet("Charset", EncodingType.PUNCHCARD)
+    charset.add_characters(dict(a=[1]))
+    result = charset.encode("aaa\naaaa\naaaaaa", 50, break_with_line=True)
+    assert [len(x) for x in result.result] == [3, 4, 6]
+
+
+def test_does_not_break_with_newline():
+    charset = CharacterSet("Charset", EncodingType.PUNCHCARD)
+    charset.add_characters({"a": [1], "\n": [2]})
+    result = charset.encode("aaa\naaaa\naaaaaa", 50)
+    assert [len(x) for x in result.result] == [15]

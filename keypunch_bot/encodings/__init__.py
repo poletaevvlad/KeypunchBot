@@ -18,4 +18,4 @@
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
 from .charset import CharacterSet, EncodingType  # noqa
-from .errors import MessageTooLongError, TooManyPagesError
+from .errors import MessageTooLongError, TooManyPagesError  # noqa

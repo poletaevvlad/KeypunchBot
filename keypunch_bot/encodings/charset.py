@@ -18,6 +18,7 @@
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
 import enum
+import unicodedata
 from typing import Dict, List, Tuple, Set
 from dataclasses import dataclass
 from .errors import MessageTooLongError, TooManyPagesError
@@ -68,6 +69,13 @@ class EncodingResult:
     def pages_count(self):
         return len(self.result)
 
+    def break_page(self):
+        self._next_page = True
+
+
+def is_linebreak(char: str):
+    return unicodedata.category(char) in {"Zl", "Zp", "Cc"}
+
 
 class CharacterSet:
     def __init__(self, name: str, charset_type: EncodingType):
@@ -87,19 +95,25 @@ class CharacterSet:
     def __getitem__(self, char: str) -> CharacterEntry:
         return self._chars[char]
 
-    def encode(self, message: str, per_page: int,
-               max_length: int = -1, max_pages: int = -1) -> EncodingResult:
+    def __contains__(self, char: str) -> bool:
+        return char in self._chars
+
+    def encode(self, message: str, per_page: int, max_length: int = -1,
+               max_pages: int = -1, break_with_line: bool = False) -> \
+            EncodingResult:
         result = EncodingResult(per_page)
         activation: List[int] = []
         for char in message:
-            try:
+            if break_with_line and is_linebreak(char):
+                result.break_page()
+            elif char not in self:
+                result.add_unknown(char)
+            else:
                 entry = self[char]
                 if entry.needs_activation and activation != entry.activation:
                     result.add_code("", entry.activation)
                     activation = entry.activation
                 result.add_code(char, entry.codes)
-            except KeyError:
-                result.add_unknown(char)
 
             if max_length != -1 and result.total_length > max_length:
                 raise MessageTooLongError()
