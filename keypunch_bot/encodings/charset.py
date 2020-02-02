@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+import re
 import enum
 import unicodedata
 from typing import Dict, List, Tuple, Set
@@ -120,6 +121,14 @@ class CharacterSet:
 
     def __iter__(self):
         return iter(self._chars)
+
+    def fix_string(self, message: str) -> str:
+        message = message.strip()
+        for char, substitition in self.substitutions.items():
+            message = message.replace(char, substitition)
+        message = re.sub(r"\s*[\n\r]+\s*", "\n", message)
+        message = re.sub(r"[^\S\n\r]+", " ", message)
+        return message
 
     def encode(self, message: str, params: EncodingParams) -> \
             EncodingResult:

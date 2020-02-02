@@ -100,3 +100,19 @@ def test_does_not_break_with_newline():
     charset.add_characters({"a": [1], "\n": [2]})
     result = charset.encode("aaa\naaaa\naaaaaa", EncodingParams(per_page=50))
     assert [len(x) for x in result.result] == [15]
+
+
+@pytest.mark.parametrize("original, expected", [
+    ("hello    \t  world", "hello world"),
+    ("hello\n\n\rworld", "hello\nworld"),
+    ("   hello\n\n\t", "hello"),
+    ("\nhello\n", "hello"),
+    ("hello   \n   world\n", "hello\nworld"),
+    ("a-b", 'b+b')
+])
+def test_fix_string(original: str, expected: str):
+    charset = CharacterSet("Charset", EncodingType.PUNCHCARD, {
+        "-": "+",
+        "a": "b"
+    })
+    assert charset.fix_string(original) == expected
