@@ -7,3 +7,4 @@ keypunch_bot/config.yaml
 commands.txtx
 *.pyc
 .env
+.venv
