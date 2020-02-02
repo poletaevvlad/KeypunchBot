@@ -8,3 +8,4 @@ commands.txtx
 *.pyc
 .env
 .venv
+*.sublime-*
