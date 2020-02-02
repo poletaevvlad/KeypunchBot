@@ -57,6 +57,7 @@ class ChatBot(ABC):
     def initialize(self):
         pass
 
+    @abstractmethod
     def text(self, ctx: MessageContext):
         pass
 
