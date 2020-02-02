@@ -19,3 +19,4 @@
 
 from .charset import CharacterSet, EncodingType  # noqa
 from .errors import MessageTooLongError, TooManyPagesError  # noqa
+from .repository import CharacterSetsRepository  # noqa
