@@ -17,7 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from keypunch_bot.encodings import CharacterSet, EncodingType
+import pytest
+from keypunch_bot.encodings import CharacterSet, EncodingType, \
+    MessageTooLongError, TooManyPagesError
 
 
 def test_creating():
@@ -62,3 +64,23 @@ def test_register_switching():
         "a", "", "c", "c", "d", "a", "b", "", "e", "", "c", "", "f"
     ]
     assert [x[0] for x in result.result[0]] == expected_chars
+
+
+def test_message_too_long():
+    charset = CharacterSet("Charset", EncodingType.PUNCHCARD)
+    charset.add_characters(dict(a=[1]))
+    with pytest.raises(MessageTooLongError):
+        charset.encode("aaaaaaaaa", 100, max_length=5)
+
+
+def test_message_too_long_ignores_unknown():
+    charset = CharacterSet("Charset", EncodingType.PUNCHCARD)
+    charset.add_characters(dict(a=[1]))
+    charset.encode("abbbbbbba", 100, max_length=5)
+
+
+def test_too_many_pages():
+    charset = CharacterSet("Charset", EncodingType.PUNCHCARD)
+    charset.add_characters(dict(a=[1]))
+    with pytest.raises(TooManyPagesError):
+        charset.encode("aaaaaaaaaaaaaaaaaa", 5, max_pages=3)

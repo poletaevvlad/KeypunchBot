@@ -20,6 +20,7 @@
 import enum
 from typing import Dict, List, Tuple, Set
 from dataclasses import dataclass
+from .errors import MessageTooLongError, TooManyPagesError
 
 
 class EncodingType(enum.Enum):
@@ -43,10 +44,12 @@ class EncodingResult:
         self._next_page: bool = True
 
         self.result: List[List[Tuple[str, int]]] = []
+        self.total_length: int = 0
         self.unknown: Set[str] = set()
         self.unknown_count: int = 0
 
     def add_code(self, char: str, codes: List[int]):
+        self.total_length += 1
         for code in codes:
             if self._next_page:
                 self.result.append([(char, code)])
@@ -60,6 +63,10 @@ class EncodingResult:
     def add_unknown(self, char: str):
         self.unknown.add(char)
         self.unknown_count += 1
+
+    @property
+    def pages_count(self):
+        return len(self.result)
 
 
 class CharacterSet:
@@ -80,7 +87,8 @@ class CharacterSet:
     def __getitem__(self, char: str) -> CharacterEntry:
         return self._chars[char]
 
-    def encode(self, message: str, per_page: int) -> EncodingResult:
+    def encode(self, message: str, per_page: int,
+               max_length: int = -1, max_pages: int = -1) -> EncodingResult:
         result = EncodingResult(per_page)
         activation: List[int] = []
         for char in message:
@@ -92,4 +100,9 @@ class CharacterSet:
                 result.add_code(char, entry.codes)
             except KeyError:
                 result.add_unknown(char)
+
+            if max_length != -1 and result.total_length > max_length:
+                raise MessageTooLongError()
+            if max_pages != -1 and result.pages_count > max_pages:
+                raise TooManyPagesError()
         return result
