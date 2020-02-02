@@ -34,3 +34,12 @@ def test_creating():
     assert charset["c"].codes == [7]
     assert charset["c"].needs_activation
     assert charset["c"].activation == [15]
+
+
+def test_encoding_simple():
+    charset = CharacterSet("Charset", EncodingType.PUNCHCARD)
+    charset.add_characters(dict(a=[1, 2], b=[3]))
+
+    result = charset.encode("aab", 3)
+    assert result.result == [[("a", 1), ("", 2), ("a", 1)],
+                             [("", 2), ("b", 3)]]

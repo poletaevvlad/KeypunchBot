@@ -18,7 +18,7 @@
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
 import enum
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from dataclasses import dataclass
 
 
@@ -35,6 +35,25 @@ class CharacterEntry:
     @property
     def needs_activation(self) -> bool:
         return len(self.activation) != 0
+
+
+class EncodingResult:
+    def __init__(self, per_page: int):
+        self._per_page: int = per_page
+        self._next_page: bool = True
+
+        self.result: List[List[Tuple[str, int]]] = []
+
+    def add_code(self, char: str, codes: List[int]):
+        for code in codes:
+            if self._next_page:
+                self.result.append([(char, code)])
+                self._next_page = False
+            else:
+                last = self.result[-1]
+                last.append((char, code))
+                self._next_page = len(self.result[-1]) == self._per_page
+            char = ""
 
 
 class CharacterSet:
@@ -54,3 +73,13 @@ class CharacterSet:
 
     def __getitem__(self, char: str) -> CharacterEntry:
         return self._chars[char]
+
+    def encode(self, message: str, per_page: int) -> EncodingResult:
+        result = EncodingResult(per_page)
+        for char in message:
+            try:
+                entry = self[char]
+                result.add_code(char, entry.codes)
+            except IndexError:
+                pass
+        return result
