@@ -82,9 +82,13 @@ class CharacterSet:
 
     def encode(self, message: str, per_page: int) -> EncodingResult:
         result = EncodingResult(per_page)
+        activation: List[int] = []
         for char in message:
             try:
                 entry = self[char]
+                if entry.needs_activation and activation != entry.activation:
+                    result.add_code("", entry.activation)
+                    activation = entry.activation
                 result.add_code(char, entry.codes)
             except KeyError:
                 result.add_unknown(char)

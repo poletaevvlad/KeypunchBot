@@ -45,3 +45,20 @@ def test_encoding_simple():
                              [("", 2), ("b", 3)]]
     assert result.unknown == {"c"}
     assert result.unknown_count == 2
+
+
+def test_register_switching():
+    charset = CharacterSet("Charset", EncodingType.PUNCHCARD)
+    charset.add_characters(dict(a=[1], b=[2]))
+    charset.add_characters(dict(c=[3], d=[4]), activation=[50])
+    charset.add_characters(dict(e=[5], f=[6]), activation=[51])
+
+    result = charset.encode("accdabecf", 100)
+    assert len(result.result) == 1
+
+    expected_codes = [1, 50, 3, 3, 4, 1, 2, 51, 5, 50, 3, 51, 6]
+    assert [x[1] for x in result.result[0]] == expected_codes
+    expected_chars = [
+        "a", "", "c", "c", "d", "a", "b", "", "e", "", "c", "", "f"
+    ]
+    assert [x[0] for x in result.result[0]] == expected_chars
