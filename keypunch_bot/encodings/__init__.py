@@ -17,6 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from .charset import CharacterSet, EncodingType  # noqa
+from .charset import CharacterSet, EncodingType, EncodingParams  # noqa
 from .errors import MessageTooLongError, TooManyPagesError  # noqa
 from .repository import CharacterSetsRepository  # noqa

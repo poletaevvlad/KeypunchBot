@@ -77,6 +77,22 @@ def is_linebreak(char: str):
     return unicodedata.category(char) in {"Zl", "Zp", "Cc"}
 
 
+@dataclass
+class EncodingParams:
+    per_page: int
+    max_length: int = -1
+    max_pages: int = -1
+    break_with_line: bool = False
+
+    @property
+    def has_max_length(self):
+        return self.max_length >= 0
+
+    @property
+    def has_max_pages(self):
+        return self.max_pages >= 0
+
+
 class CharacterSet:
     def __init__(self, name: str, charset_type: EncodingType,
                  substitutions: Dict[str, str] = None):
@@ -105,13 +121,12 @@ class CharacterSet:
     def __iter__(self):
         return iter(self._chars)
 
-    def encode(self, message: str, per_page: int, max_length: int = -1,
-               max_pages: int = -1, break_with_line: bool = False) -> \
+    def encode(self, message: str, params: EncodingParams) -> \
             EncodingResult:
-        result = EncodingResult(per_page)
+        result = EncodingResult(params.per_page)
         activation: List[int] = []
         for char in message:
-            if break_with_line and is_linebreak(char):
+            if params.break_with_line and is_linebreak(char):
                 result.break_page()
             elif char not in self:
                 result.add_unknown(char)
@@ -122,8 +137,9 @@ class CharacterSet:
                     activation = entry.activation
                 result.add_code(char, entry.codes)
 
-            if max_length != -1 and result.total_length > max_length:
+            if params.has_max_length and \
+               result.total_length > params.max_length:
                 raise MessageTooLongError()
-            if max_pages != -1 and result.pages_count > max_pages:
+            if params.has_max_pages and result.pages_count > params.max_pages:
                 raise TooManyPagesError()
         return result
