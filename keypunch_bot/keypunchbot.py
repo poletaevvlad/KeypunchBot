@@ -17,10 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from .bot import ChatBot
+from .bot import ChatBot, MessageContext
 
 
+# pylint: disable=no-self-use
 class KeyPunchBot(ChatBot):
-
     def initialize(self):
+        self.on_command("start", self.start_command)
+
+    def start_command(self, ctx: MessageContext):
+        pass
+
+    def text(self, ctx: MessageContext):
         pass
