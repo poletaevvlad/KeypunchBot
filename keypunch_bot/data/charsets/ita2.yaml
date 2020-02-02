@@ -1,0 +1,69 @@
+id: ita2
+type: tape
+name: ITA-2 (CCITT-2)
+supported:
+  - Latin letters (<code>A</code>-<code>Z</code>)
+  - Arabic numbers (<code>0</code>-<code>9</code>)
+  - Space character
+  - Line break
+  - Pound symbol (<code>£</code>)
+  - Punctuation and some other symbols (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>;</code>, <code>/</code>, <code>+</code>, <code>!</code>, <code>&amp;</code>)
+common:
+  "\r": 2
+  "\n": 8
+  " \t": 4
+registers:
+  - activation: 31
+    codes:
+      aA: 3
+      bB: 25
+      cC: 14
+      dD: 9
+      eE: 1
+      fF: 13
+      gG: 26
+      hH: 20
+      iI: 6
+      jJ: 11
+      kK: 15
+      lL: 18
+      mM: 28
+      nN: 12
+      oO: 24
+      pP: 22
+      qQ: 23
+      rR: 10
+      sS: 5
+      tT: 16
+      uU: 7
+      vV: 30
+      wW: 19
+      xX: 29
+      yY: 21
+      zZ: 17
+  - activation: 27
+    codes:
+      "-": 3
+      "?": 25
+      ":": 14
+      "3": 1
+      "!": 13
+      "&": 26
+      "£": 20
+      "8": 6
+      "(": 15
+      ")": 18
+      ".": 28
+      ",": 12
+      "9": 24
+      "0": 22
+      "1": 23
+      "4": 10
+      "'": 5
+      "5": 16
+      "7": 7
+      ";": 30
+      "2": 19
+      "/": 29
+      "6": 21
+      "+": 17

@@ -78,10 +78,14 @@ def is_linebreak(char: str):
 
 
 class CharacterSet:
-    def __init__(self, name: str, charset_type: EncodingType):
+    def __init__(self, name: str, charset_type: EncodingType,
+                 substitutions: Dict[str, str] = None):
         self.name: str = name
         self.type: EncodingType = charset_type
         self._chars: Dict[str, CharacterEntry] = {}
+        if substitutions is None:
+            substitutions = {}
+        self.substitutions: Dict[str, str] = substitutions
 
     def add_characters(self, characters: Dict[str, List[int]],
                        activation: List[int] = None):
@@ -97,6 +101,9 @@ class CharacterSet:
 
     def __contains__(self, char: str) -> bool:
         return char in self._chars
+
+    def __iter__(self):
+        return iter(self._chars)
 
     def encode(self, message: str, per_page: int, max_length: int = -1,
                max_pages: int = -1, break_with_line: bool = False) -> \

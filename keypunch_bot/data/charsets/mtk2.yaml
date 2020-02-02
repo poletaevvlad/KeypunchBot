@@ -1,0 +1,102 @@
+id: mtk2
+type: tape
+name: MTK-2
+supported:
+  - Latin letters (<code>A</code>-<code>Z</code>)
+  - Cyrillic letters (<code>А</code>-<code>Я</code>)
+  - Arabic numbers (<code>0</code>-<code>9</code>)
+  - Space character
+  - Line break
+  - Punctuation and some other symbols (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>=</code>, <code>/</code>, <code>+</code>)
+common:
+  "\r": 2
+  "\n": 8
+  " \t": 4
+substitution:
+  "Ъ": "Ь"
+  "Ё": "Е"
+  "Ч": "4"
+registers:
+  - activation: 31
+    codes:
+      aA: 3
+      bB: 25
+      cC: 14
+      dD: 9
+      eE: 1
+      fF: 13
+      gG: 26
+      hH: 20
+      iI: 6
+      jJ: 11
+      kK: 15
+      lL: 18
+      mM: 28
+      nN: 12
+      oO: 24
+      pP: 22
+      qQ: 23
+      rR: 10
+      sS: 5
+      tT: 16
+      uU: 7
+      vV: 30
+      wW: 19
+      xX: 29
+      yY: 21
+      zZ: 17
+  - activation: 0
+    codes:
+      аА: 3
+      бБ: 25
+      цЦ: 14
+      дД: 9
+      еЕ: 1
+      фФ: 13
+      гГ: 26
+      хХ: 20
+      иИ: 6
+      йЙ: 11
+      кК: 15
+      лЛ: 18
+      мМ: 28
+      нН: 12
+      оО: 24
+      пП: 22
+      яЯ: 23
+      рР: 10
+      сС: 5
+      тТ: 16
+      уУ: 7
+      жЖ: 30
+      вВ: 19
+      ьЬ: 29
+      ыЫ: 21
+      зЗ: 17
+  - activation: 27
+    codes:
+      "-": 3
+      "?": 25
+      ":": 14
+      "3": 1
+      "Э": 13
+      "шШ": 26
+      "щЩ": 20
+      "8": 6
+      "юЮ": 11
+      "(": 15
+      ")": 18
+      ".": 28
+      ",": 12
+      "9": 24
+      "0": 22
+      "1": 23
+      "4": 10
+      "'": 5
+      "5": 16
+      "7": 7
+      "=": 30
+      "2": 19
+      "/": 29
+      "6": 21
+      "+": 17
