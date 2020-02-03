@@ -17,9 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List, Tuple
+from .text_stream import TextStream
 
-from .stream import Stream  # noqa
-from .text_stream import TextStream  # noqa
 
-from .renderer import Renderer  # noqa
-from .text_renderer import punched_tape_renderer  # noqa
+def punched_tape_renderer(stream: TextStream, message: List[Tuple[str, int]],
+                          show_text: bool):
+    for char, code in message:
+        encoded = format(code, "05b")
+        encoded = f"{encoded[0:3]}.{encoded[3:]}"
+        if show_text and char != "":
+            encoded += f"  {char}"
+        stream.write_line(encoded)

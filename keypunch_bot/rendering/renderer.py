@@ -17,9 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import TypeVar, List, Tuple
+from typing_extensions import Protocol
+from .stream import Stream
 
-from .stream import Stream  # noqa
-from .text_stream import TextStream  # noqa
+TStream = TypeVar("TStream", bound=Stream, contravariant=True)
 
-from .renderer import Renderer  # noqa
-from .text_renderer import punched_tape_renderer  # noqa
+
+# pylint: disable=too-few-public-methods
+class Renderer(Protocol[TStream]):
+    def __call__(self, stream: TStream, message: List[Tuple[str, int]],
+                 show_text: bool):
+        pass
