@@ -18,11 +18,15 @@
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
 from logging import Logger
+from pathlib import Path
 from typing import Callable
 from abc import ABC, abstractmethod
 from telegram import Update
 from telegram.ext import Updater, CallbackContext, CommandHandler, \
     MessageHandler, Filters
+
+from .i18n import TranslationManager, Language
+from .utils import lazy_property
 
 LOGGER = Logger(__name__)
 
@@ -32,9 +36,18 @@ def on_error(update: Update, context):
 
 
 class MessageContext:
-    def __init__(self, update, context):
+    def __init__(self, update: Update, context: CallbackContext,
+                 translation_manager: TranslationManager):
         self.update = update
         self.context = context
+        self._translation_manager = translation_manager
+
+    @lazy_property
+    def lang(self) -> Language:
+        language = self.update.message.from_user.language_code
+        if language is None:
+            return self._translation_manager.default_lang
+        return self._translation_manager.get(language)
 
 
 MessageCallback = Callable[[MessageContext], None]
@@ -45,6 +58,9 @@ class ChatBot(ABC):
         self._updater = Updater(api_key, use_context=True)
         self._dispatcher = self._updater.dispatcher
         self._dispatcher.add_error_handler(on_error)
+
+        lang_path = Path(__file__).parents[0] / "data" / "i18n"
+        self._lang_manager = TranslationManager.load(lang_path, default="en")
 
         self.initialize()
 
@@ -63,7 +79,11 @@ class ChatBot(ABC):
 
     def _create_handler(self, callback: MessageCallback):
         def handler(update: Update, context: CallbackContext):
-            message_context = MessageContext(update, context)
+            message_context = MessageContext(
+                update=update,
+                context=context,
+                translation_manager=self._lang_manager
+            )
             callback(message_context)
         return handler
 
