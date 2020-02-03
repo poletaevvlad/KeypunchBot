@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union, Any, Dict, List, Optional
+from typing import Union, Any, Dict, List, Optional, Iterable
 from abc import ABC, abstractmethod
 
 StringPath = List[Union[str, int]]
@@ -32,10 +32,19 @@ class Language(ABC):
     def get_translation(self, path: StringPath) -> Optional[str]:
         pass
 
-    def __getitem__(self, *path: Union[str, int]):
-        translation = self.get_translation(list(path))
+    def __getitem__(self, *path: Union[StringPath, str, int]):
+        def flatten(path: Iterable[Union[StringPath, str, int]]) -> \
+                Iterable[Union[str, int]]:
+            for part in path:
+                if isinstance(part, (int, str)):
+                    yield part
+                else:
+                    yield from flatten(part)
+
+        flat_path: StringPath = list(flatten(path))
+        translation = self.get_translation(list(flat_path))
         if translation is None:
-            return self.fallback.__getitem__(*path)
+            return self.fallback[flat_path]
         return translation
 
 

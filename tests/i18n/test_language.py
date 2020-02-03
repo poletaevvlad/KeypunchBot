@@ -31,8 +31,7 @@ MESSAGES = {
     }
 }
 
-
-@pytest.mark.parametrize("path, string", [
+PATH_EXAMPLES = [
     (["a"], "A"),
     (["c"], "c"),
     (["b", "c"], "C"),
@@ -44,7 +43,16 @@ MESSAGES = {
     (["b", "d", 1], "D1"),
     (["b", "d", 4], "b.d.4"),
     (["b", "d", -2], "b.d.-2")
-])
+]
+
+
+@pytest.mark.parametrize("path, string", PATH_EXAMPLES)
 def test_get_string(path, string):
     language = StringsLanguage(NoMessageLanguage(), MESSAGES)
     assert language.__getitem__(*path) == string
+
+
+@pytest.mark.parametrize("path, string", PATH_EXAMPLES)
+def test_get_string_collection(path, string):
+    language = StringsLanguage(NoMessageLanguage(), MESSAGES)
+    assert language[path] == string
