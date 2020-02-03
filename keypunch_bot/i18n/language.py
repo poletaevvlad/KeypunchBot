@@ -19,6 +19,8 @@
 
 from typing import Union, Any, Dict, List, Optional, Iterable
 from abc import ABC, abstractmethod
+from collections import defaultdict
+
 
 StringPath = List[Union[str, int]]
 StringsGroup = Union[str, List[Any], Dict[str, Any]]
@@ -32,7 +34,7 @@ class Language(ABC):
     def get_translation(self, path: StringPath) -> Optional[str]:
         pass
 
-    def __getitem__(self, *path: Union[StringPath, str, int]):
+    def __getitem__(self, *path: Union[StringPath, str, int]) -> str:
         def flatten(path: Iterable[Union[StringPath, str, int]]) -> \
                 Iterable[Union[str, int]]:
             for part in path:
@@ -46,6 +48,20 @@ class Language(ABC):
         if translation is None:
             return self.fallback[flat_path]
         return translation
+
+    def get(self, *path: Union[StringPath, str, int],
+            **kwargs: Union[str, StringPath]) -> str:
+
+        # pylint: disable=too-few-public-methods
+        class FallbackDict(Dict[str, str]):
+            def __missing__(self, key: str):
+                return f"{{{key}}}"
+
+        params = FallbackDict({
+            key: value if isinstance(value, str) else self[value]
+            for key, value in kwargs.items()
+        })
+        return self.__getitem__(*path).format_map(params)
 
 
 # pylint: disable=too-few-public-methods

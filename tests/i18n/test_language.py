@@ -27,7 +27,8 @@ MESSAGES = {
         "d": ["D0", "D1", "D2"],
         "e": {
             "f": "F"
-        }
+        },
+        "subst": "{s1}, {s2}"
     }
 }
 
@@ -56,3 +57,15 @@ def test_get_string(path, string):
 def test_get_string_collection(path, string):
     language = StringsLanguage(NoMessageLanguage(), MESSAGES)
     assert language[path] == string
+
+
+def test_format_missing():
+    language = StringsLanguage(NoMessageLanguage(), MESSAGES)
+    res = language.get("b", "subst", s1="string")
+    assert res == "string, {s2}"
+
+
+def test_format_lookup():
+    language = StringsLanguage(NoMessageLanguage(), MESSAGES)
+    res = language.get("b", "subst", s1=["b", "d", 0], s2=["a", "b"])
+    assert res == "D0, a.b"
