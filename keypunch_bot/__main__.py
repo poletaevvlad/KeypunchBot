@@ -19,12 +19,14 @@
 
 import click
 from keypunch_bot.keypunchbot import KeyPunchBot
+from keypunch_bot.persistance import InMemoryStore
 
 
 @click.command()
 @click.option("--api-key", required=True, envvar="API_KEY")
 def main(api_key):
-    keypunch = KeyPunchBot(api_key)
+    store = InMemoryStore()
+    keypunch = KeyPunchBot(api_key, store)
     keypunch.start_polling()
 
 

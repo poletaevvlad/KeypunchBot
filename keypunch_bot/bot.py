@@ -17,9 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from logging import Logger
 from pathlib import Path
-from typing import Callable, TypeVar
+from logging import Logger
 from abc import ABC, abstractmethod
 from telegram import Update
 from telegram.ext import Updater, CallbackContext, CommandHandler, \
@@ -82,9 +81,6 @@ class MessageContext:
         )
 
 
-MessageCallback = Callable[[MessageContext], None]
-
-
 class ChatBot(ABC):
     def __init__(self, api_key: str, store: Store):
         self._updater = Updater(api_key, use_context=True)
@@ -99,7 +95,7 @@ class ChatBot(ABC):
 
         self._dispatcher.add_handler(MessageHandler(
             Filters.text,
-            self._create_handler(self.text)
+            self._create_handler(self.text, None)
         ))
 
     @abstractmethod
@@ -110,7 +106,7 @@ class ChatBot(ABC):
     def text(self, ctx: MessageContext):
         pass
 
-    def _create_handler(self, callback: MessageCallback):
+    def _create_handler(self, callback, argument=None):
         def handler(update: Update, context: CallbackContext):
             message_context = MessageContext(
                 update=update,
@@ -118,11 +114,14 @@ class ChatBot(ABC):
                 translation_manager=self._lang_manager,
                 store=self._store
             )
-            callback(message_context)
+            if argument is not None:
+                callback(message_context, argument)
+            else:
+                callback(message_context)
         return handler
 
-    def on_command(self, command: str, callback: MessageCallback):
-        handler = self._create_handler(callback)
+    def on_command(self, command: str, callback, argument=None):
+        handler = self._create_handler(callback, argument)
         self._dispatcher.add_handler(CommandHandler(command, handler))
 
     def start_polling(self):
