@@ -20,6 +20,7 @@
 
 from .stream import Stream  # noqa
 from .text_stream import TextStream  # noqa
+from .graphics_stream import GraphicsStream  # noqa
 
 from .renderer import Renderer  # noqa
 from .text_renderer import punched_tape_renderer  # noqa
