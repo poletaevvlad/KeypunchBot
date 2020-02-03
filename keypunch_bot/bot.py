@@ -91,8 +91,6 @@ class ChatBot(ABC):
         lang_path = Path(__file__).parents[0] / "data" / "i18n"
         self._lang_manager = TranslationManager.load(lang_path, default="en")
 
-        self.initialize()
-
         self._dispatcher.add_handler(MessageHandler(
             Filters.text,
             self._create_handler(self.text, None)

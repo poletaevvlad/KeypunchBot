@@ -21,3 +21,11 @@ text:
   "off":
     already: I already do not print your text on punched cards and punched tape.
     set: I will stop printing your text on punched cards and punched tape.
+
+
+set_charset:
+  already: <b>{encoding}</b> encoding is already selected.
+  selected: From now on I will use <b>{encoding}</b> to generate {kind}.
+  punchcard: punched cards
+  tape: punched tapes
+

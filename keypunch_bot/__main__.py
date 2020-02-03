@@ -27,6 +27,7 @@ from keypunch_bot.persistance import InMemoryStore
 def main(api_key):
     store = InMemoryStore()
     keypunch = KeyPunchBot(api_key, store)
+    keypunch.initialize()
     keypunch.start_polling()
 
 
