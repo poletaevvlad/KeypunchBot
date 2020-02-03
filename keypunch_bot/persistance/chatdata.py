@@ -22,7 +22,9 @@ import enum
 
 
 class Format(enum.Enum):
+    DEFAULT = "default"
     PNG = "png"
+    JPEG = "jpeg"
     TEXT = "text"
 
 

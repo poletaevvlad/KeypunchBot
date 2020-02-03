@@ -17,7 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from .charset import CharacterSet, EncodingType, EncodingParams  # noqa
-from .errors import MessageTooLongError, TooManyPagesError  # noqa
-from .repository import CharacterSetsRepository  # noqa
-from .config_factory import params_factory  # noqa
+import itertools
+import pytest
+from keypunch_bot.encodings import params_factory, EncodingType, EncodingParams
+from keypunch_bot.persistance import Format
+
+
+@pytest.mark.parametrize("encoding_format, encoding_type", itertools.product(
+    [Format.DEFAULT, Format.PNG, Format.TEXT],
+    [EncodingType.PUNCHCARD, EncodingType.TAPE]
+))
+def test_factory_types(encoding_format, encoding_type):
+    params = params_factory(encoding_format, encoding_type)
+    assert isinstance(params, EncodingParams)
+    assert isinstance(params.per_page, int)
+    assert isinstance(params.max_length, int)
+    assert isinstance(params.max_pages, int)
+    assert isinstance(params.break_with_line, bool)
