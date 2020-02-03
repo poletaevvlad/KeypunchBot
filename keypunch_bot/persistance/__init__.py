@@ -17,6 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from .chatdata import ChatData  # noqa
+from .chatdata import ChatData, Format  # noqa
 from .store import Store  # noqa
 from .memory import InMemoryStore  # noqa

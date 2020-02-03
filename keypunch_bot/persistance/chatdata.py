@@ -23,6 +23,7 @@ import enum
 
 class Format(enum.Enum):
     PNG = "png"
+    TEXT = "text"
 
 
 class ChatData(NamedTuple):

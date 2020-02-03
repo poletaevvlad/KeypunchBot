@@ -18,14 +18,25 @@
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
 from unittest.mock import MagicMock
+import pytest
 from keypunch_bot.bot import MessageContext
+from keypunch_bot.persistance import InMemoryStore, ChatData, Format
 
 
-def test_get_language():
+@pytest.fixture
+def context():
     update = MagicMock()
+    update.message.chat_id = 17
     context = MagicMock()
     translation_manager = MagicMock()
-    message_context = MessageContext(update, context, translation_manager)
+    store = InMemoryStore()
+    message_context = MessageContext(update, context, translation_manager,
+                                     store)
+    return update, translation_manager, store, message_context
+
+
+def test_get_language(context):
+    update, translation_manager, _, message_context = context
 
     update.message.from_user.language_code = "ru"
     lang = message_context.lang
@@ -33,12 +44,40 @@ def test_get_language():
     translation_manager.get.assert_called_with("ru")
 
 
-def test_no_language():
-    update = MagicMock()
-    context = MagicMock()
-    translation_manager = MagicMock()
-    message_context = MessageContext(update, context, translation_manager)
+def test_no_language(context):
+    update, translation_manager, _, message_context = context
 
     update.message.from_user.language_code = None
     lang = message_context.lang
     assert lang is translation_manager.default_lang
+
+
+@pytest.mark.parametrize("kwargs, expected", [
+    ({"charset": "mtk2"},
+     ChatData(charset="mtk2", output_format=Format.TEXT, show_text=True)),
+    ({"show_text": False},
+     ChatData(charset="ita2", output_format=Format.TEXT, show_text=False)),
+    ({"format": Format.PNG},
+     ChatData(charset="ita2", output_format=Format.PNG, show_text=True)),
+    ({"charset": "mtk2", "format": Format.PNG, "show_text": False},
+     ChatData(charset="mtk2", output_format=Format.PNG, show_text=False))
+])
+def test_save(context, kwargs, expected):
+    _, _, store, message_context = context
+    store.save(17, ChatData(charset="ita2", output_format=Format.TEXT))
+    message_context.save(**kwargs)
+
+    result = store.load(17)
+    assert result == expected
+
+
+def test_save_no_chage_1(context):
+    _, _, store, message_context = context
+    message_context.save()
+    assert store.load(17) is None
+
+
+def test_save_no_chage_2(context):
+    _, _, store, message_context = context
+    message_context.save(charset="mtk2", format=Format.PNG, show_text=True)
+    assert store.load(17) is None

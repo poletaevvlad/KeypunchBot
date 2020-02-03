@@ -19,7 +19,7 @@
 
 from logging import Logger
 from pathlib import Path
-from typing import Callable
+from typing import Callable, TypeVar
 from abc import ABC, abstractmethod
 from telegram import Update
 from telegram.ext import Updater, CallbackContext, CommandHandler, \
@@ -27,6 +27,7 @@ from telegram.ext import Updater, CallbackContext, CommandHandler, \
 
 from .i18n import TranslationManager, Language
 from .utils import lazy_property
+from .persistance import Store, ChatData, Format
 
 LOGGER = Logger(__name__)
 
@@ -37,10 +38,12 @@ def on_error(update: Update, context):
 
 class MessageContext:
     def __init__(self, update: Update, context: CallbackContext,
-                 translation_manager: TranslationManager):
+                 translation_manager: TranslationManager,
+                 store: Store):
         self.update = update
         self.context = context
         self._translation_manager = translation_manager
+        self._store = store
 
     @lazy_property
     def lang(self) -> Language:
@@ -49,10 +52,30 @@ class MessageContext:
             return self._translation_manager.default_lang
         return self._translation_manager.get(language)
 
+    @property
+    def chat_id(self) -> int:
+        return self.update.message.chat_id
+
+    @lazy_property
+    def data(self) -> ChatData:
+        return self._store.load_or_default(self.chat_id)
+
+    # pylint: disable=redefined-builtin
+    def save(self, *, format: Format = None, show_text: bool = None,
+             charset: str = None):
+        current = self.data
+        new_data = ChatData(
+            output_format=current.output_format if format is None else format,
+            show_text=current.show_text if show_text is None else show_text,
+            charset=current.charset if charset is None else charset
+        )
+        if new_data != current:
+            self._store.save(self.chat_id, new_data)
+
     def answer(self, text: str):
         bot = self.update.message.bot
         bot.send_message(
-            chat_id=self.update.message.chat_id,
+            chat_id=self.chat_id,
             text=text,
             disable_web_page_preview=True,
             parse_mode="html"
@@ -63,10 +86,11 @@ MessageCallback = Callable[[MessageContext], None]
 
 
 class ChatBot(ABC):
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, store: Store):
         self._updater = Updater(api_key, use_context=True)
         self._dispatcher = self._updater.dispatcher
         self._dispatcher.add_error_handler(on_error)
+        self._store = store
 
         lang_path = Path(__file__).parents[0] / "data" / "i18n"
         self._lang_manager = TranslationManager.load(lang_path, default="en")
@@ -91,7 +115,8 @@ class ChatBot(ABC):
             message_context = MessageContext(
                 update=update,
                 context=context,
-                translation_manager=self._lang_manager
+                translation_manager=self._lang_manager,
+                store=self._store
             )
             callback(message_context)
         return handler
