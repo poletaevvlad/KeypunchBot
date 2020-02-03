@@ -1,0 +1,15 @@
+help:
+  about: |
+   <b>KeypunchBot</b>
+   <i>version 1.1</i>
+
+   Written by <a href="https://github.com/poletaevvlad">Vlad Poletaev</a>
+
+   Fonts used:
+   <a href="https://fonts.google.com/specimen/Oswald">Oswald</a> by Vernon Adams (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web">OFL</a>),
+   <a href="https://fonts.google.com/specimen/IBM+Plex+Mono">IBM Plex Mono</a> by Mike Abbink, Bold Monday (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web">OFL</a>)
+
+  welcome: |
+    Send a text message in this chat and an image with a punched card or pucnhed tape with your text will be sent you back.
+
+    Check /help to see a list of all supported commands.

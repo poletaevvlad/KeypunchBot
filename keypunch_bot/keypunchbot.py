@@ -17,16 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Union
 from .bot import ChatBot, MessageContext
 
 
 # pylint: disable=no-self-use
 class KeyPunchBot(ChatBot):
     def initialize(self):
-        self.on_command("start", self.start_command)
+        self.on_command("start", self.show_message("help", "welcome"))
+        self.on_command("about", self.show_message("help", "about"))
 
-    def start_command(self, ctx: MessageContext):
-        pass
+    def show_message(self, *message_id: Union[str, int]):
+        def handler(ctx: MessageContext):
+            ctx.answer(ctx.lang.__getitem__(*message_id))
+        return handler
 
     def text(self, ctx: MessageContext):
         pass

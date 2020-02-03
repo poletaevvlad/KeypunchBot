@@ -49,6 +49,15 @@ class MessageContext:
             return self._translation_manager.default_lang
         return self._translation_manager.get(language)
 
+    def answer(self, text: str):
+        bot = self.update.message.bot
+        bot.send_message(
+            chat_id=self.update.message.chat_id,
+            text=text,
+            disable_web_page_preview=True,
+            parse_mode="html"
+        )
+
 
 MessageCallback = Callable[[MessageContext], None]
 
