@@ -17,9 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 import pytest
 from keypunch_bot.bot import MessageContext
+from keypunch_bot.keypunchbot import KeyPunchBot
 from keypunch_bot.persistance import InMemoryStore, ChatData, Format
 
 
@@ -81,3 +82,25 @@ def test_save_no_chage_2(context):
     _, _, store, message_context = context
     message_context.save(charset="mtk2", format=Format.PNG, show_text=True)
     assert store.load(17) is None
+
+
+@pytest.mark.parametrize("current_show, set_show, message, should_update", [
+    (True, True, "text.on.already", False),
+    (True, False, "text.off.set", True),
+    (False, True, "text.on.set", True),
+    (False, False, "text.off.already", False),
+])
+def test_change_show_text(current_show: bool, set_show: bool, message: str,
+                          should_update: bool):
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+    context = MagicMock()
+    context.data.show_text = current_show
+    context.lang.__getitem__.side_effect = lambda x: '.'.join(x)
+
+    bot.set_text_visible(context, set_show)
+    context.answer.assert_called_with(message)
+    if should_update:
+        context.save.assert_called_with(show_text=set_show)
+    else:
+        context.save.assert_not_called()

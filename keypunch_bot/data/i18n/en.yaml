@@ -13,3 +13,11 @@ help:
     Send a text message in this chat and an image with a punched card or pucnhed tape with your text will be sent you back.
 
     Check /help to see a list of all supported commands.
+
+text:
+  "on":
+    already: I already print your text on punched cards and punched tape.
+    set: I will now print your text on punched cards and punched tape.
+  "off":
+    already: I already do not print your text on punched cards and punched tape.
+    set: I will stop printing your text on punched cards and punched tape.

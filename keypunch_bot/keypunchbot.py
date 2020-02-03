@@ -26,9 +26,19 @@ class KeyPunchBot(ChatBot):
     def initialize(self):
         self.on_command("start", self.show_message, ["help", "welcome"])
         self.on_command("about", self.show_message, ["help", "about"])
+        self.on_command("showtext", self.set_text_visible, True)
+        self.on_command("hidetext", self.set_text_visible, False)
 
     def show_message(self, ctx: MessageContext, message: List[str]):
         ctx.answer(ctx.lang[message])
+
+    def set_text_visible(self, ctx: MessageContext, visible: bool):
+        message_block = "on" if visible else "off"
+        if ctx.data.show_text == visible:
+            ctx.answer(ctx.lang["text", message_block, "already"])
+            return
+        ctx.save(show_text=visible)
+        ctx.answer(ctx.lang["text", message_block, "set"])
 
     def text(self, ctx: MessageContext):
         pass
