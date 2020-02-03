@@ -57,3 +57,9 @@ def test_getting_language(lang_code: str, expected: str):
     manager = TranslationManager("en", languages)
     result = manager.get(lang_code)
     assert result is languages[expected]
+
+
+def test_default():
+    en_language = MagicMock()
+    manager = TranslationManager("en", dict(en=en_language))
+    assert manager.default_lang is en_language

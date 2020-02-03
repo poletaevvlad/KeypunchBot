@@ -58,3 +58,7 @@ class TranslationManager:
             if language in self.languages:
                 return self.languages[language]
         return self.languages[self.default]
+
+    @property
+    def default_lang(self):
+        return self.languages[self.default]
