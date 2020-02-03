@@ -48,3 +48,13 @@ class TranslationManager:
             if name != default:
                 languages[name] = load_language(default_lang, filepath)
         return TranslationManager(default, languages)
+
+    def get(self, language: str) -> Language:
+        if language in self.languages:
+            return self.languages[language]
+        dash_pos = language.find("-")
+        if dash_pos >= 0:
+            language = language[:dash_pos]
+            if language in self.languages:
+                return self.languages[language]
+        return self.languages[self.default]

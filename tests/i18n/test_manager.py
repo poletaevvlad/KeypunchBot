@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+from unittest.mock import MagicMock
 from pathlib import Path
 import pytest
 from keypunch_bot.i18n import TranslationManager
@@ -42,3 +43,17 @@ def test_loading_no_default(tmpdir):
     with pytest.raises(FileNotFoundError) as exception:
         TranslationManager.load(Path(tmpdir), default="en")
     assert str(exception.value) == "Cannot open default language file"
+
+
+@pytest.mark.parametrize("lang_code, expected", [
+    ("en", "en"), ("ru", "ru"), ("fr", "en"), ("ru-UA", "ru"), ("uk-UA", "uk")
+])
+def test_getting_language(lang_code: str, expected: str):
+    languages = {
+        "en": MagicMock(),
+        "ru": MagicMock(),
+        "uk": MagicMock()
+    }
+    manager = TranslationManager("en", languages)
+    result = manager.get(lang_code)
+    assert result is languages[expected]
