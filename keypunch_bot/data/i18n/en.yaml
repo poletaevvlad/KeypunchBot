@@ -22,10 +22,14 @@ text:
     already: I already do not print your text on punched cards and punched tape.
     set: I will stop printing your text on punched cards and punched tape.
 
-
 set_charset:
   already: <b>{encoding}</b> encoding is already selected.
   selected: From now on I will use <b>{encoding}</b> to generate {kind}.
   punchcard: punched cards
   tape: punched tapes
 
+encoding:
+  too_long: "<i>Your message is too long.</i>\nIt exceeds the maximum number of columns: {columns}."
+  too_many_pages: "<i>Your message is too long.</i>\nIt exceeds the maximum number of images: {pages}."
+  most_unsupported: "<i>Your message mostly consists of unsupported characters.</i>\nTo see, what characters are supported, use /characters command."
+  some_unsupported: "<i>Your message contains some unsupported characters.</i>\nThese characters will be removed. To see, what characters are supported, use /characters command."

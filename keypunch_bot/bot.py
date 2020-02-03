@@ -59,6 +59,10 @@ class MessageContext:
     def data(self) -> ChatData:
         return self._store.load_or_default(self.chat_id)
 
+    @property
+    def message(self):
+        return self.update.message.text
+
     # pylint: disable=redefined-builtin
     def save(self, *, format: Format = None, show_text: bool = None,
              charset: str = None):

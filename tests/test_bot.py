@@ -130,3 +130,49 @@ def test_set_charset_switch():
     context.lang.get.assert_called_with("set_charset", "selected",
                                         encoding="ASCII",
                                         kind=["set_charset", "punchcard"])
+
+
+def test_generate_message_too_many_pages():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    bot.generate(context, Format.DEFAULT, "ebcdic", "hello\n" * 7)
+    context.answer.assert_called_with(context.lang.get.return_value)
+    context.lang.get.assert_called_with("encoding", "too_many_pages",
+                                        pages="5")
+
+
+def test_generate_message_too_long():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    bot.generate(context, Format.TEXT, "ita2", "hello" * 1000)
+    context.answer.assert_called_with(context.lang.get.return_value)
+    context.lang.get.assert_called_with("encoding", "too_long",
+                                        columns="1024")
+
+
+def test_generate_most_unsupported():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    bot.generate(context, Format.DEFAULT, "ita2", "привет")
+    context.answer.assert_called_with(context.lang.__getitem__.return_value)
+    context.lang.__getitem__.assert_called_with(
+        ("encoding", "most_unsupported")
+    )
+
+
+def test_generate_some_unsupported():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    bot.generate(context, Format.DEFAULT, "ita2", "пhello")
+    context.answer.assert_called_with(context.lang.__getitem__.return_value)
+    context.lang.__getitem__.assert_called_with(
+        ("encoding", "some_unsupported")
+    )

@@ -20,8 +20,9 @@
 from pathlib import Path
 from typing import List
 from .bot import ChatBot, MessageContext
-from .persistance import Store
-from .encodings import CharacterSetsRepository
+from .persistance import Store, Format
+from .encodings import CharacterSetsRepository, params_factory
+from .encodings import TooManyPagesError, MessageTooLongError
 
 
 # pylint: disable=no-self-use
@@ -61,5 +62,26 @@ class KeyPunchBot(ChatBot):
                                 encoding=charset_obj.name,
                                 kind=["set_charset", charset_obj.type.value]))
 
+    def generate(self, ctx: MessageContext, format: Format, charset: str,
+                 text: str):
+        encoder = self.charsets[charset]
+        text = encoder.fix_string(text)
+        params = params_factory(format, encoder.type)
+        try:
+            encoding = encoder.encode(text, params)
+            if encoding.unknown_count > 0:
+                if encoding.unknown_count > encoding.total_length / 2:
+                    ctx.answer(ctx.lang["encoding", "most_unsupported"])
+                    return
+                ctx.answer(ctx.lang["encoding", "some_unsupported"])
+        except MessageTooLongError:
+            ctx.answer(ctx.lang.get("encoding", "too_long",
+                                    columns=str(params.max_length)))
+            return
+        except TooManyPagesError:
+            ctx.answer(ctx.lang.get("encoding", "too_many_pages",
+                                    pages=str(params.max_pages)))
+
     def text(self, ctx: MessageContext):
-        pass
+        self.generate(ctx, ctx.data.output_format, ctx.data.charset,
+                      ctx.message)
