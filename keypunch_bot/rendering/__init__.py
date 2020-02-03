@@ -23,3 +23,4 @@ from .text_stream import TextStream  # noqa
 
 from .renderer import Renderer  # noqa
 from .text_renderer import punched_tape_renderer  # noqa
+from .text_renderer import punched_card_renderer  # noqa

@@ -17,15 +17,26 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from keypunch_bot.rendering import TextStream, punched_tape_renderer
+from pathlib import Path
+import string
+import itertools
+import pytest
+from keypunch_bot.rendering import TextStream, punched_tape_renderer, \
+    punched_card_renderer
 
-tape = [("", 0x1f), ("h", 0x14), ("e", 0x01), ("l", 0x12), ("l", 0x12),
+TAPE = [("", 0x1f), ("h", 0x14), ("e", 0x01), ("l", 0x12), ("l", 0x12),
         ("o", 0x18)]
+CARD = [
+    ("-", 0),
+    *zip(string.ascii_lowercase, (1 << i for i in range(12))),
+    ("+", 0b111111111111),
+    *zip(itertools.repeat(""), (1 << i for i in range(12)))
+]
 
 
 def test_tape_renderer_with_text():
     stream = TextStream()
-    punched_tape_renderer(stream, tape, True)
+    punched_tape_renderer(stream, TAPE, True)
 
     expected = (b"111.11\r\n"
                 b"101.00  h\r\n"
@@ -39,7 +50,7 @@ def test_tape_renderer_with_text():
 
 def test_tape_renderer_without_text():
     stream = TextStream()
-    punched_tape_renderer(stream, tape, False)
+    punched_tape_renderer(stream, TAPE, False)
 
     expected = (b"111.11\r\n"
                 b"101.00\r\n"
@@ -49,3 +60,15 @@ def test_tape_renderer_without_text():
                 b"110.00\r\n")
     result = next(stream.generate_files()).getvalue()
     assert expected == result
+
+
+@pytest.mark.parametrize("show_text, file", [
+    (True, "card_text.txt"), (False, "card_no_text.txt")
+])
+def test_punchcard_renderer_with_text(show_text: bool, file: str):
+    stream = TextStream()
+    punched_card_renderer(stream, CARD, show_text)
+    result_str = next(stream.generate_files()).getvalue().decode("utf-8")
+    print(result_str)
+    expected_file = Path(__file__).parents[0] / "assets" / file
+    assert result_str.splitlines() == expected_file.read_text().splitlines()

@@ -29,3 +29,7 @@ class Renderer(Protocol[TStream]):
     def __call__(self, stream: TStream, message: List[Tuple[str, int]],
                  show_text: bool):
         pass
+
+
+def bit_set(number: int, bit: int) -> bool:
+    return number & (1 << bit) != 0

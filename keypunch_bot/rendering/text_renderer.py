@@ -19,6 +19,9 @@
 
 from typing import List, Tuple
 from .text_stream import TextStream
+from .renderer import bit_set
+
+PUNCHED_CARD_ROWS = [11, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
 def punched_tape_renderer(stream: TextStream, message: List[Tuple[str, int]],
@@ -29,3 +32,24 @@ def punched_tape_renderer(stream: TextStream, message: List[Tuple[str, int]],
         if show_text and char != "":
             encoded += f"  {char}"
         stream.write_line(encoded)
+
+
+def pad_right(text: str, width: int, char: str = " ") -> str:
+    return text + char * (width - len(text))
+
+
+def punched_card_renderer(stream: TextStream, message: List[Tuple[str, int]],
+                          show_text: bool):
+    stream.write_line("  " + "_" * 81)
+    text = ""
+    if show_text:
+        text = "".join(" " if x[0] == "" else x[0] for x in message)
+    stream.write_line(f" /{pad_right(text, 80)}|")
+
+    for row_bit in PUNCHED_CARD_ROWS:
+        row = []
+        for _, code in message:
+            row.append("x" if bit_set(code, row_bit) else " ")
+        stream.write_line(f"| {pad_right(''.join(row), 80)}|")
+
+    stream.write_line(f"|{'_' * 81}|")
