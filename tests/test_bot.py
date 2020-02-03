@@ -104,3 +104,29 @@ def test_change_show_text(current_show: bool, set_show: bool, message: str,
         context.save.assert_called_with(show_text=set_show)
     else:
         context.save.assert_not_called()
+
+
+def test_set_charset_already():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+    context = MagicMock()
+    context.data.charset = "mtk2"
+
+    bot.select_character_set(context, "mtk2")
+    context.answer.assert_called_with(context.lang.get.return_value)
+    context.save.assert_not_called()
+    context.lang.get.assert_called_with("set_charset", "already",
+                                        encoding="MTK-2")
+
+def test_set_charset_switch():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+    context = MagicMock()
+    context.data.charset = "mtk2"
+
+    bot.select_character_set(context, "ascii")
+    context.answer.assert_called_with(context.lang.get.return_value)
+    context.save.assert_called_with(charset="ascii")
+    context.lang.get.assert_called_with("set_charset", "selected",
+                                        encoding="ASCII",
+                                        kind=["set_charset", "punchcard"])
