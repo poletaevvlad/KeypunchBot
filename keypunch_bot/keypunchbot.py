@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+import os
 from pathlib import Path
 from typing import List
 from .bot import ChatBot, MessageContext
@@ -46,6 +47,11 @@ class KeyPunchBot(ChatBot):
         self.on_command("text", self.set_format, Format.TEXT)
         self.on_command("cancel", self.cancel_format)
         self.on_command("characters", self.show_characters)
+
+        for part in os.environ.get("HEART_COMMAND", "").split(";"):
+            part = part.strip()
+            if part != "":
+                self.on_command(part, self.show_message, ["heart"])
 
         super().initialize()
 
