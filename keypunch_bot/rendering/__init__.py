@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-
 from .stream import Stream  # noqa
 from .text_stream import TextStream  # noqa
 from .graphics_stream import GraphicsStream  # noqa
@@ -27,3 +26,5 @@ from .text_renderer import punched_tape_renderer  # noqa
 from .text_renderer import punched_card_renderer  # noqa
 from .graphics_renderer import GraphicsPunchcardRenderer  # noqa
 from .graphics_renderer import GraphicsTapeRenderer  # noqa
+
+from .factory import renderer_factory  # noqa
