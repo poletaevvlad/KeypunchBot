@@ -19,7 +19,6 @@
 
 from typing import Union, Any, Dict, List, Optional, Iterable
 from abc import ABC, abstractmethod
-from collections import defaultdict
 
 
 StringPath = List[Union[str, int]]

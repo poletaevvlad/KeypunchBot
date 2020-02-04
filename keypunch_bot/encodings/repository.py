@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict, Iterator, Tuple, ItemsView
+from typing import Dict, Iterator, ItemsView
 from pathlib import Path
 import yaml
 from .charset import CharacterSet
