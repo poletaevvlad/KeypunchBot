@@ -23,6 +23,7 @@ from .bot import ChatBot, MessageContext
 from .persistance import Store, Format
 from .encodings import CharacterSetsRepository, params_factory
 from .encodings import TooManyPagesError, MessageTooLongError
+from .rendering import renderer_factory, get_filename
 
 
 # pylint: disable=no-self-use
@@ -81,6 +82,21 @@ class KeyPunchBot(ChatBot):
         except TooManyPagesError:
             ctx.answer(ctx.lang.get("encoding", "too_many_pages",
                                     pages=str(params.max_pages)))
+            return
+
+        stream, renderer = renderer_factory(format, encoder.type)
+        for page in encoding.result:
+            renderer(stream, page, ctx.data.show_text)
+            stream.break_page()
+
+        files_count = stream.get_files_count()
+        print(files_count)
+        for i, file in enumerate(stream.generate_files()):
+            if format == Format.DEFAULT:
+                ctx.send_photo(file)
+            else:
+                filename = get_filename(encoder.type, format, i, files_count)
+                ctx.send_file(file, filename)
 
     def text(self, ctx: MessageContext):
         self.generate(ctx, ctx.data.output_format, ctx.data.charset,

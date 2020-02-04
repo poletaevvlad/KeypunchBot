@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+from io import BytesIO
 from pathlib import Path
 from logging import Logger
 from abc import ABC, abstractmethod
@@ -83,6 +84,14 @@ class MessageContext:
             disable_web_page_preview=True,
             parse_mode="html"
         )
+
+    def send_photo(self, file: BytesIO):
+        bot = self.update.message.bot
+        bot.send_photo(self.chat_id, photo=file)
+
+    def send_file(self, file: BytesIO, filename: str):
+        bot = self.update.message.bot
+        bot.send_document(self.chat_id, document=file, filename=filename)
 
 
 class ChatBot(ABC):

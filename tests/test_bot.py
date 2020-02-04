@@ -19,6 +19,7 @@
 
 from unittest.mock import MagicMock, patch
 import pytest
+from PIL import Image
 from keypunch_bot.bot import MessageContext
 from keypunch_bot.keypunchbot import KeyPunchBot
 from keypunch_bot.persistance import InMemoryStore, ChatData, Format
@@ -80,7 +81,8 @@ def test_save_no_chage_1(context):
 
 def test_save_no_chage_2(context):
     _, _, store, message_context = context
-    message_context.save(charset="mtk2", format=Format.PNG, show_text=True)
+    message_context.save(charset="ebcdic880", format=Format.DEFAULT,
+                         show_text=True)
     assert store.load(17) is None
 
 
@@ -176,3 +178,29 @@ def test_generate_some_unsupported():
     context.lang.__getitem__.assert_called_with(
         ("encoding", "some_unsupported")
     )
+
+
+def test_generate_images():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    bot.generate(context, Format.DEFAULT, "ebcdic", "hello\nworld")
+    assert context.send_photo.call_count == 2
+    for call in context.send_photo.call_args_list:
+        img = Image.open(call[0][0])
+        assert img.format == "PNG"
+
+
+def test_generatign_files():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    bot.generate(context, Format.JPEG, "ebcdic", "hello\nworld")
+    assert context.send_file.call_count == 2
+    for filename, call in zip(["card-1.jpg", "card-2.jpg"],
+                              context.send_file.call_args_list):
+        img = Image.open(call[0][0])
+        assert img.format == "JPEG"
+        assert call[0][1] == filename

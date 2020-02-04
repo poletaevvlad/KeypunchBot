@@ -30,5 +30,5 @@ class Format(enum.Enum):
 
 class ChatData(NamedTuple):
     show_text: bool = True
-    output_format: Format = Format.PNG
-    charset: str = "mtk2"
+    output_format: Format = Format.DEFAULT
+    charset: str = "ebcdic880"
