@@ -36,6 +36,7 @@ class KeyPunchBot(ChatBot):
     def initialize(self):
         self.on_command("start", self.show_message, ["help", "welcome"])
         self.on_command("about", self.show_message, ["help", "about"])
+        self.on_command("help", self.show_help)
         self.on_command("showtext", self.set_text_visible, True)
         self.on_command("hidetext", self.set_text_visible, False)
         for charset in self.charsets:
@@ -132,3 +133,11 @@ class KeyPunchBot(ChatBot):
                                 charset=self.charsets[ctx.data.charset].name,
                                 charsets_list=charsets_list,
                                 characters_list=characters_list))
+
+    def show_help(self, ctx: MessageContext):
+        charsets = list(self.charsets.items())
+        charsets.sort(key=lambda value: value[1].name)
+        encodings = "".join(ctx.lang.get("help", "encoding_line",
+                                         command=charset_id, name=charset.name)
+                            for charset_id, charset in charsets)
+        ctx.answer(ctx.lang.get("help", "help", encodings=encodings))

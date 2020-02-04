@@ -14,6 +14,28 @@ help:
 
     Check /help to see a list of all supported commands.
 
+  help: |
+    KeypunchBot is a bot that can generate 80-column-wide punched cards or five bit wide punched tape with your text as an image or a text document.
+
+    <i>Format selection</i>:
+    /png [<code>text</code>] - Render punched card or tape as a PNG file
+    /text [<code>text</code>] - Render punched card or tape as a text file
+    /jpeg [<code>text</code>] - Render punched card or tape as a JPEG file
+    /cancel - Cancel current operation
+
+    <i>Encoding seleciton</i>
+    {encodings}
+    <i>Appearance preferences</i>:
+    /showtext - Write the characters from your message on the punched card or tape
+    /showtext - Disable writing the characters from your message on the punched card or tape
+
+    <i>Information</i>:
+    /characters - Shows the list of supported characters
+    /help - Shows this message
+    /about - Shows information about this bot
+
+  encoding_line: "/{command} - Use <b>{name}</b> encoding\n"
+
 text:
   "on":
     already: I already print your text on punched cards and punched tape.
