@@ -19,6 +19,7 @@
 
 import re
 from io import BytesIO
+from typing import Any
 from pathlib import Path
 from logging import Logger
 from abc import ABC, abstractmethod
@@ -173,3 +174,6 @@ class ChatBot(ABC):
 
     def remove_webhook(self):
         self._updater.bot.delete_webhook()
+
+    def parse_update(self, data: bytes) -> Any:
+        return Update.de_json(data, self._updater.bot)

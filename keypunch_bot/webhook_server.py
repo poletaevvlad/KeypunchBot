@@ -23,20 +23,21 @@ import signal
 import tornado.ioloop
 from tornado.web import RequestHandler, Application
 from tornado.httpserver import HTTPServer
-from telegram import Update
 from .bot import ChatBot
 
 
+# pylint: disable=abstract-method
 class WebHookHandler(RequestHandler):
     def initialize(self, bot: ChatBot):
         # pylint: disable=attribute-defined-outside-init
         self.bot = bot
 
     def post(self):
-        update = Update.de_json(self.request.body)
+        update = self.bot.parse_update(self.request.body)
         self.bot.handle_update(update)
 
 
+# pylint: disable=abstract-method
 class RedirectHandler(RequestHandler):
     def get(self):
         self.set_status(307)
