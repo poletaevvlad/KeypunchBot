@@ -20,3 +20,4 @@
 from .chatdata import ChatData, Format  # noqa
 from .store import Store  # noqa
 from .memory import InMemoryStore  # noqa
+from .mongo import MongoStore  # noqa
