@@ -9,3 +9,4 @@ commands.txtx
 .env
 .venv
 *.sublime-*
+.mypy_cache
