@@ -108,3 +108,7 @@ characters:
 cancel:
   done: Ok.
   fail: There is nothing to cancel.
+
+unknown:
+  command: "<i>I don't know this command.</i>\n{suggestion}Try /help for the list of all commands."
+  suggestion: "Perhaps you ment {suggestion}? "

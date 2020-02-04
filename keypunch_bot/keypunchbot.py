@@ -149,3 +149,6 @@ class KeyPunchBot(ChatBot):
                                          command=charset_id, name=charset.name)
                             for charset_id, charset in charsets)
         ctx.answer(ctx.lang.get("help", "help", encodings=encodings))
+
+    def unknown_command(self, ctx: MessageContext):
+        ctx.answer(ctx.lang.get(["unknown", "command"], suggestion=""))

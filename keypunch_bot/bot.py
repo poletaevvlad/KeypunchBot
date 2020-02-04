@@ -113,10 +113,11 @@ class ChatBot(ABC):
         lang_path = Path(__file__).parents[0] / "data" / "i18n"
         self._lang_manager = TranslationManager.load(lang_path, default="en")
 
-        self._dispatcher.add_handler(MessageHandler(
-            Filters.text,
-            self._create_handler(self.text, None)
-        ))
+        self._dispatcher.add_handler(
+            MessageHandler(Filters.text, self._create_handler(self.text)))
+        self._dispatcher.add_handler(
+            MessageHandler(Filters.command,
+                           self._create_handler(self.unknown_command)))
 
     @abstractmethod
     def initialize(self):
@@ -124,6 +125,10 @@ class ChatBot(ABC):
 
     @abstractmethod
     def text(self, ctx: MessageContext):
+        pass
+
+    @abstractmethod
+    def unknown_command(self, ctx: MessageContext):
         pass
 
     def _create_handler(self, callback, argument=None):
