@@ -27,6 +27,7 @@ from keypunch_bot.rendering import get_filename
 @pytest.mark.parametrize("medium, output_format, page, total_pages, result", [
     (EncodingType.PUNCHCARD, Format.PNG, 0, 1, "card.png"),
     (EncodingType.TAPE, Format.TEXT, 0, 1, "tape.txt"),
+    (EncodingType.TAPE, Format.TEXT, 0, 2, "tape-1.txt"),
     (EncodingType.PUNCHCARD, Format.JPEG, 3, 8, "card-4.jpg"),
     (EncodingType.PUNCHCARD, Format.PNG, 3, 10, "card-04.png"),
     (EncodingType.PUNCHCARD, Format.PNG, 3, 999, "card-004.png"),

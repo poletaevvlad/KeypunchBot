@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-import math
 from typing import Dict
 from ..encodings import EncodingType
 from ..persistance import Format
@@ -32,7 +31,7 @@ FILE_EXTENSIONS: Dict[Format, str] = {
 def get_filename(medium_type: EncodingType, output_format: Format,
                  page_num: int, total_pages: int) -> str:
     prefix = "card" if medium_type == EncodingType.PUNCHCARD else "tape"
-    if total_pages > 2:
+    if total_pages >= 2:
         digits = 1
         while total_pages >= 10:
             digits += 1
