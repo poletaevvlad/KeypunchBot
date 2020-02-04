@@ -26,6 +26,7 @@ from keypunch_bot.persistance import InMemoryStore, ChatData, Format
 @pytest.fixture
 def context():
     update = MagicMock()
+    update.edited_message = None
     update.message.chat_id = 17
     context = MagicMock()
     translation_manager = MagicMock()
