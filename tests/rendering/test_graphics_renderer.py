@@ -20,7 +20,8 @@
 from pathlib import Path
 import pytest
 from PIL import Image, ImageChops
-from keypunch_bot.rendering import GraphicsPunchcardRenderer, GraphicsStream
+from keypunch_bot.rendering import GraphicsPunchcardRenderer, GraphicsStream, \
+    GraphicsTapeRenderer
 from tests.rendering.test_text_renderer import TAPE, CARD
 
 
@@ -31,6 +32,21 @@ def test_punchcard_renderer(show_text, image_name):
     stream = GraphicsStream("png")
     renderer = GraphicsPunchcardRenderer()
     renderer(stream, CARD, show_text)
+    result = Image.open(next(stream.generate_files()))
+
+    image_path = Path(__file__).parents[0] / "assets" / image_name
+    expected_image = Image.open(str(image_path))
+
+    assert not ImageChops.difference(result, expected_image).getbbox()
+
+
+@pytest.mark.parametrize("show_text, image_name", [
+    (True, "tape_text.png"), (False, "tape_no_text.png")
+])
+def test_tape_renderer(show_text, image_name):
+    stream = GraphicsStream("png")
+    renderer = GraphicsTapeRenderer()
+    renderer(stream, TAPE, show_text)
     result = Image.open(next(stream.generate_files()))
 
     image_path = Path(__file__).parents[0] / "assets" / image_name

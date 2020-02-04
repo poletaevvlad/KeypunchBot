@@ -26,3 +26,4 @@ from .renderer import Renderer  # noqa
 from .text_renderer import punched_tape_renderer  # noqa
 from .text_renderer import punched_card_renderer  # noqa
 from .graphics_renderer import GraphicsPunchcardRenderer  # noqa
+from .graphics_renderer import GraphicsTapeRenderer  # noqa

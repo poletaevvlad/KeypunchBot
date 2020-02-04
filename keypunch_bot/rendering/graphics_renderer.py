@@ -68,6 +68,7 @@ class GraphicsPunchcardRenderer:
         cls.hole = load_image(location / "hole.png")
         cls.col_numbers = load_image(location / "column_numbers.png")
         cls.row_numbers = load_image_map(location / "row_numbers.png", 8, 17)
+        cls.images_loaded = True
         load_font()
 
     def __init__(self):
@@ -97,3 +98,47 @@ class GraphicsPunchcardRenderer:
         numbers_layer.paste(self.col_numbers, (35, 284))
         stream.add_layer(paper_layer)
         stream.add_layer(numbers_layer)
+
+
+class GraphicsTapeRenderer:
+    base: Image.Image
+    hole: Image.Image
+    left: Image.Image
+    right: Image.Image
+    images_loaded = False
+
+    @classmethod
+    def load_images(cls):
+        location = Path(__file__).parents[1] / "data" / "images" / "tape"
+        cls.base = load_image(location / "base.png")
+        cls.hole = load_image(location / "hole.png")
+        cls.left = load_image(location / "left.png")
+        cls.right = load_image(location / "right.png")
+        cls.images_loaded = True
+        load_font()
+
+    def __init__(self):
+        if not GraphicsTapeRenderer.images_loaded:
+            GraphicsTapeRenderer.load_images()
+
+    def __call__(self, stream: GraphicsStream, message: List[Tuple[str, int]],
+                 show_text: str):
+        y0 = 5 if show_text else 0
+        width = (self.left.size[0] + self.right.size[0] +
+                 len(message) * self.base.size[0])
+        image = Image.new("RGBA", (width, self.base.size[1] + y0))
+
+        image.paste(self.left, (0, y0))
+        x = self.left.size[0]
+        for char, code in message:
+            image.paste(self.base, (x, y0))
+            for bit in range(5):
+                if not bit_set(code, bit):
+                    continue
+                y = y0 + 15 + self.hole.size[1] * (bit + (0 if bit < 2 else 1))
+                image.paste(self.hole, (x, y))
+            if show_text and char != "":
+                image.paste(font[char], (x, 0))
+            x += self.base.size[0]
+        image.paste(self.right, (x, y0))
+        stream.add_layer(image)
