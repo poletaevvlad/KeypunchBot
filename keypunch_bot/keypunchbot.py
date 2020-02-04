@@ -47,6 +47,8 @@ class KeyPunchBot(ChatBot):
         self.on_command("cancel", self.cancel_format)
         self.on_command("characters", self.show_characters)
 
+        super().initialize()
+
     def show_message(self, ctx: MessageContext, message: List[str]):
         ctx.answer(ctx.lang[message])
 

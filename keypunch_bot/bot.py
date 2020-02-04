@@ -48,16 +48,22 @@ class MessageContext:
         self._translation_manager = translation_manager
         self._store = store
 
+    @property
+    def _message(self):
+        if self.update.edited_message is not None:
+            return self.update.edited_message
+        return self.update.message
+
     @lazy_property
     def lang(self) -> Language:
-        language = self.update.message.from_user.language_code
+        language = self._message.from_user.language_code
         if language is None:
             return self._translation_manager.default_lang
         return self._translation_manager.get(language)
 
     @property
     def chat_id(self) -> int:
-        return self.update.message.chat_id
+        return self._message.chat_id
 
     @lazy_property
     def data(self) -> ChatData:
@@ -65,7 +71,7 @@ class MessageContext:
 
     @property
     def message(self):
-        text = self.update.message.text.strip()
+        text = self._message.text.strip()
         match = MessageContext.COMMAND_REGEX.search(text)
         if match is None:
             return text
@@ -86,7 +92,7 @@ class MessageContext:
             self._store.save(self.chat_id, new_data)
 
     def answer(self, text: str):
-        bot = self.update.message.bot
+        bot = self._message.bot
         bot.send_message(
             chat_id=self.chat_id,
             text=text,
@@ -95,11 +101,11 @@ class MessageContext:
         )
 
     def send_photo(self, file: BytesIO):
-        bot = self.update.message.bot
+        bot = self._message.bot
         bot.send_photo(self.chat_id, photo=file)
 
     def send_file(self, file: BytesIO, filename: str):
-        bot = self.update.message.bot
+        bot = self._message.bot
         bot.send_document(self.chat_id, document=file, filename=filename)
 
 
@@ -113,18 +119,17 @@ class ChatBot(ABC):
         lang_path = Path(__file__).parents[0] / "data" / "i18n"
         self._lang_manager = TranslationManager.load(lang_path, default="en")
 
-        self._dispatcher.add_handler(
-            MessageHandler(Filters.text, self._create_handler(self.text)))
-        self._dispatcher.add_handler(
-            MessageHandler(Filters.command,
-                           self._create_handler(self.unknown_command)))
-        self._dispatcher.add_handler(
-            MessageHandler(Filters.all,
-                           self._create_handler(self.unsupported_type)))
-
     @abstractmethod
     def initialize(self):
-        pass
+        handlers = [
+            (Filters.text, self.text),
+            (Filters.command, self.unknown_command),
+            (Filters.all, self.unsupported_type)
+        ]
+        for message_filter, callback in handlers:
+            handler_callback = self._create_handler(callback)
+            handler = MessageHandler(message_filter, handler_callback)
+            self._dispatcher.add_handler(handler)
 
     @abstractmethod
     def text(self, ctx: MessageContext):
