@@ -44,6 +44,7 @@ class KeyPunchBot(ChatBot):
         self.on_command("png", self.set_format, Format.PNG)
         self.on_command("jpeg", self.set_format, Format.JPEG)
         self.on_command("text", self.set_format, Format.TEXT)
+        self.on_command("cancel", self.cancel_format)
         self.on_command("characters", self.show_characters)
 
     def show_message(self, ctx: MessageContext, message: List[str]):
@@ -115,6 +116,13 @@ class KeyPunchBot(ChatBot):
                                     format=["format", output_format.value]))
         else:
             self.generate(ctx, output_format, ctx.data.charset, message)
+
+    def cancel_format(self, ctx: MessageContext):
+        if ctx.data.output_format == Format.DEFAULT:
+            ctx.answer(ctx.lang["cancel", "fail"])
+        else:
+            ctx.save(format=Format.DEFAULT)
+            ctx.answer(ctx.lang["cancel", "done"])
 
     def show_characters(self, ctx: MessageContext):
         charsets = list(self.charsets.items())

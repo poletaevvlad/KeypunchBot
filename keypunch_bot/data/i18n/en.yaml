@@ -104,3 +104,7 @@ characters:
       - Space character
       - Line break
       - Punctuation and some other symbols (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>=</code>, <code>/</code>, <code>+</code>)
+
+cancel:
+  done: Ok.
+  fail: There is nothing to cancel.

@@ -182,3 +182,26 @@ def test_clearing_format_on_text():
     context.message = "hello, world"
     bot.text(context)
     context.save.assert_called_with(format=Format.DEFAULT)
+
+
+def test_cancel_nothing():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    context.data = ChatData()
+    bot.cancel_format(context)
+    context.answer.assert_called_with(context.lang.__getitem__.return_value)
+    context.lang.__getitem__.assert_called_with(("cancel", "fail"))
+
+
+def test_cancel_done():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    context.data = ChatData(output_format=Format.PNG)
+    bot.cancel_format(context)
+    context.answer.assert_called_with(context.lang.__getitem__.return_value)
+    context.lang.__getitem__.assert_called_with(("cancel", "done"))
+    context.save.assert_called_with(format=Format.DEFAULT)
