@@ -38,3 +38,6 @@ class TextStream(Stream):
     def generate_files(self) -> Iterable[BytesIO]:
         self._stream.seek(0)
         yield self._stream
+
+    def get_files_count(self) -> int:
+        return 1

@@ -48,6 +48,8 @@ def test_layer_compose():
     stream.break_page()
     stream.add_layer(image3)
 
+    assert stream.get_files_count() == 2
+
     results = list(stream.generate_files())
     res1 = Image.open(results[0])
     res2 = Image.open(results[1])
@@ -72,8 +74,10 @@ def test_jpeg_background():
     stream = GraphicsStream("jpeg")
     stream.add_layer(image1)
     stream.add_layer(image2)
+    stream.break_page()
     res = Image.open(next(stream.generate_files()))
 
+    assert stream.get_files_count() == 1
     assert color_equal(res.getpixel((10, 10)), (0, 255, 0))
     assert color_equal(res.getpixel((40, 10)), (255, 0, 0))
     assert color_equal(res.getpixel((10, 40)), (0, 255, 0))

@@ -54,3 +54,6 @@ class GraphicsStream(Stream):
             image.save(io_buffer, self.output_format)
             io_buffer.seek(0)
             yield io_buffer
+
+    def get_files_count(self) -> int:
+        return sum(1 if img is not None else 0 for img in self._images)

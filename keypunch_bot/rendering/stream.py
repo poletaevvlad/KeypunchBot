@@ -30,3 +30,7 @@ class Stream(ABC):
     @abstractmethod
     def generate_files(self) -> Iterable[BytesIO]:
         pass
+
+    @abstractmethod
+    def get_files_count(self) -> int:
+        pass
