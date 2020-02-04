@@ -77,11 +77,11 @@ class KeyPunchBot(ChatBot):
                                 encoding=charset_obj.name,
                                 kind=["set_charset", charset_obj.type.value]))
 
-    def generate(self, ctx: MessageContext, format: Format, charset: str,
-                 text: str):
+    def generate(self, ctx: MessageContext, output_format: Format,
+                 charset: str, text: str):
         encoder = self.charsets[charset]
         text = encoder.fix_string(text)
-        params = params_factory(format, encoder.type)
+        params = params_factory(output_format, encoder.type)
         try:
             encoding = encoder.encode(text, params)
             if encoding.unknown_count > 0:
@@ -98,17 +98,18 @@ class KeyPunchBot(ChatBot):
                                     pages=str(params.max_pages)))
             return
 
-        stream, renderer = renderer_factory(format, encoder.type)
+        stream, renderer = renderer_factory(output_format, encoder.type)
         for page in encoding.result:
             renderer(stream, page, ctx.data.show_text)
             stream.break_page()
 
         files_count = stream.get_files_count()
         for i, file in enumerate(stream.generate_files()):
-            if format == Format.DEFAULT:
+            if output_format == Format.DEFAULT:
                 ctx.send_photo(file)
             else:
-                filename = get_filename(encoder.type, format, i, files_count)
+                filename = get_filename(encoder.type, output_format,
+                                        i, files_count)
                 ctx.send_file(file, filename)
 
     def text(self, ctx: MessageContext):
