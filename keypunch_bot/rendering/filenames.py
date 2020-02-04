@@ -17,15 +17,25 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from .stream import Stream  # noqa
-from .text_stream import TextStream  # noqa
-from .graphics_stream import GraphicsStream  # noqa
+import math
+from typing import Dict
+from ..encodings import EncodingType
+from ..persistance import Format
 
-from .renderer import Renderer  # noqa
-from .text_renderer import punched_tape_renderer  # noqa
-from .text_renderer import punched_card_renderer  # noqa
-from .graphics_renderer import GraphicsPunchcardRenderer  # noqa
-from .graphics_renderer import GraphicsTapeRenderer  # noqa
+FILE_EXTENSIONS: Dict[Format, str] = {
+    Format.PNG: "png",
+    Format.JPEG: "jpg",
+    Format.TEXT: "txt",
+}
 
-from .factory import renderer_factory  # noqa
-from .filenames import get_filename  # noqa
+
+def get_filename(medium_type: EncodingType, output_format: Format,
+                 page_num: int, total_pages: int) -> str:
+    prefix = "card" if medium_type == EncodingType.PUNCHCARD else "tape"
+    if total_pages > 2:
+        digits = 1
+        while total_pages >= 10:
+            digits += 1
+            total_pages //= 10
+        prefix += f"-{page_num + 1:0{digits}}"
+    return f"{prefix}.{FILE_EXTENSIONS[output_format]}"
