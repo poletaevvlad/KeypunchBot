@@ -19,13 +19,18 @@
 
 import click
 from keypunch_bot.keypunchbot import KeyPunchBot
-from keypunch_bot.persistance import InMemoryStore
+from keypunch_bot.persistance import InMemoryStore, MongoStore
 
 
 @click.command()
 @click.option("--api-key", required=True, envvar="API_KEY")
-def main(api_key):
-    store = InMemoryStore()
+@click.option("--mongo")
+def main(api_key, mongo):
+    if mongo is None:
+        store = InMemoryStore()
+    else:
+        store = MongoStore(mongo)
+
     keypunch = KeyPunchBot(api_key, store)
     keypunch.initialize()
     keypunch.start_polling()
