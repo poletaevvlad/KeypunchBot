@@ -39,3 +39,46 @@ format:
   png: a PNG file
   jpeg: a JPEG file
   text: a text file
+
+characters:
+  help: |
+    <b>{charset}</b> supports following characters:
+    {characters_list}
+    KeypunchBot supports muptiple encodings:
+    {charsets_list}
+  characters_line: " • {entry}\n"
+  charset_line: " • <b>{charset}</b> ({kind}, /{command})\n"
+  kinds:
+    punchcard: punched cards
+    tape: punched tape
+  supported:
+    ascii:
+      - Upper-case and lower-case latin letters (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
+      - Arabic numbers (<code>0</code>-<code>9</code>)
+      - Space character
+      - Punctuation and some other symbols (<code>\</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>[</code>, <code>]</code>, <code>\</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>&lt;</code>, <code><</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>'</code>, <code>+</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>)
+    ebcdic:
+      - Upper-case and lower-case latin letters (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
+      - Arabic numbers (<code>0</code>-<code>9</code>)
+      - Space character
+      - Punctuation and some other symbols (<code>/</code>, <code>~</code>, <code>&</code>, <code>-</code>, <code>¢</code>, <code>.</code>, <code><</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>¬</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>></code>, <code>?</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>{</code>, <code>}</code>, <code>\</code>, <code>|</code>)
+    ebcdic880:
+      - Upper-case and lower-case latin letters (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
+      - Upper-case and lower-case cyrillic letters (<code>А</code>-<code>Я</code>, <code>а</code>-<code>я</code>, <code>ђ</code>, <code>ѓ</code>, <code>ё</code>, <code>є</code>, <code>ѕ</code>, <code>і</code>, <code>ї</code>, <code>љ</code>, <code>њ</code>, <code>ћ</code>, <code>ќ</code>, <code>ў</code>, <code>џ</code>, <code>Ѓ</code>, <code>Ё</code>, <code>Є</code>, <code>Ѕ</code>, <code>І</code>, <code>Ї</code>, <code>Ј</code>, <code>Ћ</code>, <code>Ќ</code>, <code>Ў</code>, <code>Џ</code>)
+      - Arabic numbers (<code>0</code>-<code>9</code>)
+      - Space character
+      - Punctuation and some other symbols (<code>-</code>, <code>&amp;</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>`</code>, <code>[</code>, <code>]</code>, <code>\</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>#</code>, <code>&lt;</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>'</code>, <code>+</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>)
+    ita2:
+      - Latin letters (<code>A</code>-<code>Z</code>)
+      - Arabic numbers (<code>0</code>-<code>9</code>)
+      - Space character
+      - Line break
+      - Pound symbol (<code>£</code>)
+      - Punctuation and some other symbols (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>;</code>, <code>/</code>, <code>+</code>, <code>!</code>, <code>&amp;</code>)
+    mtk2:
+      - Latin letters (<code>A</code>-<code>Z</code>)
+      - Cyrillic letters (<code>А</code>-<code>Я</code>)
+      - Arabic numbers (<code>0</code>-<code>9</code>)
+      - Space character
+      - Line break
+      - Punctuation and some other symbols (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>=</code>, <code>/</code>, <code>+</code>)

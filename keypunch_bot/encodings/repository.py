@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict, Iterator
+from typing import Dict, Iterator, Tuple, ItemsView
 from pathlib import Path
 import yaml
 from .charset import CharacterSet
@@ -49,3 +49,6 @@ class CharacterSetsRepository:
 
     def __iter__(self) -> Iterator[str]:
         return iter(self._charsets)
+
+    def items(self) -> ItemsView[str, CharacterSet]:
+        return self._charsets.items()

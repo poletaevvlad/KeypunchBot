@@ -1,11 +1,6 @@
 id: ebcdic
 type: punchcard
 name: EBCDIC
-supported:
-  - Upper-case and lower-case latin letters (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
-  - Arabic numbers (<code>0</code>-<code>9</code>)
-  - Space character
-  - Punctuation and some other symbols (<code>/</code>, <code>~</code>, <code>&</code>, <code>-</code>, <code>¢</code>, <code>.</code>, <code><</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>¬</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>></code>, <code>?</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>{</code>, <code>}</code>, <code>\</code>, <code>|</code>)
 common:
   A:  [[11, 1]]
   B:  [[11, 2]]

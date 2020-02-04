@@ -1,13 +1,6 @@
 id: mtk2
 type: tape
 name: MTK-2
-supported:
-  - Latin letters (<code>A</code>-<code>Z</code>)
-  - Cyrillic letters (<code>А</code>-<code>Я</code>)
-  - Arabic numbers (<code>0</code>-<code>9</code>)
-  - Space character
-  - Line break
-  - Punctuation and some other symbols (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>=</code>, <code>/</code>, <code>+</code>)
 common:
   "\r": 2
   "\n": 8

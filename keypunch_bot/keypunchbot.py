@@ -43,6 +43,7 @@ class KeyPunchBot(ChatBot):
         self.on_command("png", self.set_format, Format.PNG)
         self.on_command("jpeg", self.set_format, Format.JPEG)
         self.on_command("text", self.set_format, Format.TEXT)
+        self.on_command("characters", self.show_characters)
 
     def show_message(self, ctx: MessageContext, message: List[str]):
         ctx.answer(ctx.lang[message])
@@ -113,3 +114,21 @@ class KeyPunchBot(ChatBot):
                                     format=["format", output_format.value]))
         else:
             self.generate(ctx, output_format, ctx.data.charset, message)
+
+    def show_characters(self, ctx: MessageContext):
+        charsets = list(self.charsets.items())
+        charsets.sort(key=lambda value: value[1].name)
+        characters_list = "".join(
+            ctx.lang.get("characters", "characters_line", entry=line)
+            for line in ctx.lang.get_object("characters", "supported",
+                                            ctx.data.charset))
+        charsets_list = "".join(
+            ctx.lang.get("characters", "charset_line",
+                         charset=charset.name, command=charset_id,
+                         kind=["characters", "kinds", charset.type.value])
+            for charset_id, charset in charsets
+        )
+        ctx.answer(ctx.lang.get("characters", "help",
+                                charset=self.charsets[ctx.data.charset].name,
+                                charsets_list=charsets_list,
+                                characters_list=characters_list))
