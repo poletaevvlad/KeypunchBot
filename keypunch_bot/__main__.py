@@ -20,6 +20,7 @@
 import click
 from keypunch_bot.keypunchbot import KeyPunchBot
 from keypunch_bot.persistance import InMemoryStore, MongoStore
+from keypunch_bot.webhook_server import start_webhook_server
 
 
 @click.group()
@@ -42,6 +43,17 @@ def main(ctx, api_key, mongo):
 def polling(ctx):
     bot: KeyPunchBot = ctx.obj
     bot.start_polling()
+
+
+@main.command()
+@click.option("--url", help="The URL this service will be available at",
+              required=True)
+@click.option("--port", help="The TCP/IP port", type=click.INT,
+              required=True)
+@click.pass_context
+def webhook(ctx, url, port):
+    bot: KeyPunchBot = ctx.obj
+    start_webhook_server(bot, url, port)
 
 
 if __name__ == "__main__":

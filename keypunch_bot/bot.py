@@ -164,3 +164,12 @@ class ChatBot(ABC):
     def start_polling(self):
         self._updater.start_polling()
         self._updater.idle()
+
+    def handle_update(self, update: Update):
+        self._dispatcher.update_queue.put(update)
+
+    def start_webhook(self, url):
+        self._updater.bot.set_webhook(url=url)
+
+    def remove_webhook(self):
+        self._updater.bot.delete_webhook()
