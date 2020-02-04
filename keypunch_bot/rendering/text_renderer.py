@@ -19,9 +19,7 @@
 
 from typing import List, Tuple
 from .text_stream import TextStream
-from .renderer import bit_set
-
-PUNCHED_CARD_ROWS = [11, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+from .renderer import bit_set, PUNCHED_CARD_ROWS
 
 
 def punched_tape_renderer(stream: TextStream, message: List[Tuple[str, int]],

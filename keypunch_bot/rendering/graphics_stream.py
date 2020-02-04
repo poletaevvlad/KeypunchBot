@@ -28,12 +28,12 @@ class GraphicsStream(Stream):
 
     def __init__(self, output_format: str):
         self.output_format = output_format.upper()
-        self._images: List[Optional[Image]] = [None]
+        self._images: List[Optional[Image.Image]] = [None]
 
     def break_page(self):
         self._images.append(None)
 
-    def add_layer(self, layer: Image):
+    def add_layer(self, layer: Image.Image):
         image = self._images[-1]
         if image is None:
             image = layer

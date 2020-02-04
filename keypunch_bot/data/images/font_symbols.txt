@@ -4,5 +4,3 @@ abcdefghijklmnopqrstuvwxyzЂЃЄЅІя
 ABCDEFGHIJKLMNOPQRSTUVWXYZђѓєѕіё
 АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮю
 абвгдежзийклмнопрстуфхцчшщъыьэ
-
-

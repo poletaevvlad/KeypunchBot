@@ -33,3 +33,6 @@ class Renderer(Protocol[TStream]):
 
 def bit_set(number: int, bit: int) -> bool:
     return number & (1 << bit) != 0
+
+
+PUNCHED_CARD_ROWS = [11, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]

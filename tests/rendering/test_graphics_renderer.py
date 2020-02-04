@@ -17,12 +17,23 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+from pathlib import Path
+import pytest
+from PIL import Image, ImageChops
+from keypunch_bot.rendering import GraphicsPunchcardRenderer, GraphicsStream
+from tests.rendering.test_text_renderer import TAPE, CARD
 
-from .stream import Stream  # noqa
-from .text_stream import TextStream  # noqa
-from .graphics_stream import GraphicsStream  # noqa
 
-from .renderer import Renderer  # noqa
-from .text_renderer import punched_tape_renderer  # noqa
-from .text_renderer import punched_card_renderer  # noqa
-from .graphics_renderer import GraphicsPunchcardRenderer  # noqa
+@pytest.mark.parametrize("show_text, image_name", [
+    (True, "card_text.png"), (False, "card_no_text.png")
+])
+def test_punchcard_renderer(show_text, image_name):
+    stream = GraphicsStream("png")
+    renderer = GraphicsPunchcardRenderer()
+    renderer(stream, CARD, show_text)
+    result = Image.open(next(stream.generate_files()))
+
+    image_path = Path(__file__).parents[0] / "assets" / image_name
+    expected_image = Image.open(str(image_path))
+
+    assert not ImageChops.difference(result, expected_image).getbbox()

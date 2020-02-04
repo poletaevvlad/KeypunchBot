@@ -147,36 +147,3 @@ class TapeImageRenderer(ImageRenderer):
         return image
 
 
-class TapeTextFormatter:
-    def render(self, encoded_message, output_format, show_text, fob):
-        i = 0
-        for char, code in encoded_message:
-            fob.write(format(code, "05b"))
-            if i < 13:
-                fob.write(" ")
-                i += 1
-            elif i >= 13:
-                fob.write("\r\n")
-                i = 0
-
-
-class PunchcardTextFormatter(PunchCardRenderer):
-    def format_line(self, fob, codes_list, num):
-        fob.write("| ")
-        for char, code in codes_list:
-            fob.write("x" if num in code else " ")
-        fob.write(" " * (80 - len(codes_list)))
-        fob.write("|\r\n")
-
-    def render(self, encoded_message, output_format, show_text, fob):
-        all_codes = list(map(lambda x: (x[0], digits(x[1])), encoded_message))
-        fob.write("  " + "_" * 81 + "\r\n /")
-        for i, code in zip_longest(range(80), all_codes):
-            if show_text and code is not None and code[0] is not None:
-                fob.write(code[0])
-            else:
-                fob.write(" ")
-        fob.write("|\r\n")
-        for line in self.bit_positions:
-            self.format_line(fob, all_codes, line)
-        fob.write("|" + "_" * 81 + "|\r\n")
