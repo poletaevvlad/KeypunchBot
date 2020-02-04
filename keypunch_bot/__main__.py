@@ -22,18 +22,26 @@ from keypunch_bot.keypunchbot import KeyPunchBot
 from keypunch_bot.persistance import InMemoryStore, MongoStore
 
 
-@click.command()
-@click.option("--api-key", required=True, envvar="API_KEY")
-@click.option("--mongo")
-def main(api_key, mongo):
+@click.group()
+@click.option("--api-key", help="Telegram api key", required=True)
+@click.option("--mongo", help="MongoDB connection string")
+@click.pass_context
+def main(ctx, api_key, mongo):
     if mongo is None:
         store = InMemoryStore()
     else:
         store = MongoStore(mongo)
 
-    keypunch = KeyPunchBot(api_key, store)
-    keypunch.initialize()
-    keypunch.start_polling()
+    bot = KeyPunchBot(api_key, store)
+    bot.initialize()
+    ctx.obj = bot
+
+
+@main.command()
+@click.pass_context
+def polling(ctx):
+    bot: KeyPunchBot = ctx.obj
+    bot.start_polling()
 
 
 if __name__ == "__main__":
