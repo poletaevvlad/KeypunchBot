@@ -30,7 +30,7 @@ CARD = [
     ("-", 0),
     *zip(string.ascii_lowercase, (1 << i for i in range(12))),
     ("+", 0b111111111111),
-    *zip(itertools.repeat(""), (1 << i for i in range(12)))
+    *zip(itertools.cycle(["", " "]), (1 << i for i in range(12)))
 ]
 
 

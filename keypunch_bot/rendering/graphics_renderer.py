@@ -91,7 +91,7 @@ class GraphicsPunchcardRenderer:
                 elif bit < 10:
                     numbers_layer.paste(self.row_numbers[bit], (x, y))
 
-            if char != "" and show_text:
+            if show_text and char in font:
                 numbers_layer.paste(font[char], (x, 12))
 
         numbers_layer.paste(self.col_numbers, (35, 93))
@@ -137,7 +137,7 @@ class GraphicsTapeRenderer:
                     continue
                 y = y0 + 15 + self.hole.size[1] * (bit + (0 if bit < 2 else 1))
                 image.paste(self.hole, (x, y))
-            if show_text and char != "":
+            if show_text and char in font:
                 image.paste(font[char], (x, 0))
             x += self.base.size[0]
         image.paste(self.right, (x, y0))
