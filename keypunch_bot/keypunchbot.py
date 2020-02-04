@@ -152,3 +152,6 @@ class KeyPunchBot(ChatBot):
 
     def unknown_command(self, ctx: MessageContext):
         ctx.answer(ctx.lang.get(["unknown", "command"], suggestion=""))
+
+    def unsupported_type(self, ctx: MessageContext):
+        ctx.answer(ctx.lang["unknown", "type"])

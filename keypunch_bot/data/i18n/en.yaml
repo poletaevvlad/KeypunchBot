@@ -112,3 +112,4 @@ cancel:
 unknown:
   command: "<i>I don't know this command.</i>\n{suggestion}Try /help for the list of all commands."
   suggestion: "Perhaps you ment {suggestion}? "
+  type: "I don't understand. Only text messages are supported."

@@ -118,6 +118,9 @@ class ChatBot(ABC):
         self._dispatcher.add_handler(
             MessageHandler(Filters.command,
                            self._create_handler(self.unknown_command)))
+        self._dispatcher.add_handler(
+            MessageHandler(Filters.all,
+                           self._create_handler(self.unsupported_type)))
 
     @abstractmethod
     def initialize(self):
@@ -129,6 +132,10 @@ class ChatBot(ABC):
 
     @abstractmethod
     def unknown_command(self, ctx: MessageContext):
+        pass
+
+    @abstractmethod
+    def unsupported_type(self, ctx: MessageContext):
         pass
 
     def _create_handler(self, callback, argument=None):
