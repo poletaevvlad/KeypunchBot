@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+import re
 from io import BytesIO
 from pathlib import Path
 from logging import Logger
@@ -37,6 +38,8 @@ def on_error(update: Update, context):
 
 
 class MessageContext:
+    COMMAND_REGEX = re.compile(r"^//?[a-zA-Z0-9_]+")
+
     def __init__(self, update: Update, context: CallbackContext,
                  translation_manager: TranslationManager,
                  store: Store):
@@ -62,7 +65,13 @@ class MessageContext:
 
     @property
     def message(self):
-        return self.update.message.text
+        text = self.update.message.text.strip()
+        match = MessageContext.COMMAND_REGEX.search(text)
+        if match is None:
+            return text
+        if match[0].startswith("//"):
+            return text[1:]
+        return text[len(match[0]):].strip()
 
     # pylint: disable=redefined-builtin
     def save(self, *, format: Format = None, show_text: bool = None,

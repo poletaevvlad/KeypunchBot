@@ -82,3 +82,17 @@ def test_save_no_chage_2(context):
     message_context.save(charset="ebcdic880", format=Format.DEFAULT,
                          show_text=True)
     assert store.load(17) is None
+
+
+@pytest.mark.parametrize("message, expected", [
+    ("text message", "text message"),
+    ("/ text message", "/ text message"),
+    ("/command arguments", "arguments"),
+    ("/command123 arguments", "arguments"),
+    ("/COMMAND_name arguments", "arguments"),
+    ("//command arguments", "/command arguments")
+])
+def test_getting_message(context, message, expected):
+    update, _, _, message_context = context
+    update.message.text = message
+    assert message_context.message == expected
