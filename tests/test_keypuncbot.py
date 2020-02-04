@@ -21,7 +21,7 @@ from unittest.mock import patch, MagicMock
 import pytest
 from PIL import Image
 from keypunch_bot.keypunchbot import KeyPunchBot
-from keypunch_bot.persistance import Format
+from keypunch_bot.persistance import Format, ChatData
 
 
 @pytest.mark.parametrize("current_show, set_show, message, should_update", [
@@ -143,3 +143,42 @@ def test_generatign_files():
         img = Image.open(call[0][0])
         assert img.format == "JPEG"
         assert call[0][1] == filename
+
+
+def test_setting_format_argument():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    context.data = ChatData()
+    context.message = "hello, world"
+    bot.set_format(context, Format.PNG)
+
+    context.send_file.assert_called()
+    context.save.assert_not_called()
+
+
+def test_setting_format_no_argument():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    context.message = ""
+    bot.set_format(context, Format.PNG)
+
+    context.save.assert_called_with(format=Format.PNG)
+    context.send_file.assert_not_called()
+    context.answer.assert_called_with(context.lang.get.return_value)
+    context.lang.get.assert_called_with("format", "prompt",
+                                        format=["format", "png"])
+
+
+def test_clearing_format_on_text():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    context.data = ChatData()
+    context.message = "hello, world"
+    bot.text(context)
+    context.save.assert_called_with(format=Format.DEFAULT)

@@ -40,6 +40,9 @@ class KeyPunchBot(ChatBot):
         self.on_command("hidetext", self.set_text_visible, False)
         for charset in self.charsets:
             self.on_command(charset, self.select_character_set, charset)
+        self.on_command("png", self.set_format, Format.PNG)
+        self.on_command("jpeg", self.set_format, Format.JPEG)
+        self.on_command("text", self.set_format, Format.TEXT)
 
     def show_message(self, ctx: MessageContext, message: List[str]):
         ctx.answer(ctx.lang[message])
@@ -90,7 +93,6 @@ class KeyPunchBot(ChatBot):
             stream.break_page()
 
         files_count = stream.get_files_count()
-        print(files_count)
         for i, file in enumerate(stream.generate_files()):
             if format == Format.DEFAULT:
                 ctx.send_photo(file)
@@ -101,3 +103,13 @@ class KeyPunchBot(ChatBot):
     def text(self, ctx: MessageContext):
         self.generate(ctx, ctx.data.output_format, ctx.data.charset,
                       ctx.message)
+        ctx.save(format=Format.DEFAULT)
+
+    def set_format(self, ctx: MessageContext, output_format: Format):
+        message = ctx.message
+        if len(message) == 0:
+            ctx.save(format=output_format)
+            ctx.answer(ctx.lang.get("format", "prompt",
+                                    format=["format", output_format.value]))
+        else:
+            self.generate(ctx, output_format, ctx.data.charset, message)

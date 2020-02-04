@@ -33,3 +33,9 @@ encoding:
   too_many_pages: "<i>Your message is too long.</i>\nIt exceeds the maximum number of images: {pages}."
   most_unsupported: "<i>Your message mostly consists of unsupported characters.</i>\nTo see, what characters are supported, use /characters command."
   some_unsupported: "<i>Your message contains some unsupported characters.</i>\nThese characters will be removed. To see, what characters are supported, use /characters command."
+
+format:
+  prompt: What text would you like to be encoded and sent to you as {format}?
+  png: a PNG file
+  jpeg: a JPEG file
+  text: a text file
