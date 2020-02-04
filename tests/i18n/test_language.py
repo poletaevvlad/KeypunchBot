@@ -59,6 +59,18 @@ def test_get_string_collection(path, string):
     assert language[path] == string
 
 
+@pytest.mark.parametrize("path, result", [
+    (["a"], "A"),
+    (["b", "c"], "C"),
+    (["b", "d"], ["D0", "D1", "D2"]),
+    (["b", "e"], {"f": "F"}),
+    (["b", "g"], "b.g")
+])
+def test_get_object(path, result):
+    language = StringsLanguage(NoMessageLanguage(), MESSAGES)
+    assert language.get_object(path) == result
+
+
 def test_format_missing():
     language = StringsLanguage(NoMessageLanguage(), MESSAGES)
     res = language.get("b", "subst", s1="string")

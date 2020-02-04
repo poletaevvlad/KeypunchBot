@@ -31,23 +31,11 @@ class Language(ABC):
         self.fallback = fallback
 
     @abstractmethod
-    def get_translation(self, path: StringPath) -> Optional[str]:
+    def get_translation(self, path: StringPath) -> Optional[Any]:
         pass
 
     def __getitem__(self, *path: Union[StringPath, str, int]) -> str:
-        def flatten(path: Iterable[Union[StringPath, str, int]]) -> \
-                Iterable[Union[str, int]]:
-            for part in path:
-                if isinstance(part, (int, str)):
-                    yield part
-                else:
-                    yield from flatten(part)
-
-        flat_path: StringPath = list(flatten(path))
-        translation = self.get_translation(list(flat_path))
-        if translation is None:
-            return self.fallback[flat_path]
-        return translation
+        return self.find(False, *path)
 
     def get(self, *path: Union[StringPath, str, int],
             **kwargs: Union[str, StringPath]) -> str:
@@ -63,13 +51,32 @@ class Language(ABC):
         })
         return self.__getitem__(*path).format_map(params)
 
+    def get_object(self, *path: StringPath) -> Any:
+        return self.find(True, *path)
+
+    def find(self, allow_obj: bool, *path: Union[StringPath, str, int]) -> Any:
+        def flatten(path: Iterable[Union[StringPath, str, int]]) -> \
+                Iterable[Union[str, int]]:
+            for part in path:
+                if isinstance(part, (int, str)):
+                    yield part
+                else:
+                    yield from flatten(part)
+
+        flat_path: StringPath = list(flatten(path))
+        translation = self.get_translation(list(flat_path))
+        if translation is None or \
+                (not allow_obj and not isinstance(translation, str)):
+            return self.fallback.find(allow_obj, *flat_path)
+        return translation
+
 
 # pylint: disable=too-few-public-methods
 class NoMessageLanguage(Language):
     def __init__(self):
         super().__init__(None)
 
-    def get_translation(self, path: StringPath) -> Optional[str]:
+    def get_translation(self, path: StringPath) -> Optional[Any]:
         return ".".join(str(x) for x in path)
 
 
@@ -78,7 +85,7 @@ class StringsLanguage(Language):
         super().__init__(fallback)
         self.messages = messages
 
-    def get_translation(self, path: StringPath) -> Optional[str]:
+    def get_translation(self, path: StringPath) -> Optional[Any]:
         block: StringsGroup = self.messages
         for index in path:
             if isinstance(block, str):
@@ -93,4 +100,4 @@ class StringsLanguage(Language):
                     block = block[index]
                 else:
                     return None
-        return block if isinstance(block, str) else None
+        return block
