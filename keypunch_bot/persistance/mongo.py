@@ -47,6 +47,4 @@ class MongoStore(Store):
                 "format": data.output_format.value,
                 "charset": data.charset
             }
-        }, {
-            "upsert": True
-        })
+        }, upsert=True)
