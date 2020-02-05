@@ -18,7 +18,10 @@
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import TypeVar, List, Tuple
-from typing_extensions import Protocol
+try:
+    from typing import Protocol
+except ImportError:
+    from typing_extensions import Protocol
 from .stream import Stream
 
 TStream = TypeVar("TStream", bound=Stream, contravariant=True)
