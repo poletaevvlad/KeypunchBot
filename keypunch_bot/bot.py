@@ -20,10 +20,11 @@
 import re
 import json
 from io import BytesIO
-from typing import Any
+from typing import Any, Optional
 from pathlib import Path
 from logging import Logger
 from abc import ABC, abstractmethod
+from threading import Thread
 from telegram import Update
 from telegram.ext import Updater, CallbackContext, CommandHandler, \
     MessageHandler, Filters
@@ -117,6 +118,7 @@ class ChatBot(ABC):
         self._dispatcher = self._updater.dispatcher
         self._dispatcher.add_error_handler(on_error)
         self._store = store
+        self._thread: Optional[Thread] = None
 
         lang_path = Path(__file__).parents[0] / "data" / "i18n"
         self._lang_manager = TranslationManager.load(lang_path, default="en")
@@ -172,8 +174,12 @@ class ChatBot(ABC):
 
     def start_webhook(self, url):
         self._updater.bot.set_webhook(url=url)
+        self._thread = Thread(target=self._dispatcher.start)
+        self._thread.start()
 
     def remove_webhook(self):
+        self._dispatcher.stop()
+        self._thread.join()
         self._updater.bot.delete_webhook()
 
     def parse_update(self, data: bytes) -> Any:
