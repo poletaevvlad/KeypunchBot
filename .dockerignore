@@ -1,0 +1,7 @@
+.venv
+.git
+.mypy_cache
+.pytest_cache
+**/*.pyc
+*.sublime-*
+**/__pycache__
