@@ -1,0 +1,117 @@
+help:
+  about: |
+   <b>KeypunchBot</b>
+   <i>версия 2.0</i>
+
+   Написано <a href="https://github.com/poletaevvlad">Владом Полетаевым</a>
+
+   Использованные шрифты:
+   <a href="https://fonts.google.com/specimen/Oswald">Oswald</a> by Vernon Adams (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web">OFL</a>),
+   <a href="https://fonts.google.com/specimen/IBM+Plex+Mono">IBM Plex Mono</a> by Mike Abbink, Bold Monday (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web">OFL</a>)
+
+  welcome: |
+    Отправьте сообщение в этот чат и вам будет отправлено изобржение с певфокартой или перфолентой на котором закодирован ваш текст.
+
+    Чтобы посмотреть список всех поддерживаемых комманд, наберите /help.
+
+  help: |
+    KeypunchBot это бот, который генерирует перфокарты и перфоленты с произвольным закодированым текстом в виде изображения или текстового файла.
+
+    <i>Выбор формата</i>:
+    /png [<code>текст</code>] - Генерировать результат в виде PNG-файла
+    /text [<code>текст</code>] - Генерировать результат в виде текстового файла
+    /jpeg [<code>текст</code>] - Генерировать результат в виде JPEG-файла
+    /cancel - Отмена текущей операции
+
+    <i>Выбор кодировки</i>:
+    {encodings}
+    <i>Настройка внешнего вида</i>:
+    /showtext - Показывать закодированный текст на перфокарте или перфоленте
+    /showtext - Отключить отображение текста на перфокарте или перфоленте
+
+    <i>Информация</i>:
+    /characters - Показать символы, поддерживаемые выбранной кодировкой
+    /help - Показать это сообщение
+    /about - Об этом боте
+
+  encoding_line: "/{command} - Использовать кодировку <b>{name}</b>\n"
+
+text:
+  "on":
+    already: Отображение текста на генерируемых изображениях уже включено.
+    set: Текст сообщения будет виден на генерируемых изображениях.
+  "off":
+    already: Отображение текста на генерируемых изображениях уже выключено.
+    set: Текст сообщения больше не будет показываться на генерируемых изображениях.
+
+set_charset:
+  already: Кодировка <b>{encoding}</b> уже выбрана.
+  selected: Кодировка <b>{encoding}</b> будет использоваться для генерации {kind} в дальнейшем.
+  punchcard: перфокарт
+  tape: перфолент
+
+encoding:
+  too_long: "<i>Сообщение слишком длинное.</i>\nПервышено максимальное количество колонок ({columns})."
+  too_many_pages: "<i>Сообщение слишком длинное.</i>\nПревышено максимальное количество изображений ({pages})."
+  most_unsupported: "<i>Большинство символов сообщения не поддерживается выбранной кодировкой.</i>\nЧтобы узнать, какие символы поддерживаются, наберите /characters."
+  some_unsupported: "<i>Некоторые символы сообщения не поддерживается выбранной кодировкой.</i>\nОни будут проигнорированы. Чтобы узнать, какие символы поддерживаются, наберите /characters."
+
+format:
+  prompt: Какое сообщение вы бы холети закодировать и получить в виде {format}?
+  png: PNG-файла
+  jpeg: JPEG-файла
+  text: текстового файла
+
+characters:
+  help: |
+    Кодировка <b>{charset}</b> поддерживает следующие символы:
+    {characters_list}
+    KeypunchBot, также, поддерживает другие кодировки:
+    {charsets_list}
+  characters_line: " • {entry}\n"
+  charset_line: " • <b>{charset}</b> ({kind}, /{command})\n"
+  kinds:
+    punchcard: перфокарты
+    tape: перфоленты
+  supported:
+    ascii:
+      - Латинские буквы верхнего и нижнего регистра (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
+      - Арабские цифры (<code>0</code>-<code>9</code>)
+      - Пробел
+      - Пунктуация и некоторые другие цифры (<code>\</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>[</code>, <code>]</code>, <code>\</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>&lt;</code>, <code><</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>'</code>, <code>+</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>)
+    ebcdic:
+      - Латинские буквы верхнего и нижнего регистра (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
+      - Арабские цифры (<code>0</code>-<code>9</code>)
+      - Пробел
+      - Пунктуация и некоторые другие цифры (<code>/</code>, <code>~</code>, <code>&</code>, <code>-</code>, <code>¢</code>, <code>.</code>, <code><</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>¬</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>></code>, <code>?</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>{</code>, <code>}</code>, <code>\</code>, <code>|</code>)
+    ebcdic880:
+      - Латинские буквы верхнего и нижнего регистра (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
+      - Кириллические буквы верхнего и нижнего регистра (<code>А</code>-<code>Я</code>, <code>а</code>-<code>я</code>, <code>ђ</code>, <code>ѓ</code>, <code>ё</code>, <code>є</code>, <code>ѕ</code>, <code>і</code>, <code>ї</code>, <code>љ</code>, <code>њ</code>, <code>ћ</code>, <code>ќ</code>, <code>ў</code>, <code>џ</code>, <code>Ѓ</code>, <code>Ё</code>, <code>Є</code>, <code>Ѕ</code>, <code>І</code>, <code>Ї</code>, <code>Ј</code>, <code>Ћ</code>, <code>Ќ</code>, <code>Ў</code>, <code>Џ</code>)
+      - Арабские цифры (<code>0</code>-<code>9</code>)
+      - Пробел
+      - Пунктуация и некоторые другие цифры (<code>-</code>, <code>&amp;</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>`</code>, <code>[</code>, <code>]</code>, <code>\</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>#</code>, <code>&lt;</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>'</code>, <code>+</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>)
+    ita2:
+      - Латинские буквы (<code>A</code>-<code>Z</code>)
+      - Арабские цифры (<code>0</code>-<code>9</code>)
+      - Пробел
+      - Разрыв строки
+      - Знак фунта (<code>£</code>)
+      - Пунктуация и некоторые другие цифры (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>;</code>, <code>/</code>, <code>+</code>, <code>!</code>, <code>&amp;</code>)
+    mtk2:
+      - Латинские буквы (<code>A</code>-<code>Z</code>)
+      - Кириллические буквы (<code>А</code>-<code>Я</code>)
+      - Арабские цифры (<code>0</code>-<code>9</code>)
+      - Пробел
+      - Разрыв строки
+      - Пунктуация и некоторые другие цифры (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>=</code>, <code>/</code>, <code>+</code>)
+
+cancel:
+  done: Ок.
+  fail: Отменять нечего.
+
+unknown:
+  command: "<i>Неизвестная команда.</i>\n{suggestion}Наберите /help чтобы посмотреть список поддерживаемых команд."
+  suggestion: "Возможно, вы имели ввиду {suggestion}? "
+  type: Поддерживаются только текстовые сообщения.
+
+heart: ♥

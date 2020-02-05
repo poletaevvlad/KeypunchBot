@@ -23,7 +23,7 @@ help:
     /jpeg [<code>text</code>] - Render punched card or tape as a JPEG file
     /cancel - Cancel current operation
 
-    <i>Encoding seleciton</i>
+    <i>Encoding seleciton</i>:
     {encodings}
     <i>Appearance preferences</i>:
     /showtext - Write the characters from your message on the punched card or tape
