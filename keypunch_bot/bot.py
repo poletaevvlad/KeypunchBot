@@ -18,6 +18,7 @@
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
 import re
+import json
 from io import BytesIO
 from typing import Any
 from pathlib import Path
@@ -176,4 +177,5 @@ class ChatBot(ABC):
         self._updater.bot.delete_webhook()
 
     def parse_update(self, data: bytes) -> Any:
-        return Update.de_json(data, self._updater.bot)
+        update_dict = json.loads(data)
+        return Update.de_json(update_dict, self._updater.bot)
