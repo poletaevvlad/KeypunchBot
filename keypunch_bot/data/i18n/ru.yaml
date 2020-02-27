@@ -1,7 +1,7 @@
 help:
   about: |
    <b>KeypunchBot</b>
-   <i>версия 2.0</i>
+   <i>версия {version}</i>
 
    Написано <a href="https://github.com/poletaevvlad">Владом Полетаевым</a>
 

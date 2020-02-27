@@ -20,6 +20,7 @@
 import os
 from pathlib import Path
 from typing import List
+from . import __version__
 from .bot import ChatBot, MessageContext
 from .persistance import Store, Format
 from .encodings import CharacterSetsRepository, params_factory
@@ -36,7 +37,7 @@ class KeyPunchBot(ChatBot):
 
     def initialize(self):
         self.on_command("start", self.show_message, ["help", "welcome"])
-        self.on_command("about", self.show_message, ["help", "about"])
+        self.on_command("about", self.show_about)
         self.on_command("help", self.show_help)
         self.on_command("showtext", self.set_text_visible, True)
         self.on_command("hidetext", self.set_text_visible, False)
@@ -150,6 +151,9 @@ class KeyPunchBot(ChatBot):
                                 charset=self.charsets[ctx.data.charset].name,
                                 charsets_list=charsets_list,
                                 characters_list=characters_list))
+
+    def show_about(self, ctx: MessageContext):
+        ctx.answer(ctx.lang.get("help", "about", version=__version__))
 
     def show_help(self, ctx: MessageContext):
         charsets = list(self.charsets.items())

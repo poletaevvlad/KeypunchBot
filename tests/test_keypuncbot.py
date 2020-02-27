@@ -22,6 +22,7 @@ import pytest
 from PIL import Image
 from keypunch_bot.keypunchbot import KeyPunchBot
 from keypunch_bot.persistance import Format, ChatData
+from keypunch_bot import __version__ as version
 
 
 @pytest.mark.parametrize("current_show, set_show, message, should_update", [
@@ -44,6 +45,17 @@ def test_change_show_text(current_show: bool, set_show: bool, message: str,
         context.save.assert_called_with(show_text=set_show)
     else:
         context.save.assert_not_called()
+
+
+def test_set_charset_already():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+    context = MagicMock()
+
+    bot.show_about(context)
+    context.answer.assert_called_with(context.lang.get.return_value)
+    context.lang.get.assert_called_with("help", "about", version=version)
+
 
 
 def test_set_charset_already():
