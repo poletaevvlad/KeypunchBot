@@ -51,7 +51,7 @@ set_charset:
   tape: перфолент
 
 encoding:
-  too_long: "<i>Сообщение слишком длинное.</i>\nПервышено максимальное количество колонок ({columns})."
+  too_long: "<i>Сообщение слишком длинное.</i>\nПревышено максимальное количество колонок ({columns})."
   too_many_pages: "<i>Сообщение слишком длинное.</i>\nПревышено максимальное количество изображений ({pages})."
   most_unsupported: "<i>Большинство символов сообщения не поддерживается выбранной кодировкой.</i>\nЧтобы узнать, какие символы поддерживаются, наберите /characters."
   some_unsupported: "<i>Некоторые символы сообщения не поддерживается выбранной кодировкой.</i>\nОни будут проигнорированы. Чтобы узнать, какие символы поддерживаются, наберите /characters."
@@ -78,32 +78,32 @@ characters:
       - Латинские буквы верхнего и нижнего регистра (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
       - Арабские цифры (<code>0</code>-<code>9</code>)
       - Пробел
-      - Пунктуация и некоторые другие цифры (<code>\</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>[</code>, <code>]</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>&lt;</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>+</code>, <code>-</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>, <code>'</code>, <code>/</code>, <code>&amp;</code>, <code>~</code>, <code>#</code>)
+      - Пунктуация и некоторые другие символы (<code>\</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>[</code>, <code>]</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>&lt;</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>+</code>, <code>-</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>, <code>'</code>, <code>/</code>, <code>&amp;</code>, <code>~</code>, <code>#</code>)
     ebcdic:
       - Латинские буквы верхнего и нижнего регистра (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
       - Арабские цифры (<code>0</code>-<code>9</code>)
       - Пробел
-      - Пунктуация и некоторые другие цифры (<code>/</code>, <code>~</code>, <code>&amp;</code>, <code>-</code>, <code>¢</code>, <code>.</code>, <code>&lt;</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>¬</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>&gt;</code>, <code>?</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>{</code>, <code>}</code>, <code>\</code>, <code>|</code>)
+      - Пунктуация и некоторые другие символы (<code>/</code>, <code>~</code>, <code>&amp;</code>, <code>-</code>, <code>¢</code>, <code>.</code>, <code>&lt;</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>¬</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>&gt;</code>, <code>?</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>{</code>, <code>}</code>, <code>\</code>, <code>|</code>)
     ebcdic880:
       - Латинские буквы верхнего и нижнего регистра (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
       - Кириллические буквы верхнего и нижнего регистра (<code>А</code>-<code>Я</code>, <code>а</code>-<code>я</code>, <code>ђ</code>, <code>ѓ</code>, <code>ё</code>, <code>є</code>, <code>ѕ</code>, <code>і</code>, <code>ї</code>, <code>љ</code>, <code>њ</code>, <code>ћ</code>, <code>ќ</code>, <code>ў</code>, <code>џ</code>, <code>Ѓ</code>, <code>Ё</code>, <code>Є</code>, <code>Ѕ</code>, <code>І</code>, <code>Ї</code>, <code>Ј</code>, <code>Ћ</code>, <code>Ќ</code>, <code>Ў</code>, <code>Џ</code>)
       - Арабские цифры (<code>0</code>-<code>9</code>)
       - Пробел
-      - Пунктуация и некоторые другие цифры (<code>-</code>, <code>&amp;</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>`</code>, <code>[</code>, <code>]</code>, <code>\</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>#</code>, <code>&lt;</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>'</code>, <code>+</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>)
+      - Пунктуация и некоторые другие символы (<code>-</code>, <code>&amp;</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>`</code>, <code>[</code>, <code>]</code>, <code>\</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>#</code>, <code>&lt;</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>'</code>, <code>+</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>)
     ita2:
       - Латинские буквы (<code>A</code>-<code>Z</code>)
       - Арабские цифры (<code>0</code>-<code>9</code>)
       - Пробел
       - Разрыв строки
       - Знак фунта (<code>£</code>)
-      - Пунктуация и некоторые другие цифры (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>;</code>, <code>/</code>, <code>+</code>, <code>!</code>, <code>&amp;</code>)
+      - Пунктуация и некоторые другие символы (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>;</code>, <code>/</code>, <code>+</code>, <code>!</code>, <code>&amp;</code>)
     mtk2:
       - Латинские буквы (<code>A</code>-<code>Z</code>)
       - Кириллические буквы (<code>А</code>-<code>Я</code>)
       - Арабские цифры (<code>0</code>-<code>9</code>)
       - Пробел
       - Разрыв строки
-      - Пунктуация и некоторые другие цифры (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>=</code>, <code>/</code>, <code>+</code>)
+      - Пунктуация и некоторые другие символы (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>=</code>, <code>/</code>, <code>+</code>)
 
 cancel:
   done: Ок.
