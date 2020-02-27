@@ -1,0 +1,117 @@
+help:
+  about: |
+   <b>KeypunchBot</b>
+   <i>версія {version}</i>
+
+   Написано <a href="https://github.com/poletaevvlad">Владом Полєтаєвим</a>
+
+   Використовувані шрифти:
+   <a href="https://fonts.google.com/specimen/Oswald">Oswald</a> by Vernon Adams (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL_web">OFL</a>),
+   <a href="https://fonts.google.com/specimen/IBM+Plex+Mono">IBM Plex Mono</a> by Mike Abbink, Bold Monday (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL_web">OFL</a>)
+
+  welcome: |
+    Відправте повідомлення у цей чат і вам буде надіслано зображення з перфокартою або перфострічкою на якій закодований ваш текст.
+
+    Щоб подивитися перелік всіх команд, що підтримуються ботом, наберіть /help.
+
+  help: |
+    KeypunchBot це бот, який генерує перфокарти і перфострічки з довільним закодованим текстом у вигляді зображення або текстового файлу.
+
+    <i>Вибір формату</i>:
+    /png [<code>текст</code>] - Генерувати результат у вигляді PNG-файлу
+    /text [<code>текст</code>] - Генерувати результат у вигляді текстового файлу
+    /jpeg [<code>текст</code>] - Генерувати результат у вигляді JPEG-файлу
+    /cancel - Скасування операції
+
+    <i>Вибір кодування</i>:
+    {encodings}
+    <i>Налаштування зовнішнього вигляду</i>:
+    /showtext - Показувати закодований текст на перфокарті чи перфострічці
+    /showtext - Не показувати текст на перфокарті чи перфострічці
+
+    <i>Інформація</i>:
+    /characters - Показати символи, що підтримуються обраним кодуванням
+    /help - Показати це повідомлення
+    /about - Інформація про цього бота
+
+  encoding_line: "/{command} - Використовувати кодування <b>{name}</b>\n"
+
+text:
+  "on":
+    already: Показ тексту на зображеннях, що генеруються ботом уже увімкнено.
+    set: Текст повідомлення буде показаний на зображеннях, що генеруються ботом.
+  "off":
+    already: Показ тексту на зображеннях, що генеруються ботом уже вимкнено.
+    set: Текст повідомлення більше не буде показуватися зображеннях, що генеруються ботом.
+
+set_charset:
+  already: Кодування <b>{encoding}</b> уже вибрано.
+  selected: Кодування <b>{encoding}</b> буде надалі використовуватися для генерації {kind}.
+  punchcard: перфокарт
+  tape: перфострічок
+
+encoding:
+  too_long: "<i>Повідомлення занадто довге.</i>\nПеревищено максимальна кількість колонок ({columns})."
+  too_many_pages: "<i>Повідомлення занадто довге.</i>\nПеревищено максимальна кількість зображень ({pages})."
+  most_unsupported: "<i>Більшість символів повідомлення не підтримується обраним кодуванням.</i>\nЩоб дізнатися, які символи підтримуються, наберіть /characters."
+  some_unsupported: "<i>Деякі символи повідомлення не підтримуються обраним кодуванням.</i>\nВони будуть проігноровані. Щоб дізнатися, які символи підтримуються, наберіть /characters."
+
+format:
+  prompt: Яке повідомлення ви хотіли би закодувати у вигляді {format}?
+  png: PNG-файлу
+  jpeg: JPEG-файлу
+  text: текстового файлу
+
+characters:
+  help: |
+    Кодування <b>{charset}</b> підтримує такі символи:
+    {characters_list}
+    KeypunchBot, також, підтримує інші кодування:
+    {charsets_list}
+  characters_line: " • {entry}\n"
+  charset_line: " • <b>{charset}</b> ({kind}, /{command})\n"
+  kinds:
+    punchcard: перфокарти
+    tape: перфострічки
+  supported:
+    ascii:
+      - Латинські літери верхнього і нижнього регістру (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
+      - Арабські цифри (<code>0</code>-<code>9</code>)
+      - Пропуск
+      - Пунктуація і деякі інші символи (<code>\</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>[</code>, <code>]</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>&lt;</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>+</code>, <code>-</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>, <code>'</code>, <code>/</code>, <code>&amp;</code>, <code>~</code>, <code>#</code>)
+    ebcdic:
+      - Латинські літери верхнього і нижнього регістру (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
+      - Арабські цифри (<code>0</code>-<code>9</code>)
+      - Пропуск
+      - Пунктуація і деякі інші символи (<code>/</code>, <code>~</code>, <code>&amp;</code>, <code>-</code>, <code>¢</code>, <code>.</code>, <code>&lt;</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>¬</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>&gt;</code>, <code>?</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>{</code>, <code>}</code>, <code>\</code>, <code>|</code>)
+    ebcdic880:
+      - Латинські літери верхнього і нижнього регістру (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
+      - Кириличні літери верхнього і нижнього регістру (<code>А</code>-<code>Я</code>, <code>а</code>-<code>я</code>, <code>ђ</code>, <code>ѓ</code>, <code>ё</code>, <code>є</code>, <code>ѕ</code>, <code>і</code>, <code>ї</code>, <code>љ</code>, <code>њ</code>, <code>ћ</code>, <code>ќ</code>, <code>ў</code>, <code>џ</code>, <code>Ѓ</code>, <code>Ё</code>, <code>Є</code>, <code>Ѕ</code>, <code>І</code>, <code>Ї</code>, <code>Ј</code>, <code>Ћ</code>, <code>Ќ</code>, <code>Ў</code>, <code>Џ</code>)
+      - Арабські цифри (<code>0</code>-<code>9</code>)
+      - Пропуск
+      - Пунктуація і деякі інші символи (<code>-</code>, <code>&amp;</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>`</code>, <code>[</code>, <code>]</code>, <code>\</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>#</code>, <code>&lt;</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>'</code>, <code>+</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>)
+    ita2:
+      - Латинські літери (<code>A</code>-<code>Z</code>)
+      - Арабські цифри (<code>0</code>-<code>9</code>)
+      - Пропуск
+      - Розрив рядка
+      - Знак фунта (<code>£</code>)
+      - Пунктуація і деякі інші символи (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>;</code>, <code>/</code>, <code>+</code>, <code>!</code>, <code>&amp;</code>)
+    mtk2:
+      - Латинські літери (<code>A</code>-<code>Z</code>)
+      - Кириличні літери (<code>А</code>-<code>Я</code>)
+      - Арабські цифри (<code>0</code>-<code>9</code>)
+      - Пропуск
+      - Розрив рядка
+      - Пунктуація і деякі інші цифри (<code>-</code>, <code>?</code>, <code>:</code>, <code>(</code>, <code>)</code>, <code>.</code>, <code>,</code>, <code>'</code>, <code>=</code>, <code>/</code>, <code>+</code>)
+
+cancel:
+  done: Ок.
+  fail: Нічого скасовувати.
+
+unknown:
+  command: "<i>Невідома команда.</i>\n{suggestion}Наберіть /help щоб побачити перелік команд, що підтримуються."
+  suggestion: "Можливо, ви мали на увазі {suggestion}? "
+  type: Підтримуються лише текстові повідомлення.
+
+heart: ♥

@@ -83,7 +83,7 @@ def test_find_yaml_strings(tmp_path):
 
 @pytest.mark.parametrize("locale, path", [
     (locale, path)
-    for locale in ["en", "ru"]
+    for locale in ["en", "ru", "uk"]
     for path in find_yaml_strings(LOCALES_PATH, locale)
 ])
 def test_string(locale: str, path: List[Union[int, str]]):
