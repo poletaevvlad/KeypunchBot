@@ -26,11 +26,11 @@ def test_check_invalid(string: str):
         check_html_string(string)
 
 
-def find_yaml_strings(path: Path, locale: str) -> Iterable[List[str]]:
+def find_yaml_strings(path: Path, locale: str) -> \
+        Iterable[List[Union[str, int]]]:
     with (path / f"{locale}.yaml").open() as file:
-        data = yaml.load(file)
+        data = yaml.load(file, yaml.CLoader)
 
-    print(data)
     def find_strings(path: List[str], value):
         if isinstance(value, str):
             yield path
