@@ -1,9 +1,11 @@
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable, List, Union
 from textwrap import dedent
 import yaml
 from xml.etree import ElementTree
 import pytest
+
+LOCALES_PATH = Path(__file__).parents[2] / "keypunch_bot" / "data" / "i18n"
 
 
 def check_html_string(string: str):
@@ -58,3 +60,17 @@ def test_find_yaml_strings(tmp_path):
     assert paths == [
         ["a"], ["c", "e"], ["c", "f", 0], ["c", "f", 2], ["c", "g"], ["h", 1]
     ]
+
+
+@pytest.mark.parametrize("locale, path", [
+    (locale, path)
+    for locale in ["en", "ru"]
+    for path in find_yaml_strings(LOCALES_PATH, locale)
+])
+def test_string(locale: str, path: List[Union[int, str]]):
+    with (LOCALES_PATH / (locale + ".yaml")).open() as file:
+        data = yaml.load(file, yaml.CLoader)
+        for part in path:
+            data = data[part]
+
+    check_html_string(data)
