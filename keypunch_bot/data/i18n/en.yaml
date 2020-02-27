@@ -6,8 +6,8 @@ help:
    Written by <a href="https://github.com/poletaevvlad">Vlad Poletaev</a>
 
    Fonts used:
-   <a href="https://fonts.google.com/specimen/Oswald">Oswald</a> by Vernon Adams (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web">OFL</a>),
-   <a href="https://fonts.google.com/specimen/IBM+Plex+Mono">IBM Plex Mono</a> by Mike Abbink, Bold Monday (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web">OFL</a>)
+   <a href="https://fonts.google.com/specimen/Oswald">Oswald</a> by Vernon Adams (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL_web">OFL</a>),
+   <a href="https://fonts.google.com/specimen/IBM+Plex+Mono">IBM Plex Mono</a> by Mike Abbink, Bold Monday (<a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL_web">OFL</a>)
 
   welcome: |
     Send a text message in this chat and an image with a punched card or pucnhed tape with your text will be sent you back.
@@ -78,12 +78,12 @@ characters:
       - Upper-case and lower-case latin letters (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
       - Arabic numbers (<code>0</code>-<code>9</code>)
       - Space character
-      - Punctuation and some other symbols (<code>\</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>[</code>, <code>]</code>, <code>\</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>&lt;</code>, <code><</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>'</code>, <code>+</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>)
+      - Punctuation and some other symbols (<code>\</code>, <code>{</code>, <code>|</code>, <code>}</code>, <code>[</code>, <code>]</code>, <code>:</code>, <code>.</code>, <code>$</code>, <code>,</code>, <code>&lt;</code>, <code>*</code>, <code>%</code>, <code>@</code>, <code>(</code>, <code>)</code>, <code>_</code>, <code>+</code>, <code>-</code>, <code>;</code>, <code>&gt;</code>, <code>=</code>, <code>!</code>, <code>^</code>, <code>?</code>, <code>"</code>, <code>'</code>, <code>/</code>, <code>&amp;</code>, <code>~</code>, <code>#</code>)
     ebcdic:
       - Upper-case and lower-case latin letters (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
       - Arabic numbers (<code>0</code>-<code>9</code>)
       - Space character
-      - Punctuation and some other symbols (<code>/</code>, <code>~</code>, <code>&</code>, <code>-</code>, <code>¢</code>, <code>.</code>, <code><</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>¬</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>></code>, <code>?</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>{</code>, <code>}</code>, <code>\</code>, <code>|</code>)
+      - Punctuation and some other symbols (<code>/</code>, <code>~</code>, <code>&amp;</code>, <code>-</code>, <code>¢</code>, <code>.</code>, <code>&lt;</code>, <code>(</code>, <code>+</code>, <code>|</code>, <code>!</code>, <code>$</code>, <code>*</code>, <code>)</code>, <code>;</code>, <code>¬</code>, <code>,</code>, <code>%</code>, <code>_</code>, <code>&gt;</code>, <code>?</code>, <code>:</code>, <code>#</code>, <code>@</code>, <code>'</code>, <code>=</code>, <code>"</code>, <code>{</code>, <code>}</code>, <code>\</code>, <code>|</code>)
     ebcdic880:
       - Upper-case and lower-case latin letters (<code>A</code>-<code>Z</code>, <code>a</code>-<code>z</code>)
       - Upper-case and lower-case cyrillic letters (<code>А</code>-<code>Я</code>, <code>а</code>-<code>я</code>, <code>ђ</code>, <code>ѓ</code>, <code>ё</code>, <code>є</code>, <code>ѕ</code>, <code>і</code>, <code>ї</code>, <code>љ</code>, <code>њ</code>, <code>ћ</code>, <code>ќ</code>, <code>ў</code>, <code>џ</code>, <code>Ѓ</code>, <code>Ё</code>, <code>Є</code>, <code>Ѕ</code>, <code>І</code>, <code>Ї</code>, <code>Ј</code>, <code>Ћ</code>, <code>Ќ</code>, <code>Ў</code>, <code>Џ</code>)
