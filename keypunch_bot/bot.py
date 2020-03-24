@@ -19,6 +19,8 @@
 
 import re
 import json
+import string
+from itertools import takewhile
 from io import BytesIO
 from typing import Any, Optional
 from pathlib import Path
@@ -42,6 +44,7 @@ def on_error(update: Update, context):
 
 class MessageContext:
     COMMAND_REGEX = re.compile(r"^//?[a-zA-Z0-9_]+(@[a-zA-Z0-9_]+)?")
+    COMMAND_CHARS = {*string.ascii_letters, *string.digits, "_"}
 
     def __init__(self, update: Update, context: CallbackContext,
                  translation_manager: TranslationManager,
@@ -76,7 +79,7 @@ class MessageContext:
     def data(self) -> ChatData:
         return self._store.load_or_default(self.chat_id)
 
-    @property
+    @lazy_property
     def message(self):
         text = self._message.text.strip()
         match = MessageContext.COMMAND_REGEX.search(text)
@@ -85,6 +88,15 @@ class MessageContext:
         if match[0].startswith("//"):
             return text[1:]
         return text[len(match[0]):].strip()
+
+    @lazy_property
+    def command(self):
+        msg = self._message.text.strip()
+        if not msg.startswith("/"):
+            return ""
+        return "".join(takewhile(
+            lambda x: x in MessageContext.COMMAND_CHARS, msg[1:]
+        ))
 
     # pylint: disable=redefined-builtin
     def save(self, *, format: Format = None, show_text: bool = None,

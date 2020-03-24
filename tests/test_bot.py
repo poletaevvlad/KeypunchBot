@@ -103,6 +103,20 @@ def test_getting_message(context, message, expected):
     assert message_context.message == expected
 
 
+@pytest.mark.parametrize("message, command", [
+    ("message", ""),
+    ("/ message", ""),
+    ("/command", "command"),
+    ("/command arguments", "command"),
+    ("/command@bot", "command"),
+    ("//command", "")
+])
+def test_getting_command(context, message, command):
+    update, _, _, message_context = context
+    update.message.text = message
+    assert message_context.command == command
+
+
 @pytest.mark.parametrize("value, is_group", [
     ("private", False),
     ("group", True),
