@@ -120,12 +120,19 @@ class KeyPunchBot(ChatBot):
 
     def set_format(self, ctx: MessageContext, output_format: Format):
         message = ctx.message
-        if len(message) == 0:
-            ctx.save(format=output_format)
-            ctx.answer(ctx.lang.get("format", "prompt",
-                                    format=["format", output_format.value]))
-        else:
+        if len(message) > 0:
             self.generate(ctx, output_format, ctx.data.charset, message)
+            return
+
+        if ctx.is_group_chat:
+            ctx.answer(ctx.lang.get(
+                "format", "group_prompt", format=output_format.value
+            ))
+        else:
+            ctx.save(format=output_format)
+            ctx.answer(ctx.lang.get(
+                "format", "prompt", format=["format", output_format.value]
+            ))
 
     def cancel_format(self, ctx: MessageContext):
         if ctx.data.output_format == Format.DEFAULT:

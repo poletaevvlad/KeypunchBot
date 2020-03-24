@@ -57,7 +57,8 @@ encoding:
   some_unsupported: "<i>Your message contains some unsupported characters.</i>\nThese characters will be removed. To see, what characters are supported, use /characters command."
 
 format:
-  prompt: What text would you like to be encoded and sent to you as {format}?
+  prompt: What text would you would like to be encoded and sent to you as {format}?
+  group_prompt: "Specify the text you want to encode after the command:\n<code>/{format} &lt;Your message&gt;</code>"
   png: a PNG file
   jpeg: a JPEG file
   text: a text file
