@@ -89,9 +89,13 @@ def test_save_no_chage_2(context):
     ("text message", "text message"),
     ("/ text message", "/ text message"),
     ("/command arguments", "arguments"),
+    ("/command", ""),
     ("/command123 arguments", "arguments"),
     ("/COMMAND_name arguments", "arguments"),
-    ("//command arguments", "/command arguments")
+    ("//command arguments", "/command arguments"),
+    ("/command@bot message", "message"),
+    ("/command@bot", ""),
+    ("//command@bot message", "/command@bot message"),
 ])
 def test_getting_message(context, message, expected):
     update, _, _, message_context = context

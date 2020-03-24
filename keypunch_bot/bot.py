@@ -41,7 +41,7 @@ def on_error(update: Update, context):
 
 
 class MessageContext:
-    COMMAND_REGEX = re.compile(r"^//?[a-zA-Z0-9_]+")
+    COMMAND_REGEX = re.compile(r"^//?[a-zA-Z0-9_]+(@[a-zA-Z0-9_]+)?")
 
     def __init__(self, update: Update, context: CallbackContext,
                  translation_manager: TranslationManager,
