@@ -27,6 +27,13 @@ from .encodings import CharacterSetsRepository, params_factory
 from .encodings import TooManyPagesError, MessageTooLongError
 from .rendering import renderer_factory, get_filename
 
+FORMAT_COMMANDS = {
+    Format.PNG: "png",
+    Format.JPEG: "jpeg",
+    Format.TEXT: "text",
+    Format.DEFAULT: "enc"
+}
+
 
 # pylint: disable=no-self-use
 class KeyPunchBot(ChatBot):
@@ -43,9 +50,8 @@ class KeyPunchBot(ChatBot):
         self.on_command("hidetext", self.set_text_visible, False)
         for charset in self.charsets:
             self.on_command(charset, self.select_character_set, charset)
-        self.on_command("png", self.set_format, Format.PNG)
-        self.on_command("jpeg", self.set_format, Format.JPEG)
-        self.on_command("text", self.set_format, Format.TEXT)
+        for format_value, command in FORMAT_COMMANDS.items():
+            self.on_command(command, self.set_format, format_value)
         self.on_command("cancel", self.cancel_format)
         self.on_command("characters", self.show_characters)
 
@@ -124,9 +130,9 @@ class KeyPunchBot(ChatBot):
             self.generate(ctx, output_format, ctx.data.charset, message)
             return
 
-        if ctx.is_group_chat:
+        if ctx.is_group_chat or output_format == Format.DEFAULT:
             ctx.answer(ctx.lang.get(
-                "format", "group_prompt", format=output_format.value
+                "format", "group_prompt", format=FORMAT_COMMANDS[output_format]
             ))
         else:
             ctx.save(format=output_format)

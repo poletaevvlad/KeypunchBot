@@ -201,6 +201,20 @@ def test_setting_format_no_argument_group():
     context.lang.get.assert_called_with("format", "group_prompt", format="png")
 
 
+def test_setting_format_no_argument_enc():
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    context.message = ""
+    context.is_group_chat = False
+    bot.set_format(context, Format.DEFAULT)
+
+    context.save.assert_not_called()
+    context.send_file.assert_not_called()
+    context.lang.get.assert_called_with("format", "group_prompt", format="enc")
+
+
 def test_clearing_format_on_text():
     with patch("keypunch_bot.bot.Updater"):
         bot = KeyPunchBot("", MagicMock())
