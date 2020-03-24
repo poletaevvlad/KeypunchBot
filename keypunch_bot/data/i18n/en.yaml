@@ -21,6 +21,7 @@ help:
     /png [<code>text</code>] - Render punched card or tape as a PNG file
     /text [<code>text</code>] - Render punched card or tape as a text file
     /jpeg [<code>text</code>] - Render punched card or tape as a JPEG file
+    /enc <code>текст</code> - Render punched card or tape and send it as a photo
     /cancel - Cancel current operation
 
     <i>Encoding selection</i>:
