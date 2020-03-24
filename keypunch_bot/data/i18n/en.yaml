@@ -28,7 +28,7 @@ help:
     {encodings}
     <i>Appearance preferences</i>:
     /showtext - Write the characters from your message on the punched card or tape
-    /showtext - Disable writing the characters from your message on the punched card or tape
+    /hidetext - Disable writing the characters from your message on the punched card or tape
 
     <i>Information</i>:
     /characters - Shows the list of supported characters
