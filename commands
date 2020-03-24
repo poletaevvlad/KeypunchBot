@@ -1,0 +1,15 @@
+enc - Render punched card or tape and send it as a photo
+png - Render punched card or tape as a PNG file
+text - Render punched card or tape as a text file
+jpeg - Render punched card or tape as a JPEG file
+cancel - Cancel current operation
+ascii - Use ASCII encoding
+ebcdic - Use EBCDIC encoding
+ebcdic880 - Use EBCDIC 880 (Cyrillic) encoding
+ita2 - Use ITA-2 (CCITT-2) encoding
+mtk2 - Use MTK-2 encoding
+showtext - Write the characters from your message on the punched card or tape
+hidetext - Disable writing the characters from your message on the punched card or tape
+characters - Shows the list of supported characters
+help - Shows the list of supported commands
+about - Shows information about this bot
