@@ -101,3 +101,15 @@ def test_getting_message(context, message, expected):
     update, _, _, message_context = context
     update.message.text = message
     assert message_context.message == expected
+
+
+@pytest.mark.parametrize("value, is_group", [
+    ("private", False),
+    ("group", True),
+    ("supergroup", True),
+    ("channel", False)
+])
+def test_is_group_chat(context, value, is_group):
+    update, _, _, message_context = context
+    update.message.chat.type = value
+    assert message_context.is_group_chat == is_group

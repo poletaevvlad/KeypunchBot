@@ -68,6 +68,10 @@ class MessageContext:
     def chat_id(self) -> int:
         return self._message.chat_id
 
+    @property
+    def is_group_chat(self) -> bool:
+        return self._message.chat.type in {"group", "supergroup"}
+
     @lazy_property
     def data(self) -> ChatData:
         return self._store.load_or_default(self.chat_id)
