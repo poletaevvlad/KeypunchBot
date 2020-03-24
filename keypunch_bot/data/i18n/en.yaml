@@ -113,7 +113,11 @@ cancel:
 
 unknown:
   command: "<i>I don't know this command.</i>\n{suggestion}Try /help for the list of all commands."
-  suggestion: "Perhaps you meant {suggestion}? "
+  suggestion:
+    text: "Perhaps you meant {suggestion}? "
+    command_double: "{a} or {b}"
+    separator: ", "
+    separator_last: ", or "
   type: "I don't understand. Only text messages are supported."
 
 heart: ♥

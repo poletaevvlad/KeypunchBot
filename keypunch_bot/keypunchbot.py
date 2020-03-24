@@ -26,6 +26,7 @@ from .persistance import Store, Format
 from .encodings import CharacterSetsRepository, params_factory
 from .encodings import TooManyPagesError, MessageTooLongError
 from .rendering import renderer_factory, get_filename
+from .utils import compute_suggestions
 
 FORMAT_COMMANDS = {
     Format.PNG: "png",
@@ -33,6 +34,10 @@ FORMAT_COMMANDS = {
     Format.TEXT: "text",
     Format.DEFAULT: "enc"
 }
+
+COMMANDS = ["enc", "png", "text", "jpeg", "cancel", "ascii", "ebcdic",
+            "ebcdic880", "ita2", "mtk2", "showtext", "hidetext", "characters",
+            "help", "about"]
 
 
 # pylint: disable=no-self-use
@@ -177,7 +182,25 @@ class KeyPunchBot(ChatBot):
         ctx.answer(ctx.lang.get("help", "help", encodings=encodings))
 
     def unknown_command(self, ctx: MessageContext):
-        ctx.answer(ctx.lang.get(["unknown", "command"], suggestion=""))
+        command = ctx.command
+        similar = ["/" + x for x in compute_suggestions(command, COMMANDS)]
+        if len(similar) == 0:
+            suggestion = ""
+        else:
+            sep = ctx.lang["unknown", "suggestion", "separator"]
+            sep_last = ctx.lang["unknown", "suggestion", "separator_last"]
+            if len(similar) == 1:
+                suggestion = similar[0]
+            elif len(similar) == 2:
+                suggestion = ctx.lang.get(
+                    ["unknown", "suggestion", "command_double"],
+                    a=similar[0], b=similar[1]
+                )
+            else:
+                suggestion = sep.join(similar[:-1]) + sep_last + similar[-1]
+            suggestion = ctx.lang.get(["unknown", "suggestion", "text"],
+                                      suggestion=suggestion)
+        ctx.answer(ctx.lang.get(["unknown", "command"], suggestion=suggestion))
 
     def unsupported_type(self, ctx: MessageContext):
         if not ctx.is_group_chat:

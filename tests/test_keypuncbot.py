@@ -17,9 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+import string
 from unittest.mock import patch, MagicMock
 import pytest
 from PIL import Image
+from keypunch_bot.i18n.language import StringsLanguage
 from keypunch_bot.keypunchbot import KeyPunchBot
 from keypunch_bot.persistance import Format, ChatData
 from keypunch_bot import __version__ as version
@@ -247,3 +249,33 @@ def test_cancel_done():
     context.answer.assert_called_with(context.lang.__getitem__.return_value)
     context.lang.__getitem__.assert_called_with(("cancel", "done"))
     context.save.assert_called_with(format=Format.DEFAULT)
+
+
+@pytest.mark.parametrize("num_results, answer", [
+    (0, "unknown."),
+    (1, "unknown. perhaps /a?"),
+    (2, "unknown. perhaps /a or /b?"),
+    (3, "unknown. perhaps /a, /b, or /c?"),
+    (4, "unknown. perhaps /a, /b, /c, or /d?")
+])
+def test_unknown_command(num_results: int, answer: str):
+    language = StringsLanguage(None, {
+        "unknown":{
+            "command": "unknown.{suggestion}",
+            "suggestion": {
+                "text": " perhaps {suggestion}?",
+                "command_double": "{a} or {b}",
+                "separator": ", ",
+                "separator_last": ", or "
+            }
+        }
+    })
+    with patch("keypunch_bot.bot.Updater"):
+        bot = KeyPunchBot("", MagicMock())
+
+    context = MagicMock()
+    context.lang = language
+    with patch("keypunch_bot.keypunchbot.compute_suggestions") as mock:
+        mock.return_value = list(string.ascii_lowercase[:num_results])
+        bot.unknown_command(context)
+    context.answer.assert_called_with(answer)
