@@ -174,4 +174,5 @@ class KeyPunchBot(ChatBot):
         ctx.answer(ctx.lang.get(["unknown", "command"], suggestion=""))
 
     def unsupported_type(self, ctx: MessageContext):
-        ctx.answer(ctx.lang["unknown", "type"])
+        if not ctx.is_group_chat:
+            ctx.answer(ctx.lang["unknown", "type"])
