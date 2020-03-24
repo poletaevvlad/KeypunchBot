@@ -17,7 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List
 import pytest
+from keypunch_bot.utils import compute_suggestions
 from keypunch_bot.utils.suggestions import levenshtein
 
 LEVENSHTEIN_CASES = [
@@ -29,6 +31,8 @@ LEVENSHTEIN_CASES = [
     ("hello", "olleh", 4),
 ]
 
+WORDS = ["abc", "adb", "aef", "afc"]
+
 
 @pytest.mark.parametrize("word1, word2, distance", [
     *LEVENSHTEIN_CASES,
@@ -36,3 +40,13 @@ LEVENSHTEIN_CASES = [
 ])
 def test_levenshtein(word1: str, word2: str, distance: int):
     assert levenshtein(word1, word2) == distance
+
+
+@pytest.mark.parametrize("word, results", [
+    ("123", []),
+    ("acf", ["aef", "abc", "adb", "afc"]),
+    ("abcd", ["abc", "afc"]),
+    ("abcdf", ["abc"])
+])
+def test_similar(word: str, results: List[str]):
+    assert compute_suggestions(word, WORDS) == results

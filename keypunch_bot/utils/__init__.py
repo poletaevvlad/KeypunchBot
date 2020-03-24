@@ -18,3 +18,4 @@
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
 from .lazy import lazy_property  # noqa
+from .suggestions import compute_suggestions  # noqa
