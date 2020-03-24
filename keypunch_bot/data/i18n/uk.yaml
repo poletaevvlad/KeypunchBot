@@ -113,7 +113,11 @@ cancel:
 
 unknown:
   command: "<i>Невідома команда.</i>\n{suggestion}Наберіть /help щоб побачити перелік команд, що підтримуються."
-  suggestion: "Можливо, ви мали на увазі {suggestion}? "
+  suggestion:
+    text: "Можливо, ви мали на увазі {suggestion}? "
+    command_double: "{a} або {b}"
+    separator: ", "
+    separator_last: " або "
   type: Підтримуються лише текстові повідомлення.
 
 heart: ♥
