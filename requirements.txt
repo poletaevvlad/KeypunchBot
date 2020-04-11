@@ -1,6 +1,6 @@
 PyYAML==5.3
 python-telegram-bot==12.3.0
-Pillow==6.2.0
+Pillow==7.1.1
 tornado==6.0.3
 pymongo==3.10.1
 click==7.0
