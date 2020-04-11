@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with KeypunchBot. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
+from typing import List, Iterable, Tuple
 
 
 def levenshtein(word1: str, word2: str) -> int:
@@ -38,7 +38,9 @@ def levenshtein(word1: str, word2: str) -> int:
 
 def compute_suggestions(word: str, possible: List[str],
                         max_dist: int = 2) -> List[str]:
-    words = [(command, levenshtein(word, command)) for command in possible]
+    words: Iterable[Tuple[str, int]] = [
+        (command, levenshtein(word, command)) for command in possible
+    ]
     words = filter(lambda x: x[1] <= max_dist, words)
     words = sorted(words, key=lambda x: x[1])
     return [word[0] for word in words]
