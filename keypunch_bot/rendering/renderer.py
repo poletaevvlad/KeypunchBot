@@ -21,7 +21,7 @@ from typing import TypeVar, List, Tuple
 try:
     from typing import Protocol
 except ImportError:
-    from typing_extensions import Protocol
+    from typing_extensions import Protocol  # type: ignore
 from .stream import Stream
 
 TStream = TypeVar("TStream", bound=Stream, contravariant=True)
