@@ -4,6 +4,10 @@
   <img width="450" height="113" src="logo.png">
 </p>
 
+![CI](https://github.com/poletaevvlad/KeypunchBot/workflows/CI/badge.svg) 
+![](https://img.shields.io/github/v/tag/poletaevvlad/KeypunchBot)
+[![@keypunch_bot](https://img.shields.io/badge/telegram-%40keypunch__bot-blue)](https://t.me/keypunch_bot)
+
 A Telegram bot that generates images of punched cards or punched tape with
 user-defined text encoded. It can be accessed via the following link:
 [t.me/keypunch_bot](https://t.me/keypunch_bot).
