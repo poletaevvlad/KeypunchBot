@@ -32,4 +32,4 @@ COPY ./keypunch_bot ./keypunch_bot
 
 ENV PYTHONPATH ${PYTHONPATH}:/keypunch_bot
 
-CMD ["sh", "-c", "python -m keypunch_bot --api-key \"$API_KEY\" --mongo \"mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_SERVER}/${MONGO_DATABASE}?retryWrites=false\" webhook --port $PORT --url \"$URL\""]
+CMD ["sh", "-c", "python -m keypunch_bot --api-key \"$API_KEY\" --mongo \"$MONGO_URL\" webhook --port $PORT --url \"$URL\""]
