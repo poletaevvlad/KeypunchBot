@@ -1,4 +1,4 @@
-PyYAML==5.3
+PyYAML==5.4
 python-telegram-bot==12.3.0
 Pillow==7.1.1
 tornado==6.0.3
